@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922434770130",
+    "project_id": "katedu-4ddd8",
+    "storage_bucket": "katedu-4ddd8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922434770130:android:fdf8ae93ef84b931e7090b",
+        "android_client_info": {
+          "package_name": "com.example.katedu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJNsoB_17b7FoDbRmbAzqCjpFz9bnPkHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
