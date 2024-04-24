@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "922434770130",
-    "project_id": "katedu-4ddd8",
-    "storage_bucket": "katedu-4ddd8.appspot.com"
+    "project_number": "862823786092",
+    "project_id": "bordaparivar-85e13",
+    "storage_bucket": "bordaparivar-85e13.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:922434770130:android:fdf8ae93ef84b931e7090b",
+        "mobilesdk_app_id": "1:862823786092:android:ea4dc278d06a159ec1da49",
         "android_client_info": {
-          "package_name": "com.example.katedu"
+          "package_name": "com.madvise.borda"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCJNsoB_17b7FoDbRmbAzqCjpFz9bnPkHQ"
+          "current_key": "AIzaSyDDZRUrnFSkp8zy0DCleyacQg8GuW_7PJQ"
         }
       ],
       "services": {

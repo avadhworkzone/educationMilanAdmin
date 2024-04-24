@@ -63,7 +63,7 @@ class PdfService {
                         // pw.Image(pw.MemoryImage(logoImg),
                         //     width: 60, height: 60),
                         pw.SizedBox(width: 20),
-                        pw.Text("Katrodiya Parivar",
+                        pw.Text("Borda Parivar",
                             style: pw.TextStyle(
                               fontSize: 30.sp,
                               color: PdfColor.fromHex('#FFFFFF'),

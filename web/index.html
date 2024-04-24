@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katrodiya Parivar</title>
+    <title>Borda Parivar</title>
 </head>
 <body>
-<!-- Your Flutter app will be rendered here -->
+
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+apiKey: "AIzaSyDipGtXqmwN1gX1r7WxQS4mO0nczzxEFx8",
+authDomain: "bordaparivar-85e13.firebaseapp.com",
+projectId: "bordaparivar-85e13",
+storageBucket: "bordaparivar-85e13.appspot.com",
+messagingSenderId: "862823786092",
+appId: "1:862823786092:web:b50f311de7461e95c1da49",
+measurementId: "G-PX272LXVD8"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+</script>
+
 <script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>

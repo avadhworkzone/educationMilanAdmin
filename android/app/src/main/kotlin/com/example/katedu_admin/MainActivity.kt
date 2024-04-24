@@ -1,4 +1,4 @@
-package com.example.katedu_admin
+package com.madvise.borda
 
 import io.flutter.embedding.android.FlutterActivity
 

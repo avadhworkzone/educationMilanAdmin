@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:responsivedashboard/firebase_options.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
 import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
@@ -19,11 +20,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyDlFCuGp1jMix597-URqzqc264sQwg7ix8",
-          appId: "1:922434770130:web:9ccb2d45c7fc1d07e7090b",
-          storageBucket: "katedu-4ddd8.appspot.com",
-          messagingSenderId: "922434770130",
-          projectId: "katedu-4ddd8"));
+          apiKey: "AIzaSyDipGtXqmwN1gX1r7WxQS4mO0nczzxEFx8",
+          authDomain: "bordaparivar-85e13.firebaseapp.com",
+          projectId: "bordaparivar-85e13",
+          storageBucket: "bordaparivar-85e13.appspot.com",
+          messagingSenderId: "862823786092",
+          appId: "1:862823786092:web:b50f311de7461e95c1da49",
+          measurementId: "G-PX272LXVD8")
+      // options: DefaultFirebaseOptions.web
+      );
+
   await GetStorage.init();
   await PdfService.getGujaratiFont();
   runApp(MyApp());
