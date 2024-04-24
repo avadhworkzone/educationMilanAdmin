@@ -213,7 +213,12 @@ class _DesktopLoginFormState extends State<DesktopLoginForm> {
                                       });
 
                                       if (status == true) {
-                                        PreferenceManagerUtils.setIsLogin(true);
+                                        await PreferenceManagerUtils.setIsLogin(
+                                            true);
+                                        await PreferenceManagerUtils
+                                            .setLoginAdmin(
+                                                emailController.text);
+
                                         Get.to(
                                           const ResponsiveLayout(
                                             desktopBody: DesktopScaffold(),

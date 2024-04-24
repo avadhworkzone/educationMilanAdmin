@@ -8,28 +8,45 @@ class PreferenceManagerUtils {
   static String isLogin = "isLogin";
   static String isSetValue = "isSetValue";
   static String isSetData = "isSetData";
+  static String loginAdmin = "loginAdmin";
 
   ///IsLogin
   static Future setIsLogin(bool value) async {
     await getStorage.write(isLogin, value);
   }
 
+  static bool getIsLogin() {
+    return getStorage.read(isLogin) ?? false;
+  }
+
+  /// setIndex
   static Future setIndex(int index) async {
     await getStorage.write(isSetValue, index);
   }
 
-  static Future setData(List data) async {
-     await getStorage.write(isSetData,data);
-  }
-  static bool getIsLogin() {
-    return getStorage.read(isLogin) ?? false;
-  }
-  static int getIndex(){
+  static int getIndex() {
     return getStorage.read(isSetValue) ?? 0;
   }
-  static List<StudentModel> getData(){
+
+  /// setData
+  static Future setData(List data) async {
+    await getStorage.write(isSetData, data);
+  }
+
+  static List<StudentModel> getData() {
     return getStorage.read(isSetData) ?? [];
   }
+
+  /// set login admin email
+  static Future setLoginAdmin(String data) async {
+    await getStorage.write(loginAdmin, data);
+  }
+
+  static String getLoginAdmin() {
+    return getStorage.read(loginAdmin) ?? '';
+  }
+
+  /// clear prefrences
   static Future<void> clearPreference() async {
     await getStorage.erase();
   }

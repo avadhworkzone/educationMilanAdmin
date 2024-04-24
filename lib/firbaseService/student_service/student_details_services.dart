@@ -3,6 +3,7 @@ import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/model/user_model.dart';
 import 'package:responsivedashboard/utils/collection_utils.dart';
 import 'package:responsivedashboard/utils/enum_utils.dart';
+import 'package:responsivedashboard/utils/share_preference.dart';
 
 class StudentService {
   ///=======================GET FINAL DATA IN FUTURE===================///
@@ -99,10 +100,11 @@ class StudentService {
 
   static Future<bool> acceptStudentResult(String studentId) async {
     try {
-      await CollectionUtils.studentDetails
-          .doc(studentId)
-          .update({"isApproved": true, "status": StatusEnum.approve.name});
-
+      await CollectionUtils.studentDetails.doc(studentId).update({
+        "isApproved": true,
+        "status": StatusEnum.approve.name,
+        "statusBy": PreferenceManagerUtils.getLoginAdmin(),
+      });
       return true; // Update successful
     } catch (e) {
       print("Accept result error: $e");
