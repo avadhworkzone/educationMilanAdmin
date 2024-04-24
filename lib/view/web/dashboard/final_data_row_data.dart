@@ -73,7 +73,9 @@ class FinalDataTableSource extends DataTableSource {
         DataCell(
           Text(dataApprove.studentFullName ?? ''),
         ), // Placeholder for result cell
-
+        DataCell(
+          Text(dataApprove.statusBy ?? ''),
+        ),
         DataCell(Text(dataApprove.villageName ?? '')),
         DataCell(Text(dataApprove.percentage?.toString() ?? '')),
 

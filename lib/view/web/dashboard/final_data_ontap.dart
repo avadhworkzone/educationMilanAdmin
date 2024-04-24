@@ -298,6 +298,10 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
                                       )),
                                       DataColumn(
                                           label: commonText(
+                                        StringUtils.statusBy,
+                                      )),
+                                      DataColumn(
+                                          label: commonText(
                                         StringUtils.villageName,
                                       )),
                                       DataColumn(

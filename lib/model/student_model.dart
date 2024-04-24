@@ -1,6 +1,7 @@
 class StudentModel {
   String? userId;
   String? studentFullName;
+  String? statusBy;
   String? villageName;
   String? standard;
   num? percentage;
@@ -15,6 +16,7 @@ class StudentModel {
   StudentModel(
       {this.userId,
       this.studentFullName,
+      this.statusBy,
       this.villageName,
       this.standard,
       this.result,
@@ -29,6 +31,7 @@ class StudentModel {
   StudentModel.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     studentFullName = json['studentFullName'];
+    statusBy = json['statusBy'];
     villageName = json['villageName'];
     standard = json['standard'];
     result = json['result'];
@@ -44,6 +47,7 @@ class StudentModel {
   Map<String, dynamic> toJson() => {
         "userId": userId,
         "studentFullName": studentFullName,
+        "statusBy": statusBy,
         "villageName": villageName,
         "standard": standard,
         "result": result,

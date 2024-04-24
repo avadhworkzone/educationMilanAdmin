@@ -20,6 +20,7 @@ class StringUtils {
   static String mobileNumber = "Mobile Number";
   static String date = "Date";
   static String studentName = "Student Name";
+  static String statusBy = "Status By";
   static String villageName = "Village name";
   static String village = "Village";
   static String percentage = "Percentage %";
