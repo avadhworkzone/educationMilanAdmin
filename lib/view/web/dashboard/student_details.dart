@@ -17,7 +17,11 @@ class YourDataTableSource extends DataTableSource {
   final BuildContext context;
   final bool isApprove;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove) commonDialogCallback;
+  final Function(
+    String studentId,
+    bool isApprove,
+    String fcmToken,
+  ) commonDialogCallback;
   final Function(
     String? image,
     num? personTage,
@@ -29,7 +33,7 @@ class YourDataTableSource extends DataTableSource {
     String? createdDate,
   ) commonDialogEditCallback;
 
-  final Function(String studentId) commonCheckUncheckCallBack;
+  final Function(String studentId, String fcmToken) commonCheckUncheckCallBack;
 
   YourDataTableSource(
     this.yourDataList,
@@ -104,7 +108,11 @@ class YourDataTableSource extends DataTableSource {
           ),
           DataCell(InkWell(
             onTap: () {
-              commonDialogCallback(rowData.studentId.toString(), isApprove);
+              commonDialogCallback(
+                rowData.studentId.toString(),
+                isApprove,
+                rowData.fcmToken.toString(),
+              );
             },
             child: LocalAssets(
               imagePath: AssetsUtils.delete,
@@ -129,7 +137,8 @@ class YourDataTableSource extends DataTableSource {
           )),
           DataCell(InkWell(
               onTap: () {
-                commonCheckUncheckCallBack(rowData.studentId.toString());
+                commonCheckUncheckCallBack(
+                    rowData.studentId.toString(), rowData.fcmToken.toString());
               },
               child: const Icon(Icons.check))),
           // DataCell(InkWell(

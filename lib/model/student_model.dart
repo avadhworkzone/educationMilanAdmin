@@ -6,6 +6,7 @@ class StudentModel {
   num? percentage;
   String? result;
   String? studentId;
+  String? fcmToken;
   String? createdDate;
   String? checkUncheck;
   String? mobileNumber;
@@ -19,6 +20,7 @@ class StudentModel {
       this.result,
       this.percentage,
       this.studentId,
+      this.fcmToken,
       this.createdDate,
       this.checkUncheck,
       this.mobileNumber,
@@ -32,6 +34,7 @@ class StudentModel {
     result = json['result'];
     percentage = json['percentage'];
     studentId = json['studentId'];
+    fcmToken = json['fcmToken'];
     createdDate = json['createdDate'];
     checkUncheck = json['checkUncheck'];
     isApproved = json['isApproved'];
@@ -46,6 +49,7 @@ class StudentModel {
         "result": result,
         "percentage": percentage,
         "studentId": studentId,
+        "fcmToken": fcmToken,
         "createdDate": createdDate,
         "checkUncheck": checkUncheck,
         "isApproved": isApproved,

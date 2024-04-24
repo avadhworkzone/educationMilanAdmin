@@ -13,6 +13,7 @@ import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
+import 'package:responsivedashboard/view/services/app_notification.dart';
 import 'package:responsivedashboard/view/web/dashboard/dashboard.dart';
 
 import '../../../firbaseService/user_service/user_service.dart';
@@ -71,7 +72,7 @@ Widget commonTab(
 }
 
 ///delete dialog
-void commonDeleteDialog(String studentId, bool isApprove) {
+void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
@@ -164,7 +165,7 @@ void commonDeleteDialog(String studentId, bool isApprove) {
 }
 
 ///delete dialog
-void deleteUserWithReason(String studentId, bool isApprove) {
+void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
   final TextEditingController reasonController = TextEditingController();
   showDialog(
     context: Get.context!,
@@ -243,6 +244,10 @@ void deleteUserWithReason(String studentId, bool isApprove) {
                             print("======false========$isDelete");
                           });
                           if (status) {
+                            NotificationMethods.sendMessage(
+                                receiverFcmToken: fcmToken,
+                                msg: 'your result status is Rejected',
+                                title: 'Notification');
                             Get.back();
                           } else {}
                         },
@@ -277,7 +282,7 @@ void deleteUserWithReason(String studentId, bool isApprove) {
 }
 
 ///delete dialog
-void commonUserDeleteDialog(String userId, bool isApprove) {
+void commonUserDeleteDialog(String userId, bool isApprove, String fcmToken) {
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
@@ -812,7 +817,7 @@ void commonUserEditDialogEdit(
 }
 
 ///CHECK ACCEPT UNBOX DIALOG
-void commonCheckUncheck(String studentId) {
+void commonCheckUncheck(String studentId, String fcmToken) {
   showDialog(
     builder: (BuildContext context) {
       return Dialog(
@@ -864,6 +869,10 @@ void commonCheckUncheck(String studentId) {
                               await StudentService.acceptStudentResult(
                                   studentId);
                           if (success) {
+                            NotificationMethods.sendMessage(
+                                receiverFcmToken: fcmToken,
+                                msg: 'your result status is Approved',
+                                title: 'Notification');
                             Get.back();
                             // fetchData();
                             // UserService.getUserData();

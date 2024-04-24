@@ -44,20 +44,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-      // apiKey: 'AIzaSyC6NEh-1YAIRHYpArBtRS9LXJzJ8llYrMg',
-      // appId: '1:489376848429:web:9edc2ea53f0de6fa7b76a4',
-      // messagingSenderId: '489376848429',
-      // projectId: 'edupulse-a9205',
-      // authDomain: 'edupulse-a9205.firebaseapp.com',
-      // storageBucket: 'edupulse-a9205.appspot.com',
-      // measurementId: 'G-WJJXE61BBY',
-      apiKey: "AIzaSyDipGtXqmwN1gX1r7WxQS4mO0nczzxEFx8",
-      authDomain: "bordaparivar-85e13.firebaseapp.com",
-      projectId: "bordaparivar-85e13",
-      storageBucket: "bordaparivar-85e13.appspot.com",
-      messagingSenderId: "862823786092",
-      appId: "1:862823786092:web:b50f311de7461e95c1da49",
-      measurementId: "G-PX272LXVD8");
+    apiKey: 'AIzaSyC6NEh-1YAIRHYpArBtRS9LXJzJ8llYrMg',
+    appId: '1:489376848429:web:9edc2ea53f0de6fa7b76a4',
+    messagingSenderId: '489376848429',
+    projectId: 'edupulse-a9205',
+    authDomain: 'edupulse-a9205.firebaseapp.com',
+    storageBucket: 'edupulse-a9205.appspot.com',
+    measurementId: 'G-WJJXE61BBY',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAVr0kHx8M8DC4NjH7XtqUPjrIsrMmck_s',

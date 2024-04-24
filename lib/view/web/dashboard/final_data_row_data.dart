@@ -13,7 +13,8 @@ const int columnCount = 10;
 class FinalDataTableSource extends DataTableSource {
   final BuildContext context;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove) commonDialogCallback;
+  final Function(String studentId, bool isApprove, String fcmToken)
+      commonDialogCallback;
   final Function(
       String? image,
       num? personTage,
@@ -102,7 +103,11 @@ class FinalDataTableSource extends DataTableSource {
 
         DataCell(InkWell(
           onTap: () {
-            commonDialogCallback(dataApprove.studentId.toString(), true);
+            commonDialogCallback(
+              dataApprove.studentId.toString(),
+              true,
+              dataApprove.fcmToken.toString(),
+            );
           },
           child: LocalAssets(
             imagePath: AssetsUtils.delete,

@@ -349,7 +349,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
   }
 
   ///delete dialog
-  void commonDeleteDialog(String studentId, bool isApprove) {
+  commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
     showDialog(
       builder: (BuildContext context) {
         return Dialog(
@@ -761,7 +761,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
   }
 
   ///CHECK UNBOX DIALOG
-  void commonCheckUncheck(String studentId) {
+  void commonCheckUncheck(String studentId, String fcmToken) {
     showDialog(
       builder: (BuildContext context) {
         return Dialog(

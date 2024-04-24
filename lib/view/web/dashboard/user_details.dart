@@ -6,7 +6,8 @@ import 'package:responsivedashboard/utils/image_utils.dart';
 class AllUserDataTableSource extends DataTableSource {
   final BuildContext context;
   final List<UserResModel> yourDataList;
-  final Function(String userId, bool isApprove) commonDeleteUserDialogCallback;
+  final Function(String userId, bool isApprove, String fcmToken)
+      commonDeleteUserDialogCallback;
   final Function(String? phoneNo, String? password)
       commonDialogUserEditCallback;
 
@@ -49,7 +50,8 @@ class AllUserDataTableSource extends DataTableSource {
 
         DataCell(InkWell(
           onTap: () {
-            commonDeleteUserDialogCallback(rowData.phoneNo.toString(), false);
+            commonDeleteUserDialogCallback(
+                rowData.phoneNo.toString(), false, '');
           },
           child: LocalAssets(
             imagePath: AssetsUtils.delete,
