@@ -124,24 +124,27 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                       SizedBox(
                         width: Get.width * 0.01,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            "welcome",
-                            fontWeight: FontWeight.w400,
-                            color: ColorUtils.white,
-                            fontSize: 15,
-                            fontFamily: AssetsUtils.poppins,
-                          ),
-                          CustomText(
-                            "ADMIN",
-                            fontWeight: FontWeight.w500,
-                            color: ColorUtils.white,
-                            fontSize: 20,
-                            fontFamily: AssetsUtils.poppins,
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              "welcome",
+                              fontWeight: FontWeight.w400,
+                              color: ColorUtils.white,
+                              fontSize: 15,
+                              fontFamily: AssetsUtils.poppins,
+                            ),
+                            CustomText(
+                              PreferenceManagerUtils.getLoginAdmin(),
+                              fontWeight: FontWeight.w500,
+                              color: ColorUtils.white,
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 20,
+                              fontFamily: AssetsUtils.poppins,
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),

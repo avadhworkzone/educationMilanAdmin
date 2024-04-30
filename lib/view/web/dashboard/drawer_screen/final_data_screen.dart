@@ -202,10 +202,10 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                           itemCount: stdList.length,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 5,
+                                  crossAxisCount: 4,
                                   mainAxisSpacing: 40.h,
                                   childAspectRatio: 5,
-                                  crossAxisSpacing: 15.w),
+                                  crossAxisSpacing: 16.w),
                           itemBuilder: (context, index) {
                             var element = stdList[index];
                             return InkWell(
@@ -255,7 +255,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                                 child: Center(
                                     child: CustomText(
                                   element.standard ?? "",
-                                  fontSize: 19.sp,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: AssetsUtils.poppins,
                                   color: ColorUtils.black3F,
@@ -266,7 +266,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                         );
                       }),
                   SizedBox(
-                    width: Get.width / 3,
+                    height: 20,
                   ),
                 ],
               ),

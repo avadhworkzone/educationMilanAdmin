@@ -92,201 +92,194 @@ class _DesktopLoginFormState extends State<DesktopLoginForm> {
                       child: Padding(
                         padding: EdgeInsets.only(
                             top: 35.r, left: 120.r, right: 120.r),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            height: Get.height,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  AssetsUtils.signupLogo,
-                                  height: 60.h,
-                                ),
-                                CustomText(
-                                  StringUtils.logIn,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorUtils.black,
-                                  fontSize: 20,
-                                ),
-                                SizedBox(
-                                  height: 10.w,
-                                ),
-                                Container(
-                                  height: 3.h,
-                                  width: 30.w,
-                                  decoration: BoxDecoration(
-                                      color: ColorUtils.primaryColor,
-                                      borderRadius: BorderRadius.circular(5)),
-                                ),
-                                SizedBox(
-                                  height: 50.w,
-                                ),
-                                Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CustomText(
-                                        StringUtils.email,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 17,
-                                        color: ColorUtils.black32,
-                                      ),
-                                      SizedBox(
-                                        height: 1.w,
-                                      ),
+                        child: SizedBox(
+                          height: Get.height,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AssetsUtils.signupLogo,
+                                height: 60.h,
+                              ),
+                              CustomText(
+                                StringUtils.logIn,
+                                fontWeight: FontWeight.w600,
+                                color: ColorUtils.black,
+                                fontSize: 20,
+                              ),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                              Container(
+                                height: 3.h,
+                                width: 30.w,
+                                decoration: BoxDecoration(
+                                    color: ColorUtils.primaryColor,
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                              SizedBox(
+                                height: 50.w,
+                              ),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      StringUtils.email,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: ColorUtils.black32,
+                                    ),
+                                    SizedBox(
+                                      height: 1.w,
+                                    ),
 
-                                      /// EMAIL field
-                                      SizedBox(
-                                        width: 300.w,
-                                        child: CommonTextField(
-                                          hintText: "Enter Your Email",
-                                          textEditController: emailController,
-                                          keyBoardType:
-                                              TextInputType.emailAddress,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                !isValidEmail(value)) {
-                                              return 'Please enter a valid email address';
-                                            }
-                                            return null;
+                                    /// EMAIL field
+                                    SizedBox(
+                                      width: 300.w,
+                                      child: CommonTextField(
+                                        hintText: "Enter Your Email",
+                                        textEditController: emailController,
+                                        keyBoardType:
+                                            TextInputType.emailAddress,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              !isValidEmail(value)) {
+                                            return 'Please enter a valid email address';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    CustomText(
+                                      StringUtils.password,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: ColorUtils.black32,
+                                    ),
+                                    SizedBox(
+                                      height: 1.w,
+                                    ),
+
+                                    /// PASSWORD field
+                                    SizedBox(
+                                      width: 300.w,
+                                      child: CommonTextField(
+                                        obscureValue: _obscureText,
+                                        sIcon: IconButton(
+                                          icon: Icon(
+                                            _obscureText
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _obscureText = !_obscureText;
+                                            });
                                           },
                                         ),
+                                        hintText: "Enter Your Password",
+                                        textEditController: passwordController,
+                                        keyBoardType: TextInputType.name,
+                                        validator: validatePassword,
                                       ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-                                      CustomText(
-                                        StringUtils.password,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 17,
-                                        color: ColorUtils.black32,
-                                      ),
-                                      SizedBox(
-                                        height: 1.w,
-                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 50.w,
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
 
-                                      /// PASSWORD field
-                                      SizedBox(
-                                        width: 300.w,
-                                        child: CommonTextField(
-                                          obscureValue: _obscureText,
-                                          sIcon: IconButton(
-                                            icon: Icon(
-                                              _obscureText
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Colors.grey,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                _obscureText = !_obscureText;
-                                              });
-                                            },
-                                          ),
-                                          hintText: "Enter Your Password",
-                                          textEditController:
-                                              passwordController,
-                                          keyBoardType: TextInputType.name,
-                                          validator: validatePassword,
+                                    final status = await AuthService.signIn(
+                                        docId: emailController.text,
+                                        pin: passwordController.text);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    if (status == true) {
+                                      PreferenceManagerUtils.setIsLogin(true);
+                                      PreferenceManagerUtils.setLoginAdmin(
+                                          emailController.text);
+
+                                      Get.offAll(
+                                        const ResponsiveLayout(
+                                          desktopBody: DesktopScaffold(),
+                                          mobileBody: MobileBottombar(),
+                                          tabletBody: TabletBottombar(),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 50.w,
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-
-                                      final status = await AuthService.signIn(
-                                          docId: emailController.text,
-                                          pin: passwordController.text);
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-
-                                      if (status == true) {
-                                        await PreferenceManagerUtils.setIsLogin(
-                                            true);
-                                        await PreferenceManagerUtils
-                                            .setLoginAdmin(
-                                                emailController.text);
-
-                                        Get.to(
-                                          const ResponsiveLayout(
-                                            desktopBody: DesktopScaffold(),
-                                            mobileBody: MobileBottombar(),
-                                            tabletBody: TabletBottombar(),
-                                          ),
-                                        );
-                                        ToastUtils.showCustomToast(
-                                          context: context,
-                                          title: "Login Successfully",
-                                        );
-                                      } else {
-                                        ToastUtils.showCustomToast(
-                                          context: context,
-                                          title: "Some Thing Went Wrong",
-                                        );
-                                      }
+                                      );
+                                      ToastUtils.showCustomToast(
+                                        context: context,
+                                        title: "Login Successfully",
+                                      );
+                                    } else {
+                                      ToastUtils.showCustomToast(
+                                        context: context,
+                                        title: "Some Thing Went Wrong",
+                                      );
                                     }
-                                  },
-                                  child: isLoading
-                                      ? const CircularProgressIndicator() // Show loader when isLoading is true
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                              color: const Color(0XFF251E90),
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 6.h,
-                                                horizontal: 23.w),
-                                            child: CustomText(
-                                              StringUtils.log,
-                                              color: ColorUtils.white,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                  }
+                                },
+                                child: isLoading
+                                    ? const CircularProgressIndicator() // Show loader when isLoading is true
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color(0XFF251E90),
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 6.h, horizontal: 23.w),
+                                          child: CustomText(
+                                            StringUtils.log,
+                                            color: ColorUtils.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
-                                ),
-                                SizedBox(
-                                  height: 10.w,
-                                ),
-                                CustomText(
-                                  StringUtils.forgetPassword,
-                                  color: ColorUtils.grey9A,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                SizedBox(
-                                  height: 10.w,
-                                ),
-                                CustomText(
-                                  StringUtils.signIn,
-                                  color: ColorUtils.purple2E,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                SizedBox(
-                                  height: 60.w,
-                                ),
-                                CustomText(
-                                  StringUtils.privacyPolicy,
-                                  color: ColorUtils.grey9A,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ],
-                            ),
+                                      ),
+                              ),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                              CustomText(
+                                StringUtils.forgetPassword,
+                                color: ColorUtils.grey9A,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                              CustomText(
+                                StringUtils.signIn,
+                                color: ColorUtils.purple2E,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(
+                                height: 60.w,
+                              ),
+                              CustomText(
+                                StringUtils.privacyPolicy,
+                                color: ColorUtils.grey9A,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ],
                           ),
                         ),
                       ),
