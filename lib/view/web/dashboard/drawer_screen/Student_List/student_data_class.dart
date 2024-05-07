@@ -119,71 +119,6 @@ class _StudentListState extends State<StudentList> {
                     return noDataFound();
                   }
                   List<StudentModel> stdList = snapshot.data!;
-                  // return Wrap(
-                  //   children: List.generate(stdList.length, (index) {
-                  //     var element = stdList[index];
-                  //
-                  //     return Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: InkWell(
-                  //         onTap: () {
-                  //           // List<StudentModel> stdFilteredData = [];
-                  //           // stdFilteredData = stdList
-                  //           //     .where((val) =>
-                  //           //         val.standard == element.standard.toString() &&
-                  //           //         val.isApproved == false)
-                  //           //     .toList()
-                  //           //   ..sort((a, b) =>
-                  //           //       b.percentage!.compareTo(a.percentage!));
-                  //           // print("stdFilteredData == ${stdFilteredData}");
-                  //           // if (stdFilteredData.isNotEmpty) {
-                  //           Get.offAll(() => ResponsiveLayout(
-                  //                 desktopBody: StandardViseDataStudentScreen(
-                  //                   stdId: element.standard.toString(),
-                  //                 ),
-                  //                 mobileBody: OnTapStudentDataScreen(
-                  //                   studentId: element.standard.toString(),
-                  //                   yourDataList: stdList,
-                  //                 ),
-                  //                 tabletBody: OnTapStudentDataScreen(
-                  //                   studentId: element.standard.toString(),
-                  //                   yourDataList: stdList,
-                  //                 ),
-                  //               ));
-                  //           // } else {
-                  //           //   ToastUtils.showCustomToast(
-                  //           //       timeInSecForIosWeb: 2,
-                  //           //       context: context,
-                  //           //       gravity: ToastGravity.TOP,
-                  //           //       title: "No Data in This Standard");
-                  //           // }
-                  //
-                  //           // finalDataApprovedDialog(element.standard.toString());
-                  //         },
-                  //         child: Container(
-                  //           width: 300,
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(15.r),
-                  //             border: Border.all(
-                  //                 color: ColorUtils.greyEA, width: 3.w),
-                  //             color: ColorUtils.greyF9,
-                  //           ),
-                  //           child: Padding(
-                  //             padding: const EdgeInsets.all(8.0),
-                  //             child: Center(
-                  //                 child: CustomText(
-                  //               element.standard ?? "",
-                  //               fontSize: 19.sp,
-                  //               fontWeight: FontWeight.w600,
-                  //               fontFamily: AssetsUtils.poppins,
-                  //               color: ColorUtils.black3F,
-                  //             )),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     );
-                  //   }),
-                  // );
                   return GridView.builder(
                     padding: EdgeInsets.only(right: 25.w),
                     shrinkWrap: true,
@@ -240,7 +175,7 @@ class _StudentListState extends State<StudentList> {
                           child: Center(
                               child: CustomText(
                             element.standard ?? "",
-                            fontSize: 18.sp,
+                            fontSize: 19.sp,
                             fontWeight: FontWeight.w600,
                             fontFamily: AssetsUtils.poppins,
                             color: ColorUtils.black3F,

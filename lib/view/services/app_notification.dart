@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+const EventChannel eventChannel = EventChannel('flutter.native/helper');
+
 class NotificationMethods {
   // UpdateSessionViewModel updateSessionViewModel = Get.find();
 
@@ -40,12 +42,45 @@ class NotificationMethods {
   }
 
   onNotification() {
+    // on notification
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   RemoteNotification? notification = message.notification;
+    //   AndroidNotification? android = message.notification?.android;
+
+    // print('notification data ' + jsonEncode(message.data));
+
+    // if (notification != null && android != null) {
+    //   log('notification body${notification.body}');
+
+    // await flutterLocalNotificationsPlugin.show(notification.hashCode,
+    //     notification.title, notification.body, platformChannelSpecifics(),
+    //     payload: jsonEncode(message.data));
+
+    // print('notification data ' + jsonEncode(message.data));
+    // }
+
+    // }
+    // });
+
     /// when app is in background and user tap on it.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) async {
       if (message != null) {
         Map<String, dynamic> messageData = message.data;
         RemoteNotification? notification = message.notification;
         String screenName = messageData['notification_for'];
+
+        // if (messageData != null) {
+        //   if (notiIds.contains(messageData['entity'])) {
+        //     return;
+        //   } else {
+        //     notiIds.add(messageData['entity']);
+        //   }
+        //
+        //   routeScreenOnNotificationClick(
+        //     context: context,
+        //     data: messageData,
+        //   );
+        // }
       }
     });
 
@@ -54,6 +89,24 @@ class NotificationMethods {
         .getInitialMessage()
         .then((RemoteMessage? message) async {});
   }
+
+  // ///====================get fcm token==========================
+  // static Future<void> getFcmToken() async {
+  //   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  //   // firebaseMessaging.deleteToken();
+  //   try {
+  //     String? token = await firebaseMessaging.getToken().catchError((e) {
+  //       log("=========fcm- Error ....:$e");
+  //     });
+  //     log("=========FCM-TOKEN BEFORE ======${PreferenceManagerUtils.getFcmToken()}");
+  //
+  //     await PreferenceManagerUtils.setFcmToken(token!);
+  //     log("=========FCM-TOKEN AFTER ======${PreferenceManagerUtils.getFcmToken()}");
+  //   } catch (e) {
+  //     // log("=========fcm- Error :$e");
+  //     return;
+  //   }
+  // }
 
   static Future<void> sendMessage(
       {required String receiverFcmToken,

@@ -13,17 +13,25 @@ const int columnCount = 10;
 class FinalDataTableSource extends DataTableSource {
   final BuildContext context;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove, String fcmToken)
-      commonDialogCallback;
+  final Function(String studentId, bool isApprove, String fcmToken) commonDialogCallback;
   final Function(
-      String? image,
-      num? personTage,
-      String? standard,
-      String? fullName,
-      String studentId,
-      String userId,
-      String villageName,
-      String? createdDate) commonDialogEditCallback;
+    String? image,
+    num? personTage,
+    String? standard,
+    String? fullName,
+    String studentId,
+    String userId,
+    String villageName,
+    String? createdDate, {
+    required String? mobileNumber,
+    required bool? isApproved,
+    String? result,
+    required String fcmToken,
+    String? checkUncheck,
+    String? imageId,
+    String? reason,
+    String? status,
+  }) commonDialogEditCallback;
 
   FinalDataTableSource(
     this.yourDataList,
@@ -67,15 +75,13 @@ class FinalDataTableSource extends DataTableSource {
       cells: [
         DataCell(Text('${index + 1}')),
         DataCell(Text(dataApprove.mobileNumber ?? '')),
-        DataCell(Text(DateFormat("dd MMM yyyy").format(DateTime.parse(
-            dataApprove.createdDate ?? DateTime.now().toString())))),
+        DataCell(Text(DateFormat("dd MMM yyyy")
+            .format(DateTime.parse(dataApprove.createdDate ?? DateTime.now().toString())))),
 
         DataCell(
           Text(dataApprove.studentFullName ?? ''),
         ), // Placeholder for result cell
-        DataCell(
-          Text(dataApprove.statusBy ?? ''),
-        ),
+
         DataCell(Text(dataApprove.villageName ?? '')),
         DataCell(Text(dataApprove.percentage?.toString() ?? '')),
 
@@ -127,6 +133,14 @@ class FinalDataTableSource extends DataTableSource {
               dataApprove.userId.toString(),
               dataApprove.villageName.toString(),
               dataApprove.createdDate,
+              mobileNumber: dataApprove.mobileNumber,
+              checkUncheck: dataApprove.checkUncheck,
+              fcmToken: dataApprove.fcmToken!,
+              result: dataApprove.result,
+              isApproved: dataApprove.isApproved,
+              imageId: dataApprove.imageId,
+              reason: dataApprove.reason,
+              status: dataApprove.status,
             );
           },
           child: LocalAssets(

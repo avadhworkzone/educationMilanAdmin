@@ -255,7 +255,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                                 child: Center(
                                     child: CustomText(
                                   element.standard ?? "",
-                                  fontSize: 18.sp,
+                                  fontSize: 19.sp,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: AssetsUtils.poppins,
                                   color: ColorUtils.black3F,
@@ -266,7 +266,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                         );
                       }),
                   SizedBox(
-                    height: 20,
+                    width: Get.width / 3,
                   ),
                 ],
               ),

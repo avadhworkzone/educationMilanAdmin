@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:octo_image/octo_image.dart';
 import 'package:responsivedashboard/common_widget/column_text.dart';
 import 'package:responsivedashboard/common_widget/common_btn.dart';
 import 'package:responsivedashboard/common_widget/common_drawer.dart';
@@ -19,9 +17,11 @@ import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/mobile/auth/login_mobile.dart';
+import 'package:responsivedashboard/view/services/app_notification.dart';
 import 'package:responsivedashboard/view/tablet/auth/login_tablet.dart';
-import '../auth/desktop_login_form.dart';
+
 import '../../../responsiveLayout/responsive_layout.dart';
+import '../auth/desktop_login_form.dart';
 import 'student_details.dart';
 
 class DesktopAllUser extends StatefulWidget {
@@ -74,6 +74,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
       }
     });
   }
+
   //
   // void fetchData() async {
   //   try {
@@ -194,48 +195,37 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.search_rounded,
-                                      color: ColorUtils.grey66),
-                                  contentPadding:
-                                      EdgeInsets.only(left: Get.width * 0.02),
+                                  prefixIcon:
+                                      const Icon(Icons.search_rounded, color: ColorUtils.grey66),
+                                  contentPadding: EdgeInsets.only(left: Get.width * 0.02),
                                   hintText: "Search",
                                   hintStyle: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       color: ColorUtils.grey66),
                                   errorBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: ColorUtils.red)),
+                                      borderSide: BorderSide(color: ColorUtils.red)),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                          color: ColorUtils.greyD0)),
+                                      borderSide: const BorderSide(color: ColorUtils.greyD0)),
                                   focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 1.0, color: ColorUtils.greyD0),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(width: 1.0, color: ColorUtils.greyD0),
+                                    borderRadius: BorderRadius.all(Radius.circular(8)),
                                   ),
                                   disabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 1.0, color: ColorUtils.greyD0),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(width: 1.0, color: ColorUtils.greyD0),
+                                    borderRadius: BorderRadius.all(Radius.circular(8)),
                                   ),
                                   enabledBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    borderSide: BorderSide(
-                                        width: 1.0, color: ColorUtils.greyD0),
+                                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(width: 1.0, color: ColorUtils.greyD0),
                                   ),
                                 ),
                                 onChanged: (value) {
                                   if (value.isNotEmpty) {
                                     filteredData = yourDataList
-                                        .where((element) => element
-                                            .studentFullName!
-                                            .toLowerCase()
-                                            .contains(value))
+                                        .where((element) =>
+                                            element.studentFullName!.toLowerCase().contains(value))
                                         .toList();
                                   } else {
                                     filteredData = yourDataList;
@@ -264,18 +254,15 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                       SizedBox(
                           width: double.infinity,
                           child: Theme(
-                            data: ThemeData.light()
-                                .copyWith(cardColor: Colors.white),
+                            data: ThemeData.light().copyWith(cardColor: Colors.white),
                             child: PaginatedDataTable(
                               initialFirstRowIndex: 0,
                               onPageChanged: (int rowIndex) {
-                                int remainingRows =
-                                    filteredData.length - rowIndex;
+                                int remainingRows = filteredData.length - rowIndex;
                                 // yourDataList.length - rowIndex;
 
                                 setState(() {
-                                  _rowsPerPage =
-                                      remainingRows >= 10 ? 10 : remainingRows;
+                                  _rowsPerPage = remainingRows >= 10 ? 10 : remainingRows;
                                 });
                               },
                               source: YourDataTableSource(
@@ -400,8 +387,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                             update(() {
                               isDelete = true;
                             });
-                            final status =
-                                await StudentService.deleteStudent(studentId);
+                            final status = await StudentService.deleteStudent(studentId);
                             update(() {
                               isDelete = false;
                               print("======false========${isDelete}");
@@ -417,8 +403,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                       borderRadius: BorderRadius.circular(20),
                                       color: ColorUtils.redF3),
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 6.h, horizontal: 20.w),
+                                    padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                                     child: CustomText(
                                       StringUtils.delete,
                                       color: ColorUtils.white,
@@ -450,12 +435,18 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
     final String studentId,
     final String userId,
     final String villageName,
-    final String? createdDate,
-  ) {
-    final TextEditingController fullNameController =
-        TextEditingController(text: fullName ?? '');
-    final TextEditingController villageController =
-        TextEditingController(text: villageName);
+    final String? createdDate, {
+    required final String? mobileNumber,
+    required final bool? isApproved,
+    final String? result,
+    required final String fcmToken,
+    final String? checkUncheck,
+    final String? imageId,
+    final String? reason,
+    final String? status,
+  }) {
+    final TextEditingController fullNameController = TextEditingController(text: fullName ?? '');
+    final TextEditingController villageController = TextEditingController(text: villageName);
     final TextEditingController percentageController =
         TextEditingController(text: personTage?.toString() ?? '');
 
@@ -590,8 +581,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                 child: FutureBuilder<List<String>>(
                                   future: standardsListFuture,
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
                                       return const Center(
                                         child: CircularProgressIndicator(),
                                       );
@@ -601,16 +591,13 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                           'Error: ${snapshot.error}',
                                         ),
                                       );
-                                    } else if (!snapshot.hasData ||
-                                        snapshot.data!.isEmpty) {
+                                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                       return const Center(
                                         child: Text('No standards found.'),
                                       );
                                     } else {
-                                      List<String> standardsList =
-                                          snapshot.data!;
-                                      Set<String> uniqueStandards =
-                                          Set<String>.from(standardsList);
+                                      List<String> standardsList = snapshot.data!;
+                                      Set<String> uniqueStandards = Set<String>.from(standardsList);
                                       return DropdownButtonFormField<String>(
                                         decoration: const InputDecoration(
                                             // ... Your decoration properties
@@ -618,8 +605,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                         isExpanded: true,
                                         isDense: true,
                                         menuMaxHeight: 150.w,
-                                        validator: (value) =>
-                                            value == null ? "* Required" : null,
+                                        validator: (value) => value == null ? "* Required" : null,
                                         dropdownColor: ColorUtils.greyF6,
                                         value: selectedValue,
                                         onChanged: (String? newValue) {
@@ -628,8 +614,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                           });
                                           Form.of(context).validate();
                                         },
-                                        items: uniqueStandards
-                                            .map((String standard) {
+                                        items: uniqueStandards.map((String standard) {
                                           return DropdownMenuItem<String>(
                                             value: standard,
                                             child: Text(standard),
@@ -668,8 +653,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                       return StringUtils.personaTageValidation;
                                     }
 
-                                    double? parsedValue =
-                                        double.tryParse(value);
+                                    double? parsedValue = double.tryParse(value);
 
                                     if (parsedValue == null ||
                                         parsedValue < 0 ||
@@ -702,21 +686,23 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                               //   downloadUrl =
                               //       await _uploadImageToFirebase();
                               // }
-
+                              reqModel.mobileNumber = mobileNumber;
+                              reqModel.result = result;
+                              reqModel.fcmToken = fcmToken;
+                              reqModel.checkUncheck = checkUncheck;
                               reqModel.standard = selectedValue.toString();
-                              reqModel.studentFullName =
-                                  fullNameController.text;
-                              reqModel.percentage =
-                                  double.parse(percentageController.text);
+                              reqModel.studentFullName = fullNameController.text;
+                              reqModel.percentage = double.parse(percentageController.text);
                               reqModel.studentId = studentId.toString();
                               reqModel.villageName = villageController.text;
                               reqModel.userId = userId.toString();
                               reqModel.checkUncheck = userId.toString();
-                              reqModel.createdDate =
-                                  DateTime.now().toLocal().toString();
+                              reqModel.createdDate = DateTime.now().toLocal().toString();
+                              reqModel.imageId = imageId;
+                              reqModel.reason = reason;
+                              reqModel.status = status;
 
-                              final status =
-                                  await StudentService.studentDetailsEdit(
+                              final isStatus = await StudentService.studentDetailsEdit(
                                 reqModel,
                               );
 
@@ -724,7 +710,12 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                 isEdit = false;
                               });
 
-                              if (status) {
+                              if (isStatus) {
+                                NotificationMethods.sendMessage(
+                                  receiverFcmToken: fcmToken,
+                                  msg: 'your result data is Edited',
+                                  title: 'Notification',
+                                );
                                 Get.back();
                               }
                             }
@@ -809,9 +800,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                         ),
                         InkWell(
                           onTap: () async {
-                            bool success =
-                                await StudentService.acceptStudentResult(
-                                    studentId);
+                            bool success = await StudentService.acceptStudentResult(studentId);
                             if (success) {
                               Get.back();
                             } else {
@@ -820,11 +809,9 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: ColorUtils.redF3),
+                                borderRadius: BorderRadius.circular(20), color: ColorUtils.redF3),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 6.h, horizontal: 20.w),
+                              padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                               child: CustomText(
                                 "YES",
                                 color: ColorUtils.white,
@@ -896,9 +883,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                         ),
                         InkWell(
                           onTap: () async {
-                            bool success =
-                                await StudentService.acceptStudentResult(
-                                    studentId);
+                            bool success = await StudentService.acceptStudentResult(studentId);
                             if (success) {
                               Get.back();
                             } else {
@@ -907,11 +892,9 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: ColorUtils.redF3),
+                                borderRadius: BorderRadius.circular(20), color: ColorUtils.redF3),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 6.h, horizontal: 20.w),
+                              padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                               child: CustomText(
                                 "YES",
                                 color: ColorUtils.white,

@@ -31,6 +31,16 @@ class YourDataTableSource extends DataTableSource {
     String userId,
     String villageName,
     String? createdDate,
+  {
+  required  String? mobileNumber,
+  required  bool? isApproved,
+   String? result,
+   required String fcmToken,
+   String? checkUncheck,
+  required String? imageId,
+  String? reason,
+  String? status,
+  }
   ) commonDialogEditCallback;
 
   final Function(String studentId, String fcmToken) commonCheckUncheckCallBack;
@@ -129,6 +139,14 @@ class YourDataTableSource extends DataTableSource {
                 rowData.userId.toString(),
                 rowData.villageName.toString(),
                 rowData.createdDate,
+                mobileNumber: rowData.mobileNumber,
+                result: rowData.result,
+                fcmToken: rowData.fcmToken!,
+                checkUncheck: rowData.checkUncheck,
+                isApproved: rowData.isApproved,
+                imageId : rowData.imageId,
+                reason :rowData.reason,
+                status :rowData.status,
               );
             },
             child: LocalAssets(

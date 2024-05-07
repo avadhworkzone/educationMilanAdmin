@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_xlider/another_xlider.dart';
 import 'package:another_xlider/enums/tooltip_direction_enum.dart';
 import 'package:another_xlider/models/handler.dart';
@@ -46,6 +48,8 @@ class _StandardViseDataStudentScreenState
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: ColorUtils.primaryColor,

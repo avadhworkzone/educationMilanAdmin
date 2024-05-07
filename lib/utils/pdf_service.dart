@@ -320,4 +320,196 @@ class PdfService {
       return rank;
     }
   }
+
+  static Future<void> generateAllReportPdf({
+    required List<List<StudentModel>> reportList,
+    String? std,
+  }) async {
+    rank = 1;
+    if (reportList.isEmpty) {
+      // showToast(title: VariablesUtils.noDataFound);
+      return;
+    }
+    final logoImg =
+        (await rootBundle.load('assets/images/logo.png')).buffer.asUint8List();
+
+    try {
+      final pdf = pw.Document();
+      for (var reportList in reportList) {}
+      List.generate(
+          reportList.length,
+          (superIndex) => pdf.addPage(pw.Page(
+              pageFormat: PdfPageFormat.a4,
+              build: (pw.Context context) {
+                return pw.Container(
+                  width: double.infinity,
+                  decoration: pw.BoxDecoration(
+                      border:
+                          pw.Border.all(color: PdfColor.fromHex('#41a7f5'))),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Container(
+                        decoration: pw.BoxDecoration(
+                            color: PdfColor.fromHex('#133178')),
+                        padding: const pw.EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: pw.Row(children: [
+                          pw.ClipRRect(
+                            verticalRadius: 10.sp,
+                            horizontalRadius: 10.sp,
+                            child: pw.Image(pw.MemoryImage(logoImg),
+                                width: 60, height: 60),
+                          ),
+                          // pw.Image(pw.MemoryImage(logoImg),
+                          //     width: 60, height: 60),
+                          pw.SizedBox(width: 20),
+                          pw.Text("Borda Parivar",
+                              style: pw.TextStyle(
+                                fontSize: 30.sp,
+                                color: PdfColor.fromHex('#FFFFFF'),
+                              )),
+                        ]),
+                      ),
+                      pw.SizedBox(height: 5.sp),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.symmetric(horizontal: 5),
+                        child: pw.Row(children: [
+                          pw.Text("STD : ${superIndex + 1}",
+                              style: pw.TextStyle(fontSize: 13.sp)),
+                          pw.Spacer(),
+                          pw.Text(
+                              DateFormat('dd MMM yyyy').format(DateTime.now()),
+                              style: pw.TextStyle(fontSize: 13.sp)),
+                        ]),
+                      ),
+                      pw.SizedBox(
+                        height: 30,
+                      ),
+                      pw.Container(
+                          decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                  color: PdfColor.fromHex('#133178'))),
+                          margin: const pw.EdgeInsets.symmetric(horizontal: 5),
+                          child: pw.Column(children: [
+                            transactionHeader(),
+                            pw.ListView.builder(
+                              itemCount: reportList.length > finalPageIndex
+                                  ? finalPageIndex
+                                  : reportList.length,
+                              padding: const pw.EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 2),
+                              itemBuilder: (context, index) {
+                                final result = reportList[superIndex][index];
+                                return transactionRow(
+                                    result, index, reportList[superIndex]);
+                              },
+                            ),
+                          ])),
+                    ],
+                  ),
+                ); // Center
+              })));
+      // pdf.addPage(
+      //   pw.Page(
+      //       pageFormat: PdfPageFormat.a4,
+      //       build: (pw.Context context) {
+      //         return pw.Container(
+      //           width: double.infinity,
+      //           decoration:
+      //               pw.BoxDecoration(border: pw.Border.all(color: PdfColor.fromHex('#41a7f5'))),
+      //           child: pw.Column(
+      //             crossAxisAlignment: pw.CrossAxisAlignment.start,
+      //             children: [
+      //               pw.Container(
+      //                 decoration: pw.BoxDecoration(color: PdfColor.fromHex('#133178')),
+      //                 padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      //                 child: pw.Row(children: [
+      //                   pw.ClipRRect(
+      //                     verticalRadius: 10.sp,
+      //                     horizontalRadius: 10.sp,
+      //                     child: pw.Image(pw.MemoryImage(logoImg), width: 60, height: 60),
+      //                   ),
+      //                   // pw.Image(pw.MemoryImage(logoImg),
+      //                   //     width: 60, height: 60),
+      //                   pw.SizedBox(width: 20),
+      //                   pw.Text("Edupulse",
+      //                       style: pw.TextStyle(
+      //                         fontSize: 30.sp,
+      //                         color: PdfColor.fromHex('#FFFFFF'),
+      //                       )),
+      //                 ]),
+      //               ),
+      //               pw.SizedBox(height: 5.sp),
+      //               pw.Padding(
+      //                 padding: const pw.EdgeInsets.symmetric(horizontal: 5),
+      //                 child: pw.Row(children: [
+      //                   pw.Text("STD : 1", style: pw.TextStyle(fontSize: 13.sp)),
+      //                   pw.Spacer(),
+      //                   pw.Text(DateFormat('dd MMM yyyy').format(DateTime.now()),
+      //                       style: pw.TextStyle(fontSize: 13.sp)),
+      //                 ]),
+      //               ),
+      //               pw.SizedBox(
+      //                 height: 30,
+      //               ),
+      //               pw.Container(
+      //                   decoration: pw.BoxDecoration(
+      //                       border: pw.Border.all(color: PdfColor.fromHex('#133178'))),
+      //                   margin: const pw.EdgeInsets.symmetric(horizontal: 5),
+      //                   child: pw.Column(children: [
+      //                     transactionHeader(),
+      //                     pw.ListView.builder(
+      //                       itemCount: reportList.length > finalPageIndex
+      //                           ? finalPageIndex
+      //                           : reportList.length,
+      //                       padding: const pw.EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+      //                       itemBuilder: (context, index) {
+      //                         final result = reportList[index];
+      //                         return transactionRow(result, index, reportList);
+      //                       },
+      //                     ),
+      //                   ])),
+      //             ],
+      //           ),
+      //         ); // Center
+      //       }),
+      // );
+      //
+      // int pageCount = ((reportList.length - finalPageIndex) / maxPageCount).ceil();
+      //
+      // print('pageCount:=>$pageCount reportList:=>${reportList.length}');
+      //
+      // for (int pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+      //   int rowIndex = finalPageIndex + (pageIndex * maxPageCount);
+      //   int maxLength = maxPageCount;
+      //   if ((rowIndex + maxPageCount) > reportList.length) {
+      //     maxLength = reportList.length - rowIndex;
+      //   }
+      //
+      //   pdf.addPage(
+      //       getPage(
+      //           maxLength: maxLength,
+      //           startIndex: rowIndex,
+      //           reportList: reportList,
+      //           isLast: pageIndex == pageCount - 1),
+      //       index: pageIndex + 1);
+      // }
+      // final output = await getTemporaryDirectory();
+      // final file = File('${output.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+      // await file.writeAsBytes(await pdf.save());
+      // Get.to(PDFView(filePath: file.path,));
+      var savedFile = await pdf.save();
+      List<int> fileInts = List.from(savedFile);
+      html.AnchorElement(
+          href:
+              "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(fileInts)}")
+        ..setAttribute(
+            "download", "${DateTime.now().millisecondsSinceEpoch}.pdf")
+        ..click();
+    } on Exception catch (e) {
+      print('GENERATE PDF ERROR => $e');
+      return;
+    }
+  }
 }

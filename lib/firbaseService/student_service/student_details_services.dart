@@ -111,4 +111,15 @@ class StudentService {
       return false; // Update failed
     }
   }
+
+  ///=======================GET FINAL All DATA IN FUTURE===================///
+  static Future<List<StudentModel>> getFinalAllStudentDataFuture() {
+    return CollectionUtils.studentDetails
+        .where('isApproved', isEqualTo: true)
+        .where('status', isEqualTo: StatusEnum.approve.name)
+        .get()
+        .then((event) =>
+            event.docs.map((e) => StudentModel.fromJson(e.data())).toList()
+              ..sort((a, b) => b.percentage!.compareTo(a.percentage!)));
+  }
 }

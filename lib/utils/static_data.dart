@@ -5,8 +5,9 @@ class StaticData {
     {"title": "Student list", "icon": AssetsUtils.vector},
     {"title": "All User", "icon": AssetsUtils.person},
     {"title": "Final Data", "icon": AssetsUtils.graph},
+    {"title": "All Result Download", "icon": AssetsUtils.download},
+
     {"title": "Setting", "icon": AssetsUtils.pencil},
-    // {"title": "Promotion", "icon": AssetsUtils.adsIcon},
     // {"title": "Edit Entry Data", "icon": AssetsUtils.pencil},
   ];
 }

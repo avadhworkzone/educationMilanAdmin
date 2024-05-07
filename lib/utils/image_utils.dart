@@ -6,7 +6,6 @@ class AssetsUtils {
   /// Images/Icons
   static String imagePath = "assets/images/";
   static String iconPath = "assets/icon/";
-  // static String animationPath = "assets/animation/";
 
   /// Images
   static String logo = "${imagePath}logo.png";
@@ -23,6 +22,7 @@ class AssetsUtils {
   static String graph = "${iconPath}graph.png";
   static String pencil = "${iconPath}pencil.png";
   static String adsIcon = "${iconPath}adsIcon.png";
+  static String download = "${iconPath}download.png";
 
   ///Gif
   static String noDataFound = "${imagePath}no_data_found.gif";

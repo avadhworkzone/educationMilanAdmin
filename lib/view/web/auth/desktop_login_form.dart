@@ -232,6 +232,38 @@ class _DesktopLoginFormState extends State<DesktopLoginForm> {
                                       );
                                     }
                                   }
+                                  // if (_formKey.currentState!.validate()) {
+                                  //   setState(() {
+                                  //     isLoading = true;
+                                  //   });
+                                  //
+                                  //   final status = await AuthService.signIn(
+                                  //       docId: emailController.text,
+                                  //       pin: passwordController.text);
+                                  //   setState(() {
+                                  //     isLoading = false;
+                                  //   });
+                                  //
+                                  //   if (status == true) {
+                                  //     PreferenceManagerUtils.setIsLogin(true);
+                                  //     Get.offAll(
+                                  //       const ResponsiveLayout(
+                                  //         desktopBody: DesktopScaffold(),
+                                  //         mobileBody: MobileBottombar(),
+                                  //         tabletBody: TabletBottombar(),
+                                  //       ),
+                                  //     );
+                                  //     ToastUtils.showCustomToast(
+                                  //       context: context,
+                                  //       title: "Login Successfully",
+                                  //     );
+                                  //   } else {
+                                  //     ToastUtils.showCustomToast(
+                                  //       context: context,
+                                  //       title: "Some Thing Went Wrong",
+                                  //     );
+                                  //   }
+                                  // }
                                 },
                                 child: isLoading
                                     ? const CircularProgressIndicator() // Show loader when isLoading is true

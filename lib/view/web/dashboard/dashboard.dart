@@ -1,14 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:responsivedashboard/common_widget/custom_text.dart';
-import 'package:responsivedashboard/firbaseService/standard_service/standad_services.dart';
-import 'package:responsivedashboard/firbaseService/student_service/student_details_services.dart';
-import 'package:responsivedashboard/firbaseService/user_service/user_service.dart';
-import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/model/user_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
@@ -16,13 +9,12 @@ import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/static_data.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
+import 'package:responsivedashboard/view/web/dashboard/download_all_result_screen.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/Student_List/student_data_class.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/all_user_class.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/final_data_screen.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/setting_data_screen.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
-
-import 'drawer_screen/promotion_screen.dart';
 
 class DesktopScaffold extends StatefulWidget {
   const DesktopScaffold({Key? key}) : super(key: key);
@@ -118,8 +110,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: AssetImage(AssetsUtils.logo),
-                                fit: BoxFit.fill)),
+                                image: AssetImage(AssetsUtils.logo), fit: BoxFit.fill)),
                       ),
                       SizedBox(
                         width: Get.width * 0.01,
@@ -139,7 +130,6 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                               PreferenceManagerUtils.getLoginAdmin(),
                               fontWeight: FontWeight.w500,
                               color: ColorUtils.white,
-                              overflow: TextOverflow.ellipsis,
                               fontSize: 20,
                               fontFamily: AssetsUtils.poppins,
                             ),
@@ -162,6 +152,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                             color: onTitleTap.value == index
                                 ? Colors.white.withOpacity(0.2)
                                 : Colors.transparent,
+                            iconHeight: index == 3 ? Get.height * 0.04 : Get.height * 0.05,
                             onTap: () {
                               setState(() {
                                 onTitleTap.value = index;
@@ -187,9 +178,11 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                   : (onTitleTap.value == 2)
                       ? const FinalDataDrawerScreen()
                       : (onTitleTap.value == 3)
-                          ? const SettingDataScreen()
-                          // : const PromotionScreen()
-                          : const SizedBox()
+                          ? const DownloadAllResultScreen()
+                          : (onTitleTap.value == 4)
+                              ? const SettingDataScreen()
+                              // : const PromotionScreen()
+                              : const SizedBox()
           // : const Center(
           //     child: Text("Edit Entry Data",
           //         textAlign: TextAlign.center),

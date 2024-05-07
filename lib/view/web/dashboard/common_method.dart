@@ -14,7 +14,6 @@ import 'package:responsivedashboard/utils/image_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/services/app_notification.dart';
-import 'package:responsivedashboard/view/web/dashboard/dashboard.dart';
 
 import '../../../firbaseService/user_service/user_service.dart';
 
@@ -31,10 +30,7 @@ List<UserResModel> userData = [];
 List<UserResModel> userfilterData = [];
 
 Widget commonTab(
-    {required String icon,
-    required String title,
-    required Function onTap,
-    required Color color}) {
+    {required String icon, required String title, required Function onTap, required Color color,double? iconWidth,double? iconHeight}) {
   return Container(
     color: color,
     child: InkWell(
@@ -49,10 +45,8 @@ Widget commonTab(
             ),
           LocalAssets(
               imagePath: icon,
-              width:
-                  title == "Promotion" ? Get.width * 0.035 : Get.width * 0.05,
-              height:
-                  title == "Promotion" ? Get.height * 0.035 : Get.height * 0.05,
+              width: iconWidth ?? (title == "Promotion" ? Get.width * 0.035 : Get.width * 0.05),
+              height: iconHeight ?? (title == "Promotion" ? Get.height * 0.035 : Get.height * 0.05),
               imgColor: Colors.white),
           if (title == "Promotion")
             const SizedBox(
@@ -124,8 +118,7 @@ void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
                           update(() {
                             isDelete = true;
                           });
-                          final status =
-                              await StudentService.deleteStudent(studentId);
+                          final status = await StudentService.deleteStudent(studentId);
                           update(() {
                             isDelete = false;
                             print("======false========$isDelete");
@@ -141,8 +134,7 @@ void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
                                     borderRadius: BorderRadius.circular(20),
                                     color: ColorUtils.redF3),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 6.h, horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                                   child: CustomText(
                                     StringUtils.delete,
                                     color: ColorUtils.white,
@@ -236,18 +228,18 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
                           update(() {
                             isDelete = true;
                           });
-                          final status =
-                              await StudentService.deleteStudentWithReason(
-                                  studentId, reasonController.text, isApprove);
+                          final status = await StudentService.deleteStudentWithReason(
+                              studentId, reasonController.text, isApprove);
                           update(() {
                             isDelete = false;
                             print("======false========$isDelete");
                           });
                           if (status) {
                             NotificationMethods.sendMessage(
-                                receiverFcmToken: fcmToken,
-                                msg: 'your result status is Rejected',
-                                title: 'Notification');
+                                    receiverFcmToken: fcmToken,
+                                    msg: 'your result status is Rejected',
+                                    title: 'Notification')
+                                .then((value) => Get.back());
                             Get.back();
                           } else {}
                         },
@@ -258,8 +250,7 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
                                     borderRadius: BorderRadius.circular(20),
                                     color: ColorUtils.redF3),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 6.h, horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                                   child: CustomText(
                                     StringUtils.delete,
                                     color: ColorUtils.white,
@@ -350,8 +341,7 @@ void commonUserDeleteDialog(String userId, bool isApprove, String fcmToken) {
                                     borderRadius: BorderRadius.circular(20),
                                     color: ColorUtils.redF3),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 6.h, horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                                   child: CustomText(
                                     StringUtils.delete,
                                     color: ColorUtils.white,
@@ -382,12 +372,18 @@ void commonDialogEdit(
   final String studentId,
   final String userId,
   final String villageName,
-  final String? createdDate,
-) {
-  final TextEditingController fullNameController =
-      TextEditingController(text: fullName ?? '');
-  final TextEditingController villageController =
-      TextEditingController(text: villageName);
+  final String? createdDate, {
+  required final String? mobileNumber,
+  required final bool? isApproved,
+  final String? result,
+  required final String fcmToken,
+  final String? checkUncheck,
+  String? imageId,
+  String? reason,
+  String? status,
+}) {
+  final TextEditingController fullNameController = TextEditingController(text: fullName ?? '');
+  final TextEditingController villageController = TextEditingController(text: villageName);
   final TextEditingController percentageController =
       TextEditingController(text: personTage?.toString() ?? '');
 
@@ -520,8 +516,7 @@ void commonDialogEdit(
                               child: FutureBuilder<List<String>>(
                                 future: standardsListFuture,
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
@@ -531,15 +526,13 @@ void commonDialogEdit(
                                         'Error: ${snapshot.error}',
                                       ),
                                     );
-                                  } else if (!snapshot.hasData ||
-                                      snapshot.data!.isEmpty) {
+                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                     return const Center(
                                       child: Text('No standards found.'),
                                     );
                                   } else {
                                     List<String> standardsList = snapshot.data!;
-                                    Set<String> uniqueStandards =
-                                        Set<String>.from(standardsList);
+                                    Set<String> uniqueStandards = Set<String>.from(standardsList);
                                     return DropdownButtonFormField<String>(
                                       decoration: const InputDecoration(
                                           // ... Your decoration properties
@@ -547,8 +540,7 @@ void commonDialogEdit(
                                       isExpanded: true,
                                       isDense: true,
                                       menuMaxHeight: 150.w,
-                                      validator: (value) =>
-                                          value == null ? "* Required" : null,
+                                      validator: (value) => value == null ? "* Required" : null,
                                       dropdownColor: ColorUtils.greyF6,
                                       value: selectedValue,
                                       onChanged: (String? newValue) {
@@ -557,8 +549,7 @@ void commonDialogEdit(
                                         });
                                         Form.of(context).validate();
                                       },
-                                      items: uniqueStandards
-                                          .map((String standard) {
+                                      items: uniqueStandards.map((String standard) {
                                         return DropdownMenuItem<String>(
                                           value: standard,
                                           child: Text(standard),
@@ -599,9 +590,7 @@ void commonDialogEdit(
 
                                   double? parsedValue = double.tryParse(value);
 
-                                  if (parsedValue == null ||
-                                      parsedValue < 0 ||
-                                      parsedValue > 100) {
+                                  if (parsedValue == null || parsedValue < 0 || parsedValue > 100) {
                                     return 'Enter a 0 to 100';
                                   }
                                   return null;
@@ -625,20 +614,23 @@ void commonDialogEdit(
                             update(() {
                               isEdit = true;
                             });
-
+                            reqModel.mobileNumber = mobileNumber;
+                            reqModel.result = result;
+                            reqModel.fcmToken = fcmToken;
+                            reqModel.checkUncheck = checkUncheck;
                             reqModel.standard = selectedValue.toString();
                             reqModel.studentFullName = fullNameController.text;
-                            reqModel.percentage =
-                                double.parse(percentageController.text);
+                            reqModel.percentage = double.parse(percentageController.text);
                             reqModel.studentId = studentId.toString();
                             reqModel.villageName = villageController.text;
                             reqModel.userId = userId.toString();
-                            reqModel.isApproved = false;
-                            reqModel.createdDate =
-                                DateTime.now().toLocal().toString();
+                            reqModel.isApproved = isApproved ?? false;
+                            reqModel.createdDate = DateTime.now().toLocal().toString();
+                            reqModel.imageId = imageId;
+                            reqModel.reason = reason;
+                            reqModel.status = status;
 
-                            final status =
-                                await StudentService.studentDetailsEdit(
+                            final isStatus = await StudentService.studentDetailsEdit(
                               reqModel,
                             );
 
@@ -646,7 +638,11 @@ void commonDialogEdit(
                               isEdit = false;
                             });
 
-                            if (status) {
+                            if (isStatus) {
+                              NotificationMethods.sendMessage(
+                                  receiverFcmToken: fcmToken,
+                                  msg: 'your result data is Edited',
+                                  title: 'Notification');
                               Get.back();
                             }
                           }
@@ -687,10 +683,8 @@ void commonUserEditDialogEdit(
   final String? phoneNo,
   final String? password,
 ) {
-  final TextEditingController phoneController =
-      TextEditingController(text: phoneNo ?? '');
-  final TextEditingController passwordController =
-      TextEditingController(text: password);
+  final TextEditingController phoneController = TextEditingController(text: phoneNo ?? '');
+  final TextEditingController passwordController = TextEditingController(text: password);
 
   showDialog(
     builder: (BuildContext context) {
@@ -767,8 +761,7 @@ void commonUserEditDialogEdit(
                             userResModel.phoneNo = phoneController.text;
                             userResModel.pin = passwordController.text;
 
-                            print(
-                                "userResModel.phoneNo == ${userResModel.phoneNo}");
+                            print("userResModel.phoneNo == ${userResModel.phoneNo}");
                             print("userResModel.pin == ${userResModel.pin}");
 
                             final status = await UserService.userDetailsEdit(
@@ -865,9 +858,7 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                       ),
                       InkWell(
                         onTap: () async {
-                          bool success =
-                              await StudentService.acceptStudentResult(
-                                  studentId);
+                          bool success = await StudentService.acceptStudentResult(studentId);
                           if (success) {
                             NotificationMethods.sendMessage(
                                 receiverFcmToken: fcmToken,
@@ -887,11 +878,9 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: ColorUtils.redF3),
+                              borderRadius: BorderRadius.circular(20), color: ColorUtils.redF3),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 6.h, horizontal: 20.w),
+                            padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                             child: CustomText(
                               "YES",
                               color: ColorUtils.white,
@@ -963,9 +952,7 @@ void commonRejectDialog(String studentId) {
                       ),
                       InkWell(
                         onTap: () async {
-                          bool success =
-                              await StudentService.acceptStudentResult(
-                                  studentId);
+                          bool success = await StudentService.acceptStudentResult(studentId);
                           if (success) {
                             Get.back();
                           } else {
@@ -974,11 +961,9 @@ void commonRejectDialog(String studentId) {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: ColorUtils.redF3),
+                              borderRadius: BorderRadius.circular(20), color: ColorUtils.redF3),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 6.h, horizontal: 20.w),
+                            padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
                             child: CustomText(
                               "YES",
                               color: ColorUtils.white,

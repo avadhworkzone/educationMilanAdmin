@@ -1,7 +1,6 @@
 class StudentModel {
   String? userId;
   String? studentFullName;
-  String? statusBy;
   String? villageName;
   String? standard;
   num? percentage;
@@ -12,11 +11,13 @@ class StudentModel {
   String? checkUncheck;
   String? mobileNumber;
   bool? isApproved;
+  String? imageId;
+  String? reason;
+  String? status;
 
   StudentModel(
       {this.userId,
       this.studentFullName,
-      this.statusBy,
       this.villageName,
       this.standard,
       this.result,
@@ -26,12 +27,14 @@ class StudentModel {
       this.createdDate,
       this.checkUncheck,
       this.mobileNumber,
-      this.isApproved});
+      this.isApproved,
+      this.imageId,
+      this.reason,
+      this.status});
 
   StudentModel.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     studentFullName = json['studentFullName'];
-    statusBy = json['statusBy'];
     villageName = json['villageName'];
     standard = json['standard'];
     result = json['result'];
@@ -42,12 +45,14 @@ class StudentModel {
     checkUncheck = json['checkUncheck'];
     isApproved = json['isApproved'];
     mobileNumber = json['mobileNumber'] ?? "";
+    imageId = json['imageId'];
+    reason = json['reason'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() => {
         "userId": userId,
         "studentFullName": studentFullName,
-        "statusBy": statusBy,
         "villageName": villageName,
         "standard": standard,
         "result": result,
@@ -58,6 +63,9 @@ class StudentModel {
         "checkUncheck": checkUncheck,
         "isApproved": isApproved,
         "mobileNumber": mobileNumber,
+        "imageId": imageId,
+        "reason": reason,
+        "status": status,
       };
 
   Map<String, dynamic> updateToJson() => {"studentFullName": studentFullName};
