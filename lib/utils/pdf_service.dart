@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -246,6 +247,44 @@ class PdfService {
       ),
     );
   }
+
+  static Future<void> generateReportExcel({
+    required List<StudentModel> reportList,
+    required String std,
+  }) async {
+    // TODO: Implement your Excel generation logic using the `excel` package.
+    // Here's a sample structure to start with:
+    final excel = Excel.createExcel();
+    final sheet = excel['Sheet1'];
+
+    // Add headers
+    sheet.appendRow([
+      'Rank',
+      'Student Name',
+      'Mobile Number',
+      'Village Name',
+      'Percentage',
+    ]);
+
+    int rank = 1;
+    for (int i = 0; i < reportList.length; i++) {
+      final s = reportList[i];
+      sheet.appendRow([
+        rank++,
+        s.studentFullName ?? '',
+        s.mobileNumber ?? '',
+        s.villageName ?? '',
+        '${s.percentage}%',
+      ]);
+    }
+
+    final fileBytes = excel.encode();
+    final content = base64Encode(fileBytes!);
+    final anchor = html.AnchorElement(href: 'data:application/octet-stream;charset=utf-16le;base64,$content')
+      ..setAttribute("download", "${DateTime.now().millisecondsSinceEpoch}.xlsx")
+      ..click();
+  }
+
 
   static pw.Container transactionRow(
     StudentModel result,
