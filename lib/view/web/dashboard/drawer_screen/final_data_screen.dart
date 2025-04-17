@@ -148,6 +148,16 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                           if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
                           if (snapshot.hasError) return noDataFound();
                           List<StudentModel> stdList = snapshot.data!;
+                          // List<StudentModel>     stdList = snapshot.data!.where((e) {
+                          //   final dateStr = e.createdDate;
+                          //   if (dateStr == null || dateStr.isEmpty) return false;
+                          //   try {
+                          //     final date = DateTime.parse(dateStr);
+                          //     return date.year == 2025;
+                          //   } catch (e) {
+                          //     return false;
+                          //   }
+                          // }).toList();
                           List<StudentModel> juniorKgs = stdList.where((e) => e.standard?.contains('Junior KG') ?? false).toList();
                           List<StudentModel> seniorKgs = stdList.where((e) => e.standard?.contains('Senior KG') ?? false).toList();
                           List<StudentModel> others = stdList.where((e) {

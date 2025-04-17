@@ -601,7 +601,16 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
                             }
                             studentList = snapshot.data!
                                 .where((s) => s.studentFullName!.toLowerCase().contains(searchController.text.toLowerCase()))
-                                .toList();
+                                .toList().where((element){
+  final dateStr = element.createdDate;
+                                if (dateStr
+                                    == null || dateStr.isEmpty) return false;
+                                try {
+                                  final date = DateTime.parse(dateStr);
+                                  return date.year == 2025;
+                                } catch (e) {
+                                  return false;
+                                }                            },).toList();
 
                             return SizedBox(
                               width: double.infinity,
