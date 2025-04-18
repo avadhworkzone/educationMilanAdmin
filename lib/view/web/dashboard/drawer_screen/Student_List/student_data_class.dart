@@ -305,6 +305,8 @@ class _StudentListState extends State<StudentList> {
 
                   List<StudentModel> all = snapshot.data!;
                   List<StudentModel> kgList = all.where((e) {
+                    // print('${e.standard}');
+
                     final std = e.standard ?? "";
                     return std.contains("Junior KG") || std.contains("Senior KG");
                   }).where((e) => e.standard?.contains(
@@ -317,7 +319,6 @@ class _StudentListState extends State<StudentList> {
                         !std.contains("Senior KG") &&
                         std.contains(selectedMedium == 'English' ? "(Eng)" : "(Guj)");
                   }).toList();
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -382,6 +383,7 @@ class _StudentListState extends State<StudentList> {
       ),
       itemBuilder: (context, index) {
         var element = stdList[index];
+
         return InkWell(
           onTap: () {
             Get.offAll(() => ResponsiveLayout(

@@ -19,6 +19,17 @@ class StudentService {
               ..sort((a, b) => b.percentage!.compareTo(a.percentage!)));
   }
 
+  ///=======================all download data===================///
+  static Future<List<StudentModel>> getFinalStudentDataAllFuture() {
+    return CollectionUtils.studentDetails
+        .where('isApproved', isEqualTo: true)
+        .where('status', isEqualTo: StatusEnum.approve.name)
+        .get()
+        .then((event) =>
+    event.docs.map((e) => StudentModel.fromJson(e.data())).toList()
+      ..sort((a, b) => b.percentage!.compareTo(a.percentage!)));
+  }
+
   ///=======================get data===================///
   static Stream<List<StudentModel>> getStudentData(
       {required String standard,

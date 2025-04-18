@@ -14,6 +14,7 @@ import 'package:responsivedashboard/view/web/dashboard/drawer_screen/Student_Lis
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/all_user_class.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/final_data_screen.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/setting_data_screen.dart';
+import 'package:responsivedashboard/view/web/dashboard/year_wise_data.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
 
 class DesktopScaffold extends StatefulWidget {
@@ -178,7 +179,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                   : (onTitleTap.value == 2)
                       ? const FinalDataDrawerScreen()
                       : (onTitleTap.value == 3)
-                          ? const DownloadAllResultScreen()
+                          ? const YearWiseExportScreen()
                           : (onTitleTap.value == 4)
                               ? const SettingDataScreen()
                               // : const PromotionScreen()

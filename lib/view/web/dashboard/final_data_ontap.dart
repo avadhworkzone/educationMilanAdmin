@@ -569,7 +569,7 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
                         child: SizedBox(
                           width: 24,
                           height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(),
                         ),
                       )
                           : IconButton(
@@ -601,13 +601,15 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
                             }
                             studentList = snapshot.data!
                                 .where((s) => s.studentFullName!.toLowerCase().contains(searchController.text.toLowerCase()))
-                                .toList().where((element){
+                                .toList()
+
+                                .where((element){
   final dateStr = element.createdDate;
                                 if (dateStr
                                     == null || dateStr.isEmpty) return false;
                                 try {
                                   final date = DateTime.parse(dateStr);
-                                  return date.year == 2025;
+                                  return date.year == DateTime.now().year;
                                 } catch (e) {
                                   return false;
                                 }                            },).toList();
