@@ -6,10 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
+import 'package:printing/printing.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'dart:html' as html;
-
+import 'package:universal_html/html.dart' as universal_html;
 import 'package:responsivedashboard/utils/string_utils.dart';
+
+import '../firbaseService/student_service/student_details_services.dart';
 
 class PdfService {
   static int finalPageIndex = 22;
@@ -18,29 +21,38 @@ class PdfService {
   static late Font gujaratiFont;
 
   static getGujaratiFont() async {
-    final font = await rootBundle.load("fonts/NotoSansGujarati.ttf");
+    final font = await rootBundle.load("fonts/NotoSansGujarati-Regular.ttf");
     gujaratiFont = pw.Font.ttf(font);
   }
-  static Future<void> generateYearWiseReportPdf({
+
+
+  static Future<void> generateYearWiseReport({
     required int year,
     required List<StudentModel> allStudents,
   }) async {
-    await getGujaratiFont();
-    final pdf = pw.Document();
-    final logoImg = (await rootBundle.load('assets/images/logo.jpg')).buffer.asUint8List();
-    bool isFirstPage = true;
+    final excel = Excel.createExcel();
+    final sheet = excel['Sheet1'];
 
-    const List<String> standardOrder = [
-      'STD Junior KG (Eng)', 'STD Junior KG (Guj)', 'STD Senior KG (Eng)', 'STD Senior KG (Guj)',
-      'STD 1 (Eng)', 'STD 1 (Guj)', 'STD 2 (Eng)', 'STD 2 (Guj)', 'STD 3 (Eng)', 'STD 3 (Guj)',
-      'STD 4 (Eng)', 'STD 4 (Guj)', 'STD 5 (Eng)', 'STD 5 (Guj)', 'STD 6 (Eng)', 'STD 6 (Guj)',
-      'STD 7 (Eng)', 'STD 7 (Guj)', 'STD 8 (Eng)', 'STD 8 (Guj)', 'STD 9 (Eng)', 'STD 9 (Guj)',
-      'STD 10 (Eng)', 'STD 10 (Guj)', 'STD 11 Com. (Eng)', 'STD 11 Com. (Guj)',
-      'STD 11 Sci. (Eng)', 'STD 11 Sci. (Guj)', 'STD 11 Art (Eng)', 'STD 11 Art (Guj)',
-      'STD 12 Com. (Eng)', 'STD 12 Com. (Guj)', 'STD 12 Sci. (Eng)', 'STD 12 Sci. (Guj)',
-      'STD 12 Art (Eng)', 'STD 12 Art (Guj)'
-    ];
+    // Set column widths
+    sheet.setColWidth(0, 8);   // Rank
+    sheet.setColWidth(1, 65);  // Name
+    sheet.setColWidth(2, 25);  // Mobile
+    sheet.setColWidth(3, 17);  // Village
+    sheet.setColWidth(4, 15);  // Percentage
 
+    // 🔄 Get dynamic standard list from StudentService
+    final List<StudentModel> allStdData = await StudentService.getStandardData().first;
+    final List<String> standardOrder = allStdData
+        .map((s) => s.standard?.trim() ?? '')
+        .where((s) => s.isNotEmpty)
+        .toSet()
+        .toList();
+    // Top spacing before standard section
+    sheet.appendRow(['']);
+    sheet.appendRow(['']);
+    sheet.appendRow(['------------------------------------------------------------------------------ BORDA PARIVAR SNEHMILAN ------------------------------------------------------------------------------']);
+    // Top spacing before standard section
+    sheet.appendRow(['']);
     for (final std in standardOrder) {
       final students = allStudents.where((s) {
         final matchStd = s.standard?.trim() == std.trim();
@@ -55,78 +67,47 @@ class PdfService {
 
       if (students.isEmpty) continue;
 
-      pdf.addPage(
-        pw.MultiPage(
-          pageFormat: PdfPageFormat.a4.landscape,
-          build: (context) {
-            final content = <pw.Widget>[];
+      // Top spacing before standard section
+      sheet.appendRow(['']);
+      sheet.appendRow(['']);
 
-            if (isFirstPage) {
-              content.add(
-                pw.Container(
-                  padding: const pw.EdgeInsets.all(10),
-                  decoration: pw.BoxDecoration(color: PdfColors.indigo800),
-                  child: pw.Row(
-                    children: [
-                      pw.Image(pw.MemoryImage(logoImg), width: 60, height: 60),
-                      pw.SizedBox(width: 20),
-                      pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text("Borda Parivar", style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold, color: PdfColors.white)),
-                          pw.Text("Annual Student Report - $year", style: pw.TextStyle(font: gujaratiFont, fontSize: 14, color: PdfColors.white)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              content.add(pw.SizedBox(height: 20));
-              isFirstPage = false;
-            }
+      // Title row
+      sheet.appendRow(['================================================== $std ===================================================']);
 
-            content.add(pw.Text(std, style: pw.TextStyle(font: gujaratiFont, fontSize: 18, fontWeight: pw.FontWeight.bold)));
-            content.add(pw.SizedBox(height: 10));
+      // Spacer after title
+      sheet.appendRow(['']);
+      sheet.appendRow(['']);
 
-            content.add(
-              pw.Table.fromTextArray(
-                headers: ['Rank', 'Name', 'Mobile', 'Village', 'Percentage'],
-                headerStyle: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold),
-                headerDecoration: const pw.BoxDecoration(color: PdfColors.grey300),
-                cellStyle: pw.TextStyle(font: gujaratiFont),
-                data: List.generate(students.length, (index) {
-                  final s = students[index];
-                  return [
-                    '${index + 1}',
-                    s.studentFullName ?? '',
-                    s.mobileNumber ?? '',
-                    s.villageName ?? '',
-                    '${s.percentage ?? '-'}%',
-                  ];
-                }),
-              ),
-            );
+      // Header
+      sheet.appendRow(['Rank', 'Name', 'Mobile', 'Village', 'Percentage']);
 
-            return content;
-          },
-        ),
-      );
+      for (int i = 0; i < students.length; i++) {
+        final s = students[i];
+        sheet.appendRow([
+          '${i + 1}',
+          s.studentFullName ?? '',
+          s.mobileNumber ?? '',
+          s.villageName ?? '',
+          '${s.percentage ?? '-'}%',
+        ]);
+      }
+
+      // Bottom spacing after section
+      sheet.appendRow(['']);
+      sheet.appendRow(['']);
     }
 
-    // var savedFile = await pdf.save();
-    // List<int> fileInts = List.from(savedFile);
-    // html.AnchorElement(
-    //     href:
-    //     "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(fileInts)}")
-    //   ..setAttribute(
-    //       "download", "borda parivar $year.pdf")
-    //   ..click();
-    final pdfBytes = await pdf.save();
-    final base64Data = base64Encode(pdfBytes);
-    html.AnchorElement(
-      href: 'data:application/pdf;base64,$base64Data',
-    )
-      ..setAttribute('download', 'Report_${DateTime.now().millisecondsSinceEpoch}.pdf')
+    // Save and download
+    final excelBytes = excel.encode();
+    if (excelBytes == null) return;
+
+    final base64Data = base64Encode(excelBytes);
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final content =
+        'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,$base64Data';
+
+    final anchor = html.AnchorElement(href: content)
+      ..setAttribute('download', 'Yearly_Student_Report_$timestamp.xlsx')
       ..click();
   }
 
@@ -139,140 +120,96 @@ class PdfService {
     required List<StudentModel> reportList,
     required String std,
   }) async {
+    rank = 1;
     if (reportList.isEmpty) return;
 
     await getGujaratiFont();
+    final logoImg = (await rootBundle.load('assets/images/logo.jpg')).buffer.asUint8List();
 
     final pdf = pw.Document();
-    final logoImg = (await rootBundle.load('assets/images/logo.jpg')).buffer.asUint8List();
-    final currentYear = DateTime.now().year;
-
-    final filteredList = reportList.where((s) {
-      try {
-        final date = DateTime.parse(s.createdDate ?? '');
-        return date.year == currentYear;
-      } catch (_) {
-        return false;
-      }
-    }).toList();
-
-    if (filteredList.isEmpty) return;
+    final currentDate = DateFormat('dd MMM yyyy').format(DateTime.now());
 
     const int rowsPerPage = 25;
-    final totalPages = (filteredList.length / rowsPerPage).ceil();
+    final totalPages = (reportList.length / rowsPerPage).ceil();
 
     for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       final start = pageIndex * rowsPerPage;
-      final end = (start + rowsPerPage > filteredList.length)
-          ? filteredList.length
+      final end = (start + rowsPerPage > reportList.length)
+          ? reportList.length
           : start + rowsPerPage;
-      final currentPageItems = filteredList.sublist(start, end);
+      final currentPageItems = reportList.sublist(start, end);
 
       pdf.addPage(
         pw.MultiPage(
-          pageFormat: PdfPageFormat.a4,
-          build: (_) {
-            final content = <pw.Widget>[];
-
-            if (pageIndex == 0) {
-              content.add(
-                pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          pageFormat: PdfPageFormat.a4.landscape,
+          margin: const pw.EdgeInsets.all(16),
+          build: (context) {
+            return [
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                color: PdfColor.fromHex('#133178'),
+                child: pw.Row(
                   children: [
-                    pw.Image(pw.MemoryImage(logoImg), width: 60, height: 60),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                      children: [
-                        pw.Text(
-                          'Borda Parivar',
-                          style: pw.TextStyle(
-                            font: gujaratiFont,
-                            fontSize: 24,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                        pw.Text(
-                          'STD: $std - Year: $currentYear',
-                          style: pw.TextStyle(font: gujaratiFont, fontSize: 14),
-                        ),
-                      ],
+                    pw.ClipRRect(
+                      verticalRadius: 10,
+                      horizontalRadius: 10,
+                      child: pw.Image(pw.MemoryImage(logoImg), width: 60, height: 60),
                     ),
+                    pw.SizedBox(width: 20),
                     pw.Text(
-                      DateFormat('dd MMM yyyy').format(DateTime.now()),
-                      style: pw.TextStyle(font: gujaratiFont, fontSize: 12),
+                      "Borda Parivar Snehmilan",
+                      style: pw.TextStyle(
+                        font: gujaratiFont,
+                        fontSize: 30,
+                        color: PdfColor.fromHex('#FFFFFF'),
+                      ),
                     ),
+                    pw.Spacer(),
+                    pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      children: [
+                        pw.Text("STD: $std", style: pw.TextStyle(font: gujaratiFont, fontSize: 13, color: PdfColors.white)),
+                        pw.Text(currentDate, style: pw.TextStyle(font: gujaratiFont, fontSize: 13, color: PdfColors.white)),
+                      ],
+                    )
                   ],
                 ),
-              );
-              content.add(pw.SizedBox(height: 20));
-            }
-
-            content.add(
-              pw.Table(
-                border: pw.TableBorder.all(width: 0.5),
-                columnWidths: {
-                  0: const pw.FixedColumnWidth(40),
-                  1: const pw.FlexColumnWidth(3),
-                  2: const pw.FlexColumnWidth(2.5),
-                  3: const pw.FlexColumnWidth(2),
-                  4: const pw.FixedColumnWidth(80),
-                },
-                children: [
-                  pw.TableRow(
-                    decoration: const pw.BoxDecoration(color: PdfColors.blueGrey300),
-                    children: [
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Rank', style: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold)),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Name', style: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold)),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Mobile', style: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold)),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Village', style: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold)),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Percentage', style: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                  ...List.generate(currentPageItems.length, (index) {
-                    final s = currentPageItems[index];
-                    return pw.TableRow(
-                      children: [
-                        pw.Padding(padding: const pw.EdgeInsets.all(4), child: pw.Text('${start + index + 1}', style: pw.TextStyle(font: gujaratiFont))),
-                        pw.Padding(padding: const pw.EdgeInsets.all(4), child: pw.Text(s.studentFullName ?? '', style: pw.TextStyle(font: gujaratiFont))),
-                        pw.Padding(padding: const pw.EdgeInsets.all(4), child: pw.Text(s.mobileNumber ?? '', style: pw.TextStyle(font: gujaratiFont))),
-                        pw.Padding(padding: const pw.EdgeInsets.all(4), child: pw.Text(s.villageName ?? '', style: pw.TextStyle(font: gujaratiFont))),
-                        pw.Padding(padding: const pw.EdgeInsets.all(4), child: pw.Text('${s.percentage ?? '-'}%', style: pw.TextStyle(font: gujaratiFont))),
-                      ],
-                    );
-                  }),
-                ],
               ),
-            );
-
-            return content;
+              pw.SizedBox(height: 20),
+              pw.Container(
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(color: PdfColor.fromHex('#133178')),
+                ),
+                child: pw.Table.fromTextArray(
+                  headers: ['Rank', 'Name', 'Mobile', 'Village', 'Percentage'],
+                  headerStyle: pw.TextStyle(font: gujaratiFont, fontWeight: pw.FontWeight.bold),
+                  headerDecoration: const pw.BoxDecoration(color: PdfColors.grey300),
+                  cellStyle: pw.TextStyle(font: gujaratiFont),
+                  data: List.generate(currentPageItems.length, (index) {
+                    final s = currentPageItems[index];
+                    return [
+                      '${start + index + 1}',
+                      s.studentFullName ?? '',
+                      s.mobileNumber ?? '',
+                      s.villageName ?? '',
+                      '${s.percentage ?? '-'}%',
+                    ];
+                  }),
+                ),
+              ),
+            ];
           },
         ),
       );
     }
 
     final pdfBytes = await pdf.save();
-    final base64Data = base64Encode(pdfBytes);
-    html.AnchorElement(
-      href: 'data:application/pdf;base64,$base64Data',
-    )
-      ..setAttribute('download', 'Report_${DateTime.now().millisecondsSinceEpoch}.pdf')
-      ..click();
+    await Printing.sharePdf(
+      bytes: pdfBytes,
+      filename: 'Report_${DateTime.now().millisecondsSinceEpoch}.pdf',
+    );
   }
+
 
   static pw.Page getPage(
       {required int maxLength,
@@ -376,51 +313,77 @@ class PdfService {
     );
   }
 
+
   static Future<void> generateReportExcel({
     required List<StudentModel> reportList,
     required String std,
   }) async {
-    // TODO: Implement your Excel generation logic using the `excel` package.
-    // Here's a sample structure to start with:
     final excel = Excel.createExcel();
     final sheet = excel['Sheet1'];
 
-    // Add headers
+    // Set column widths
+    sheet.setColWidth(0, 8);   // Rank
+    sheet.setColWidth(1, 65);  // Name
+    sheet.setColWidth(2, 25);  // Mobile
+    sheet.setColWidth(3, 17);  // Village
+    sheet.setColWidth(4, 15);  // Percentage
+    // Spacer
+    sheet.appendRow(['']);
+    sheet.appendRow(['']);
+
+    // App title row
+    sheet.appendRow(['------------------------------------------------------------------------------ BORDA PARIVAR SNEHMILAN ------------------------------------------------------------------------------']);
+
+
+
+    // Spacer
+    sheet.appendRow(['']);
+
+    // Section title
     sheet.appendRow([
-      'Rank',
-      'Student Name',
-      'Mobile Number',
-      'Village Name',
-      'Percentage',
+      '================================================== $std ==================================================='
     ]);
 
-    // int rank = 1;
+    // Spacer
+    sheet.appendRow(['']);
+    sheet.appendRow(['']);
 
-    reportList=reportList.where((element){
-    final dateStr = element.createdDate;
-    if (dateStr
-    == null || dateStr.isEmpty) return false;
-    try {
-    final date = DateTime.parse(dateStr);
-    return date.year == DateTime.now().year;
-    } catch (e) {
-    return false;
-    }                            },).toList();
+    // Header row
+    sheet.appendRow(['Rank', 'Student Name', 'Mobile Number', 'Village Name', 'Percentage']);
+
+    // Filter reportList by current year
+    final currentYear = DateTime.now().year;
+    reportList = reportList.where((element) {
+      final dateStr = element.createdDate;
+      if (dateStr == null || dateStr.isEmpty) return false;
+      try {
+        final date = DateTime.parse(dateStr);
+        return date.year == currentYear;
+      } catch (_) {
+        return false;
+      }
+    }).toList();
+
+    // Add student rows
     for (int i = 0; i < reportList.length; i++) {
       final s = reportList[i];
       sheet.appendRow([
-        rank++,
+        '${i + 1}',
         s.studentFullName ?? '',
         s.mobileNumber ?? '',
         s.villageName ?? '',
-        '${s.percentage}%',
+        '${s.percentage ?? '-'}%',
       ]);
     }
 
+    // Save and download
     final fileBytes = excel.encode();
-    final content = base64Encode(fileBytes!);
-    final anchor = html.AnchorElement(href: 'data:application/octet-stream;charset=utf-16le;base64,$content')
-      ..setAttribute("download", "${DateTime.now().millisecondsSinceEpoch}.xlsx")
+    if (fileBytes == null) return;
+
+    final content = base64Encode(fileBytes);
+    final anchor = html.AnchorElement(
+      href: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-16le;base64,$content',
+    )..setAttribute("download", "Report_${std}_${DateTime.now().millisecondsSinceEpoch}.xlsx")
       ..click();
   }
 

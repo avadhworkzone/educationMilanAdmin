@@ -535,29 +535,29 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
                         ),
                       ),
                       SizedBox(width: 10.w),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ColorUtils.greyD0),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: DropdownButton<String>(
-                          value: selectedExportType,
-                          underline: SizedBox(),
-                          icon: Icon(Icons.arrow_drop_down),
-                          items: ['PDF', 'Excel'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedExportType = newValue!;
-                            });
-                          },
-                        ),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(color: ColorUtils.greyD0),
+                      //     borderRadius: BorderRadius.circular(8.r),
+                      //   ),
+                      //   child: DropdownButton<String>(
+                      //     value: selectedExportType,
+                      //     underline: SizedBox(),
+                      //     icon: Icon(Icons.arrow_drop_down),
+                      //     items: ['PDF', 'Excel'].map((String value) {
+                      //       return DropdownMenuItem<String>(
+                      //         value: value,
+                      //         child: Text(value),
+                      //       );
+                      //     }).toList(),
+                      //     onChanged: (newValue) {
+                      //       setState(() {
+                      //         selectedExportType = newValue!;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
                       // IconButton(
                       //     onPressed: () {
                       //       filterDataDialog();

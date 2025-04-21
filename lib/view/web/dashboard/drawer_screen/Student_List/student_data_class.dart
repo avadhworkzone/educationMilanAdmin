@@ -30,6 +30,7 @@ import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/standaredvise_data_student.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common_widget/no_data_found.dart';
 import '../../../../../utils/enum_utils.dart';
@@ -205,6 +206,26 @@ class _StudentListState extends State<StudentList> {
   bool isLoggingOut = false;
   String? selectedMedium = 'English';
   DashboardViewModel dashboardViewModel = Get.find();
+  @override
+  void initState() {
+    super.initState();
+    loadMediumPreference();
+  }
+
+  void loadMediumPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    final medium = prefs.getString('selectedMedium');
+    if (medium != null && mounted) {
+      setState(() {
+        selectedMedium = medium;
+      });
+    }
+  }
+
+  void saveMediumPreference(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedMedium', value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +305,10 @@ class _StudentListState extends State<StudentList> {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() => selectedMedium = value);
+                        if (value != null) {
+                          setState(() => selectedMedium = value);
+                          saveMediumPreference(value);
+                        }
                       },
                     ),
                   ),

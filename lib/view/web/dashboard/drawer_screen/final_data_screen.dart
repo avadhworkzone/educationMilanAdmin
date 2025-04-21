@@ -19,6 +19,7 @@ import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/web/dashboard/final_data_ontap.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FinalDataDrawerScreen extends StatefulWidget {
   const FinalDataDrawerScreen({Key? key}) : super(key: key);
@@ -31,6 +32,26 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
   DashboardViewModel dashboardViewModel = Get.find();
   bool isLoggingOut = false;
   String? selectedMedium = 'English';
+  @override
+  void initState() {
+    super.initState();
+    loadMediumPreference();
+  }
+
+  void loadMediumPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    final medium = prefs.getString('selectedMedium');
+    if (medium != null && mounted) {
+      setState(() {
+        selectedMedium = medium;
+      });
+    }
+  }
+
+  void saveMediumPreference(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedMedium', value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +285,10 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          setState(() => selectedMedium = value);
+                                          if (value != null) {
+                                            setState(() => selectedMedium = value);
+                                            saveMediumPreference(value);
+                                          }
                                         },
                                       ),
                                     ),

@@ -54,17 +54,18 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
     }
   }
 
-  Future<void> _downloadYearWisePDF() async {
+  Future<void> _downloadYearWise() async {
     setState(() => isDownloading = true);
     try {
-      await PdfService.generateYearWiseReportPdf(
+      await PdfService.generateYearWiseReport(
         year: selectedYear,
         allStudents: allStudents,
       );
 
       Get.snackbar('Success', 'PDF downloaded for year $selectedYear');
-    } catch (e) {
+    } catch (e ,s) {
       Get.snackbar('Error', 'Failed to download PDF: $e');
+      print("--=-=-=-=-= $e \n   $s" );
     } finally {
       setState(() => isDownloading = false);
     }
@@ -117,8 +118,8 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
                   isDownloading
                       ? const CircularProgressIndicator()
                       : InkWell(
-                    onTap: _downloadYearWisePDF,
-                    child: commonButton("Download PDF"),
+                    onTap: _downloadYearWise,
+                    child: commonButton("Download Result"),
                   ),
                 ],
               ),
