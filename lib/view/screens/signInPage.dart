@@ -199,6 +199,7 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
       if (status == true) {
         PreferenceManagerUtils.setIsLogin(true);
         PreferenceManagerUtils.setLoginAdmin(familyCodeController.text.trim());
+        PreferenceManagerUtils.setFamilyCode(familyCodeController.text.trim());
 
         Get.offAll(()=>DesktopScaffold());
 

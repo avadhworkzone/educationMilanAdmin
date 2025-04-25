@@ -9,6 +9,7 @@ class PreferenceManagerUtils {
   static String isSetValue = "isSetValue";
   static String isSetData = "isSetData";
   static String loginAdmin = "loginAdmin";
+  static String familyCode = 'familyCode';
 
   ///IsLogin
   static Future setIsLogin(bool value) async {
@@ -46,6 +47,13 @@ class PreferenceManagerUtils {
     return getStorage.read(loginAdmin) ?? '';
   }
 
+
+  static Future setFamilyCode(String value) async {
+    await getStorage.write(familyCode, value);
+  }
+  static String getFamilyCode() {
+    return getStorage.read(familyCode) ?? "";
+  }
   /// clear prefrences
   static Future<void> clearPreference() async {
     await getStorage.erase();
