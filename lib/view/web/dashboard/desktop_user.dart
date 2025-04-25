@@ -19,7 +19,7 @@ import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/services/app_notification.dart';
 
 import '../auth/desktop_login_form.dart';
-import 'student_details.dart';
+import '../../screens/student_details_row.dart';
 
 class DesktopAllUser extends StatefulWidget {
   const DesktopAllUser({Key? key}) : super(key: key);
@@ -244,79 +244,79 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          width: double.infinity,
-                          child: Theme(
-                            data: ThemeData.light().copyWith(cardColor: Colors.white),
-                            child: PaginatedDataTable(
-                              initialFirstRowIndex: 0,
-                              onPageChanged: (int rowIndex) {
-                                int remainingRows = filteredData.length - rowIndex;
-                                // yourDataList.length - rowIndex;
-
-                                setState(() {
-                                  _rowsPerPage = remainingRows >= 10 ? 10 : remainingRows;
-                                });
-                              },
-                              source: YourDataTableSource(
-                                  filteredData,
-                                  // yourDataList,
-                                  commonDeleteDialog,
-                                  commonDialogEdit,
-                                  commonCheckUncheck,
-                                  // commonRejectDialog,
-                                  context),
-                              dataRowMaxHeight: 60.w,
-                              dataRowMinHeight: 40.w,
-                              // headingRowColor: MaterialStateColor.resolveWith(
-                              //     (Set<MaterialState> states) {
-                              //   if (states.contains(MaterialState.selected)) {
-                              //     return Colors.blue;
-                              //   }
-                              //   return Colors.white;
-                              // }),
-                              rowsPerPage: _rowsPerPage,
-                              columnSpacing: 8,
-                              columns: [
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.number,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.mobileNumber,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.date,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.studentName,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.villageName,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.percentage,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.imageUrl,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.delete,
-                                )),
-                                DataColumn(
-                                    label: commonText(
-                                  StringUtils.edit,
-                                )),
-                              ],
-                            ),
-                          )),
+                      // SizedBox(
+                      //     width: double.infinity,
+                      //     child: Theme(
+                      //       data: ThemeData.light().copyWith(cardColor: Colors.white),
+                      //       child: PaginatedDataTable(
+                      //         initialFirstRowIndex: 0,
+                      //         onPageChanged: (int rowIndex) {
+                      //           int remainingRows = filteredData.length - rowIndex;
+                      //           // yourDataList.length - rowIndex;
+                      //
+                      //           setState(() {
+                      //             _rowsPerPage = remainingRows >= 10 ? 10 : remainingRows;
+                      //           });
+                      //         },
+                      //         source: YourDataTableSource(
+                      //             filteredData,
+                      //             // yourDataList,
+                      //             commonDeleteDialog,
+                      //             commonDialogEdit,
+                      //             commonCheckUncheck,
+                      //             // commonRejectDialog,
+                      //             context),
+                      //         dataRowMaxHeight: 60.w,
+                      //         dataRowMinHeight: 40.w,
+                      //         // headingRowColor: MaterialStateColor.resolveWith(
+                      //         //     (Set<MaterialState> states) {
+                      //         //   if (states.contains(MaterialState.selected)) {
+                      //         //     return Colors.blue;
+                      //         //   }
+                      //         //   return Colors.white;
+                      //         // }),
+                      //         rowsPerPage: _rowsPerPage,
+                      //         columnSpacing: 8,
+                      //         columns: [
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.number,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.mobileNumber,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.date,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.studentName,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.villageName,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.percentage,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.imageUrl,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.delete,
+                      //           )),
+                      //           DataColumn(
+                      //               label: commonText(
+                      //             StringUtils.edit,
+                      //           )),
+                      //         ],
+                      //       ),
+                      //     )),
                     ],
                   ),
                 )

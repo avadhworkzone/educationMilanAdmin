@@ -379,316 +379,287 @@ void commonUserDeleteDialog(String userId, bool isApprove, String fcmToken) {
 
 ///edit dialog
 void commonDialogEdit(
-  final String? image,
-  final num? personTage,
-  final String? standard,
-  final String? fullName,
-  final String studentId,
-  final String userId,
-  final String villageName,
-  final String? createdDate, {
-  required final String? mobileNumber,
-  required final bool? isApproved,
-  final String? result,
-  required final String fcmToken,
-  final String? checkUncheck,
-  String? imageId,
-  String? reason,
-  String? status,
-}) {
-  final TextEditingController fullNameController = TextEditingController(text: fullName ?? '');
-  final TextEditingController villageController = TextEditingController(text: villageName);
-  final TextEditingController percentageController =
-      TextEditingController(text: personTage?.toString() ?? '');
+    final String? image,
+    final num? personTage,
+    final String? standard,
+    final String? fullName,
+    final String studentId,
+    final String userId,
+    final String villageName,
+    final String? createdDate, {
+      required final String? mobileNumber,
+      required final bool? isApproved,
+      final String? result,
+      required final String fcmToken,
+      final String? checkUncheck,
+      String? imageId,
+      String? reason,
+      String? status,
+      required VoidCallback onSuccess, // ✅ ADD THIS
 
+    }) {
+  final TextEditingController fullNameController = TextEditingController(text: fullName ?? '');
+  final TextEditingController percentageController = TextEditingController(text: personTage?.toString() ?? '');
+  String? selectedVillage = villageName;
   showDialog(
+    context: Get.context!,
     builder: (BuildContext context) {
+      final isMobile = MediaQuery.of(context).size.width < 600;
       selectedValue = standard;
+
       return Dialog(
         backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
-        child: StatefulBuilder(builder: (context, update) {
-          return SizedBox(
-            width: 400.w,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Center(
-                        child: GestureDetector(
-                          // onTap: () async {
-                          //   FilePickerResult? fileResult = await FilePicker
-                          //       .platform
-                          //       .pickFiles(allowMultiple: true);
-                          //
-                          //   if (fileResult != null) {
-                          //     update(() {
-                          //       selectedFile = fileResult.files.first.name;
-                          //       selectedImageInBytes =
-                          //           fileResult.files.first.bytes;
-                          //     });
-                          //   }
-                          //   // _selectFile();
-                          //   // handleImageTap();
-                          // },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white,
-                            ),
-                            height: 300.h,
-                            width: 350.w,
+        insetPadding: EdgeInsets.symmetric(horizontal: isMobile ? 10.w : 50.w, vertical: 24.h),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: StatefulBuilder(
+          builder: (context, update) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 16.w : 30.w, vertical: 24.h),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Image
+                      if ((image?.isNotEmpty ?? false))
+                        Center(
+                          child: InkWell(
+                            onTap: () {
+                              _showImageDialog(context, image);
+                            },
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: NetWorkOcToAssets(
-                                imgUrl: image.toString(),
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                image!,
+                                height: isMobile ? 180.h : 250.h,
+                                width: isMobile ? 180.h : 250.h,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => const Icon(Icons.image, size: 50),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
 
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                      SizedBox(height: 24.h),
 
-                    /// Email field
-                    CustomText(
-                      StringUtils.studentFullName,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                      color: ColorUtils.black32,
-                    ),
+                      /// Student Name
+                      buildLabel('Student Name', isMobile),
+                      SizedBox(height: 8.h),
+                      buildTextField(fullNameController, TextInputType.name),
 
-                    SizedBox(
-                      height: 1.w,
-                    ),
+                      SizedBox(height: 16.h),
 
-                    SizedBox(
-                      width: 300.w,
-                      child: CommonTextField(
-                        textEditController: fullNameController,
-                        keyBoardType: TextInputType.name,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.w,
-                    ),
-
-                    /// Village field
-                    CustomText(
-                      StringUtils.villageName,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                      color: ColorUtils.black32,
-                    ),
-
-                    SizedBox(
-                      height: 1.w,
-                    ),
-
-                    CommonTextField(
-                      textEditController: villageController,
-                      keyBoardType: TextInputType.name,
-                    ),
-
-                    SizedBox(
-                      height: 10.w,
-                    ),
-
-                    /// ===============std and percentage=============== ///
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              StringUtils.standard,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17,
-                              color: ColorUtils.black32,
-                            ),
-                            SizedBox(
-                              height: 1.w,
-                            ),
-
-                            /// drop down menu
-                            SizedBox(
-                              width: 100.w,
-                              child: FutureBuilder<List<String>>(
-                                future: standardsListFuture,
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                      child: Text(
-                                        'Error: ${snapshot.error}',
-                                      ),
-                                    );
-                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                    return const Center(
-                                      child: Text('No standards found.'),
-                                    );
-                                  } else {
-                                    List<String> standardsList = snapshot.data!;
-                                    Set<String> uniqueStandards = Set<String>.from(standardsList);
-                                    return DropdownButtonFormField<String>(
-                                      decoration: const InputDecoration(
-                                          // ... Your decoration properties
-                                          ),
-                                      isExpanded: true,
-                                      isDense: true,
-                                      menuMaxHeight: 150.w,
-                                      validator: (value) => value == null ? "* Required" : null,
-                                      dropdownColor: ColorUtils.greyF6,
-                                      value: selectedValue,
-                                      onChanged: (String? newValue) {
-                                        update(() {
-                                          selectedValue = newValue;
-                                        });
-                                        Form.of(context).validate();
-                                      },
-                                      items: uniqueStandards.map((String standard) {
-                                        return DropdownMenuItem<String>(
-                                          value: standard,
-                                          child: Text(standard),
-                                        );
-                                      }).toList(),
-                                    );
-                                  }
-                                },
+                      /// Village Name (DROPDOWN now ✅)
+                      buildLabel('Village Name', isMobile),
+                      SizedBox(height: 8.h),
+                      FutureBuilder<List<String>>(
+                        future: StudentService().getVillagesByFamily(PreferenceManagerUtils.getLoginAdmin()), // ✅ from firestore
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                // filled: true,
+                                // fillColor: ColorUtils.greyF6,
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              StringUtils.percentageEdit,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17,
-                              color: ColorUtils.black32,
-                            ),
-                            SizedBox(
-                              height: 1.w,
-                            ),
-
-                            /// percentage
-                            SizedBox(
-                              width: 100.w,
-                              child: CommonTextField(
-                                textEditController: percentageController,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return StringUtils.personaTageValidation;
-                                  }
-
-                                  double? parsedValue = double.tryParse(value);
-
-                                  if (parsedValue == null || parsedValue < 0 || parsedValue > 100) {
-                                    return 'Enter a 0 to 100';
-                                  }
-                                  return null;
-                                },
-                                keyBoardType: TextInputType.number,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: 30.w,
-                    ),
-
-                    Center(
-                      child: InkWell(
-                        onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            update(() {
-                              isEdit = true;
-                            });
-                            reqModel.mobileNumber = mobileNumber;
-                            reqModel.result = result;
-                            reqModel.fcmToken = fcmToken;
-                            reqModel.checkUncheck = checkUncheck;
-                            reqModel.standard = selectedValue.toString();
-                            reqModel.studentFullName = fullNameController.text;
-                            reqModel.percentage = double.parse(percentageController.text);
-                            reqModel.studentId = studentId.toString();
-                            reqModel.villageName = villageController.text;
-                            reqModel.userId = userId.toString();
-                            reqModel.isApproved = isApproved ?? false;
-                            reqModel.createdDate = DateTime.now().toLocal().toString();
-                            reqModel.imageId = imageId;
-                            reqModel.reason = reason;
-                            reqModel.status = status;
-
-                            final isStatus = await StudentService.studentDetailsEdit(
-                              reqModel,
+                              value: selectedVillage,
+                              isExpanded: true,
+                              hint: Text('Select Village'),
+                              validator: (value) => value == null ? 'Please select a village' : null,
+                              onChanged: (String? newValue) {
+                                update(() {
+                                  selectedVillage = newValue;
+                                });
+                              },
+                              items: snapshot.data!.map((String village) {
+                                return DropdownMenuItem<String>(
+                                  value: village,
+                                  child: Text(village),
+                                );
+                              }).toList(),
                             );
-
-                            update(() {
-                              isEdit = false;
-                            });
-
-                            if (isStatus) {
-                              NotificationMethods.sendMessage(
-                                  receiverFcmToken: fcmToken,
-                                  msg: 'your result data is Edited',
-                                  title: 'Notification');
-                              Get.back();
-                            }
+                          } else {
+                            return const Text("No villages available");
                           }
                         },
-                        child: isEdit
-                            ? const CircularProgressIndicator()
-                            : Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0XFF251E90),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CustomText(
-                                    StringUtils.update,
-                                    color: ColorUtils.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
                       ),
-                    ),
-                  ],
+
+                      SizedBox(height: 16.h),
+
+                      /// Standard and Percentage
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                buildLabel('Standard', isMobile),
+                                SizedBox(height: 8.h),
+                                FutureBuilder<List<String>>(
+                                  future: StudentService().getStandardsByFamily(PreferenceManagerUtils.getLoginAdmin()),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return const Center(child: CircularProgressIndicator());
+                                    } else if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                                      return const Text('No standards found');
+                                    }
+                                    List<String> standardsList = snapshot.data!;
+                                    return DropdownButtonFormField<String>(
+                                      isExpanded: true,
+                                      isDense: true,
+                                      menuMaxHeight: 200,
+                                      value: selectedValue,
+                                      validator: (value) => value == null ? "* Required" : null,
+                                      decoration: const InputDecoration(border: OutlineInputBorder()),
+                                      items: standardsList.map((std) => DropdownMenuItem(
+                                        value: std,
+                                        child: Text(std),
+                                      )).toList(),
+                                      onChanged: (value) {
+                                        update(() {
+                                          selectedValue = value;
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                buildLabel('Percentage', isMobile),
+                                SizedBox(height: 8.h),
+                                buildTextField(
+                                  percentageController,
+                                  TextInputType.number,
+                                  validator: (value) {
+                                    if (value!.isEmpty) return 'Required';
+                                    final number = double.tryParse(value);
+                                    if (number == null || number < 0 || number > 100) {
+                                      return 'Enter 0 to 100';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 30.h),
+
+                      /// Update Button
+                      Center(
+                        child: InkWell(
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              update(() => isEdit = true);
+
+                              reqModel.mobileNumber = mobileNumber;
+                              reqModel.result = result;
+                              reqModel.fcmToken = fcmToken;
+                              reqModel.checkUncheck = checkUncheck;
+                              reqModel.standard = selectedValue.toString();
+                              reqModel.studentFullName = fullNameController.text;
+                              reqModel.percentage = double.parse(percentageController.text);
+                              reqModel.studentId = studentId;
+                              reqModel.villageName = selectedVillage ?? '';
+                              reqModel.userId = userId;
+                              reqModel.isApproved = isApproved ?? false;
+                              reqModel.createdDate = DateTime.now().toLocal().toString();
+                              reqModel.imageId = imageId;
+                              reqModel.reason = reason;
+                              reqModel.status = status;
+
+                              final isStatus = await StudentService.studentDetailsEdit(reqModel);
+
+                              update(() => isEdit = false);
+
+                              if (isStatus) {
+                                NotificationMethods.sendMessage(
+                                  receiverFcmToken: fcmToken,
+                                  msg: 'Your result data has been edited.',
+                                  title: 'Notification',
+                                );
+                                Get.back();
+                                onSuccess(); // ✅ call refresh
+
+                              }
+                            }
+                          },
+                          child: isEdit
+                              ? const CircularProgressIndicator()
+                              : Container(
+                            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0XFF251E90),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: CustomText(
+                              'Update',
+                              fontSize: isMobile ? 32.sp : 16.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                  ,
                 ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       );
     },
-    context: Get.context!,
+  );
+}
+void _showImageDialog(BuildContext context, String imageUrl) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Image.network(imageUrl, fit: BoxFit.contain),
+      ),
+    ),
+  );
+}
+
+Widget buildLabel(String label, bool isMobile) {
+  return Text(
+    label,
+    style: TextStyle(
+      fontSize: isMobile ? 32.sp : 14.sp,
+      fontWeight: FontWeight.w600,
+      color: ColorUtils.black32,
+    ),
+  );
+}
+
+Widget buildTextField(TextEditingController controller, TextInputType type, {String? Function(String?)? validator}) {
+  return TextFormField(
+    controller: controller,
+    keyboardType: type,
+    validator: validator,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      isDense: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    ),
   );
 }
 

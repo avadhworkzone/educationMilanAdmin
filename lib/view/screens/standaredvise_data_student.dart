@@ -14,7 +14,7 @@ import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/firbaseService/student_service/student_details_services.dart';
 import 'package:responsivedashboard/common_widget/column_text.dart';
 import '../../utils/share_preference.dart';
-import '../web/dashboard/student_details.dart';
+import 'student_details_row.dart';
 
 class StandardViseDataStudentScreen extends StatefulWidget {
   final String stdId;
@@ -28,7 +28,6 @@ class StandardViseDataStudentScreen extends StatefulWidget {
 class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentScreen> {
   TextEditingController searchController = TextEditingController();
   int _rowsPerPage = 10;
-  List<StudentModel> stdFilteredData = [];
   List<StudentModel> studentData = [];
 
   @override
@@ -51,7 +50,7 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
             ),
           ),
           body: ListView(
-            padding: EdgeInsets.all( 24.w),
+            padding: EdgeInsets.all(24.w),
             children: [
               buildSearchBox(isMobile),
               SizedBox(height: 20.h),
@@ -69,7 +68,6 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }
-
                   if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                     return SizedBox(
                       height: Get.height * 0.5,
@@ -78,18 +76,18 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                   }
 
                   studentData = snapshot.data!;
-                  stdFilteredData = filterStudentData(searchController.text);
+                  final filteredData = filterStudentData(searchController.text);
 
-                  if (stdFilteredData.isEmpty) {
+                  if (filteredData.isEmpty) {
                     return SizedBox(
                       height: Get.height * 0.5,
                       child: Center(child: noDataFound()),
                     );
                   }
 
-                  return buildDataTable();
+                  return buildDataTable(filteredData);
                 },
-              )
+              ),
             ],
           ),
         );
@@ -109,14 +107,8 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
             prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
             hintText: "Search student...",
             hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: ColorUtils.greyD0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: ColorUtils.primaryColor),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: ColorUtils.primaryColor)),
           ),
           style: const TextStyle(
             color: ColorUtils.black,
@@ -129,16 +121,17 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
-  Widget buildDataTable() {
+
+  Widget buildDataTable(List<StudentModel> dataList) {
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     if (isMobile) {
       return ListView.builder(
-        itemCount: stdFilteredData.length,
+        itemCount: dataList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          final student = stdFilteredData[index];
+          final student = dataList[index];
 
           return Card(
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 8.w),
@@ -149,55 +142,43 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-               Row(
-                children: [
-                  // ✅ Student Image
-                  if ((student.result?.isNotEmpty ?? false)) ...[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white,
-                          ),
-                          // width: 100.w,
-                          height: 200.h,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: GestureDetector(
-                              onTap: () {
-                                _showImageDialog(context, student.result.toString());
-                              },
-                              child: NetWorkOcToAssets(
-                                imgUrl: student.result.toString(),
+                  Row(
+                    children: [
+                      if ((student.result?.isNotEmpty ?? false))
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white,
+                            ),
+                            height: 200.h,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showImageDialog(context, student.result.toString());
+                                },
+                                child: NetWorkOcToAssets(imgUrl: student.result.toString()),
                               ),
                             ),
                           ),
                         ),
+                      SizedBox(width: 12.h),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            buildRowItem("Student Name", student.studentFullName ?? "-", isMobile: true),
+                            buildRowItem("Mobile", student.mobileNumber ?? "-", isMobile: true),
+                            buildRowItem("Village", student.villageName ?? "-", isMobile: true),
+                            buildRowItem("Standard", student.standard ?? "-", isMobile: true),
+                            buildRowItem("Percentage", "${student.percentage ?? 0}%", isMobile: true),
+                            buildRowItem("Date", student.createdDate?.split("T").first ?? "-", isMobile: true),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-
-                  SizedBox(width: 12.h),
-
-                  Expanded(
-                    child: Column(
-                      children: [
-                        buildRowItem("Student Name", student.studentFullName ?? "-", isMobile: true),
-                        buildRowItem("Mobile", student.mobileNumber ?? "-", isMobile: true),
-                        buildRowItem("Village", student.villageName ?? "-", isMobile: true),
-                        buildRowItem("Standard", student.standard ?? "-", isMobile: true),
-                        buildRowItem("Percentage", "${student.percentage ?? 0}%", isMobile: true),
-                        buildRowItem("Date", student.createdDate?.split("T").first ?? "-", isMobile: true),
-                      ],
-                    ),
+                    ],
                   ),
-                ],
-               ),
-
                   SizedBox(height: 12.h),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -211,7 +192,7 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       ),
                       IconButton(
                         onPressed: () => commonDialogEdit(
-                          student.imageId,
+                          student.result,
                           student.percentage,
                           student.standard,
                           student.studentFullName,
@@ -227,6 +208,9 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                           imageId: student.imageId,
                           reason: student.reason,
                           status: student.status,
+                          onSuccess: () {
+                            setState(() {}); // ✅ Refresh without leaving screen
+                          },
                         ),
                         icon: const Icon(Icons.edit, color: Colors.orange),
                       ),
@@ -247,13 +231,11 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       );
     }
 
-
-    // 🛠 No SingleChildScrollView needed for Web/Desktop
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 1000),
       child: PaginatedDataTable(
         source: YourDataTableSource(
-          stdFilteredData,
+          dataList,
           deleteUserWithReason,
           commonDialogEdit,
           commonCheckUncheck,
@@ -278,6 +260,7 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
+
   void _showImageDialog(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
@@ -290,7 +273,6 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
-
 
   Widget buildRowItem(String label, String value, {bool isMobile = false}) {
     return Padding(

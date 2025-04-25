@@ -9,6 +9,8 @@ import 'package:responsivedashboard/utils/share_preference.dart';
 class StudentService {
   static final _firestore = FirebaseFirestore.instance;
   static String get _familyCode => PreferenceManagerUtils.getFamilyCode();
+  List<String> standardsList = [];
+  List<String> villageList = [];
 
   ///=======================getStudentDataForAdmin===================///
   static Stream<List<StudentModel>> getStudentDataForAdmin({
@@ -44,6 +46,46 @@ class StudentService {
     yield allStudents;
   }
 
+  Future<List<String>> getVillagesByFamily(String familyCode) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('village')
+          .doc('villages')
+          .get();
+
+      if (doc.exists) {
+        List<dynamic> data = doc['villages'] ?? [];
+        villageList = data.map((e) => e.toString()).toList();
+      }
+      return villageList;
+    } catch (e) {
+      print('Error fetching villages: $e');
+      return [];
+    }
+  }
+
+
+  Future<List<String>> getStandardsByFamily(String familyCode) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('standerd')
+          .doc('standerd')
+          .get();
+
+      if (doc.exists) {
+        List<dynamic> data = doc['standerd'] ?? [];
+        standardsList = data.map((e) => e.toString()).toList();
+      }
+      return standardsList;
+    } catch (e) {
+      print('Error fetching standards: $e');
+      return [];
+    }
+  }
 
 
   ///=======================CREATE STUDENT===================///
@@ -191,12 +233,26 @@ class StudentService {
   ///=======================EDIT STUDENT===================///
   static Future<bool> studentDetailsEdit(StudentModel studentDetail) async {
     try {
-      return _updateFieldByStudentId(studentDetail.studentId!, studentDetail.toJson());
-    } catch (e) {
+      final familyCode = PreferenceManagerUtils.getFamilyCode(); // ✅
+
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('users')
+          .doc(studentDetail.userId)
+          .collection('results')
+          .doc(studentDetail.studentId); // same collection as in createStudent
+
+      await docRef.update(studentDetail.toJson());
+      return true;
+
+    } catch (e, stackTrace) {
       print('EDIT STUDENT ERROR: $e');
+      print('STACK TRACE: $stackTrace');
       return false;
     }
   }
+
 
   ///=======================APPROVE RESULT===================///
   static Future<bool> acceptStudentResult(String studentId) async {

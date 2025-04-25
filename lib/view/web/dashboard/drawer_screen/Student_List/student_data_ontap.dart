@@ -19,7 +19,7 @@ import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/screens/dashboard.dart';
-import 'package:responsivedashboard/view/web/dashboard/student_details.dart';
+import 'package:responsivedashboard/view/screens/student_details_row.dart';
 
 class OnTapStudentDataScreen extends StatefulWidget {
   final String studentId;

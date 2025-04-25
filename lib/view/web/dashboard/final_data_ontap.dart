@@ -609,35 +609,35 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
 
                             return SizedBox(
                               width: double.infinity,
-                              child: Theme(
-                                data: ThemeData.light().copyWith(cardColor: Colors.white),
-                                child: PaginatedDataTable(
-                                  initialFirstRowIndex: 0,
-                                  onPageChanged: (int rowIndex) {
-                                    int remainingRows = studentList.length - rowIndex;
-                                    setState(() {
-                                      _rowsPerPage = remainingRows >= 10 ? 10 : remainingRows;
-                                    });
-                                  },
-                                  source: FinalDataTableSource(studentList, deleteUserWithReason,
-                                      commonDialogEdit, context),
-                                  dataRowMaxHeight: 60.w,
-                                  dataRowMinHeight: 40.w,
-                                  rowsPerPage: _rowsPerPage,
-                                  columnSpacing: 8,
-                                  columns: [
-                                    DataColumn(label: commonText(StringUtils.number)),
-                                    DataColumn(label: commonText(StringUtils.mobileNumber)),
-                                    DataColumn(label: commonText(StringUtils.date)),
-                                    DataColumn(label: commonText(StringUtils.studentName)),
-                                    DataColumn(label: commonText(StringUtils.villageName)),
-                                    DataColumn(label: commonText(StringUtils.percentage)),
-                                    DataColumn(label: commonText(StringUtils.imageUrl)),
-                                    DataColumn(label: commonText(StringUtils.delete)),
-                                    DataColumn(label: commonText(StringUtils.edit)),
-                                  ],
-                                ),
-                              ),
+                              // child: Theme(
+                              //   data: ThemeData.light().copyWith(cardColor: Colors.white),
+                              //   // child: PaginatedDataTable(
+                              //   //   initialFirstRowIndex: 0,
+                              //   //   onPageChanged: (int rowIndex) {
+                              //   //     int remainingRows = studentList.length - rowIndex;
+                              //   //     setState(() {
+                              //   //       _rowsPerPage = remainingRows >= 10 ? 10 : remainingRows;
+                              //   //     });
+                              //   //   },
+                              //   //   // source: FinalDataTableSource(studentList, deleteUserWithReason,
+                              //   //   //     commonDialogEdit, context),
+                              //   //   dataRowMaxHeight: 60.w,
+                              //   //   dataRowMinHeight: 40.w,
+                              //   //   rowsPerPage: _rowsPerPage,
+                              //   //   columnSpacing: 8,
+                              //   //   columns: [
+                              //   //     DataColumn(label: commonText(StringUtils.number)),
+                              //   //     DataColumn(label: commonText(StringUtils.mobileNumber)),
+                              //   //     DataColumn(label: commonText(StringUtils.date)),
+                              //   //     DataColumn(label: commonText(StringUtils.studentName)),
+                              //   //     DataColumn(label: commonText(StringUtils.villageName)),
+                              //   //     DataColumn(label: commonText(StringUtils.percentage)),
+                              //   //     DataColumn(label: commonText(StringUtils.imageUrl)),
+                              //   //     DataColumn(label: commonText(StringUtils.delete)),
+                              //   //     DataColumn(label: commonText(StringUtils.edit)),
+                              //   //   ],
+                              //   // ),
+                              // ),
                             );
                           }),
                     ],
