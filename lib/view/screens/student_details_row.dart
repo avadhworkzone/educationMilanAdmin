@@ -8,7 +8,6 @@ import 'package:responsivedashboard/common_widget/octa_image.dart';
 import 'package:responsivedashboard/common_widget/custom_assets.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
-import 'package:responsivedashboard/view/screens/dashboard.dart';
 
 const int columnCount = 10;
 
@@ -16,7 +15,7 @@ class YourDataTableSource extends DataTableSource {
   final BuildContext context;
   final bool isApprove;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove, String fcmToken) commonDialogCallback;
+  final Function(String studentId, bool isApprove, String fcmToken, VoidCallback onSuccess) commonDialogCallback;
   final Function(
       String? image,
       num? personTage,
@@ -79,12 +78,8 @@ class YourDataTableSource extends DataTableSource {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: GestureDetector(
-                    onTap: () {
-                      _showImageDialog(context, rowData.result.toString());
-                    },
-                    child: NetWorkOcToAssets(
-                      imgUrl: rowData.result.toString(),
-                    ),
+                    onTap: () => _showImageDialog(context, rowData.result ?? ''),
+                    child: NetWorkOcToAssets(imgUrl: rowData.result ?? ''),
                   ),
                 ),
               ),
@@ -94,9 +89,15 @@ class YourDataTableSource extends DataTableSource {
             InkWell(
               onTap: () {
                 commonDialogCallback(
-                  rowData.studentId.toString(),
+                  rowData.studentId!,
                   isApprove,
-                  rowData.fcmToken.toString(),
+                  rowData.fcmToken!,
+                      () {
+                    Get.back(); // Close Delete Dialog
+                    if (context.mounted) {
+                      (context as Element).markNeedsBuild(); // Refresh after delete ✅
+                    }
+                  },
                 );
               },
               child: LocalAssets(imagePath: AssetsUtils.delete),
@@ -123,12 +124,10 @@ class YourDataTableSource extends DataTableSource {
                   reason: rowData.reason,
                   status: rowData.status,
                   onSuccess: () {
-                    // 🔥 After successful edit, refresh the table
-                    Get.back(); // Close dialog
+                    Get.back(); // Close Edit Dialog
                     if (context.mounted) {
-                      (context as Element).markNeedsBuild();
+                      (context as Element).markNeedsBuild(); // Refresh after edit ✅
                     }
-                    // Get.offAll(() => const DesktopScaffold()); // ✅ Reload dashboard (you can replace this with smarter refresh if needed)
                   },
                 );
               },
@@ -139,8 +138,8 @@ class YourDataTableSource extends DataTableSource {
             InkWell(
               onTap: () {
                 commonCheckUncheckCallBack(
-                  rowData.studentId.toString(),
-                  rowData.fcmToken.toString(),
+                  rowData.studentId!,
+                  rowData.fcmToken!,
                 );
               },
               child: const Icon(Icons.check),

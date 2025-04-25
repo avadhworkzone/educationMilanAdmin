@@ -186,7 +186,11 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                         onPressed: () => deleteUserWithReason(
                           student.studentId ?? '',
                           student.isApproved ?? false,
-                          student.fcmToken ?? '',
+                          student.fcmToken ?? '',() {
+                            setState(() {
+
+                            });
+                          },
                         ),
                         icon: const Icon(Icons.delete, color: Colors.red),
                       ),

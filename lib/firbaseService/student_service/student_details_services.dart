@@ -230,6 +230,50 @@ class StudentService {
     }
   }
 
+  static Future<bool> deleteStudentResultReason({
+    required String studentId,
+    required String reason,
+  }) async {
+    try {
+      final usersRef = _firestore
+          .collection('families')
+          .doc(_familyCode)
+          .collection('users');
+
+      final userSnapshot = await usersRef.get();
+
+      for (final userDoc in userSnapshot.docs) {
+        final resultsRef = usersRef.doc(userDoc.id).collection('results');
+
+        final querySnapshot = await resultsRef
+            .where('studentId', isEqualTo: studentId)
+            .limit(1)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          final docRef = querySnapshot.docs.first.reference;
+          final currentData = querySnapshot.docs.first.data();
+
+          // 👉 Safely update by keeping all old fields + override the ones you need
+          await docRef.set({
+            ...currentData, // 💥 Keep all old data
+            "status": StatusEnum.delete.name,
+            "reason": reason,
+            "isApproved": false,
+          }, SetOptions(merge: true)); // ✅ merge true to update without deleting
+
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      print('DELETE STUDENT RESULT ERROR: $e');
+      return false;
+    }
+  }
+
+
   ///=======================EDIT STUDENT===================///
   static Future<bool> studentDetailsEdit(StudentModel studentDetail) async {
     try {

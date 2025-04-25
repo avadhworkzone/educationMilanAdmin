@@ -247,7 +247,7 @@ class _OnTapStudentDataScreenState extends State<OnTapStudentDataScreen> {
                               },
                               source: YourDataTableSource(
                                   filteredData,
-                                  commonDeleteDialog,
+                                  deleteUserWithReason,
                                   commonDialogEdit,
                                   commonCheckUncheck,
                                   // commonRejectDialog,

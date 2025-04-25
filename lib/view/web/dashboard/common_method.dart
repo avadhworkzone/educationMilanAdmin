@@ -164,7 +164,7 @@ void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
 }
 
 ///delete dialog
-void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
+void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, VoidCallback onSuccess) {
   final TextEditingController reasonController = TextEditingController();
   bool isDeleting = false;
 
@@ -235,10 +235,9 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
 
                             setState(() => isDeleting = true);
 
-                            final success = await StudentService.deleteStudentWithReason(
-                              studentId,
-                              reason,
-                              isApprove,
+                            final success = await StudentService.deleteStudentResultReason(
+                              studentId: studentId,
+                              reason: reason,
                             );
 
                             setState(() => isDeleting = false);
@@ -250,6 +249,7 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
                                 title: 'Notification',
                               );
                               Get.back(); // close dialog
+                              onSuccess(); // ✅ after delete, call success callback to refresh!
                             } else {
                               Get.showSnackbar(
                                 const GetSnackBar(
