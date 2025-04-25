@@ -5,15 +5,9 @@ import 'package:responsivedashboard/common_widget/custom_assets.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/auth/login_mobile.dart';
-import 'package:responsivedashboard/view/mobile/bottombar_mobile/all_user_mob.dart';
-import 'package:responsivedashboard/view/tablet/auth/login_tablet.dart';
-import 'package:responsivedashboard/view/tablet/bottomebar_tablet/all_user_tab.dart';
-import 'package:responsivedashboard/view/web/dashboard/dashboard.dart';
 import 'package:responsivedashboard/view/web/dashboard/desktop_user.dart';
 import '../utils/image_utils.dart';
 import '../view/web/auth/desktop_login_form.dart';
-import '../responsiveLayout/responsive_layout.dart';
 
 var defaultBackgroundColor = ColorUtils.white;
 var appBarColor = Colors.grey[900];
@@ -101,11 +95,7 @@ var myDrawer = Drawer(
       InkWell(
         onTap: () {
           // Get.to(const DesktopScaffold());
-          Get.to(const ResponsiveLayout(
-            desktopBody: DesktopLoginForm(),
-            mobileBody: LoginMobile(),
-            tabletBody: LoginTablet(),
-          ));
+          Get.to(DesktopLoginForm());
         },
         child: Row(
           children: [
@@ -132,11 +122,7 @@ var myDrawer = Drawer(
       InkWell(
         onTap: () {
           // Get.to(const DesktopAllUser());
-          Get.to(ResponsiveLayout(
-            desktopBody: const DesktopAllUser(),
-            mobileBody: AllUserMob(allUserData1: allUserData1),
-            tabletBody: const AllUserTab(),
-          ));
+          Get.to(DesktopAllUser());
         },
         child: Row(
           children: [

@@ -8,11 +8,7 @@ import 'package:responsivedashboard/firbaseService/auth_services/login_services.
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
-import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/bottombar_mobile/mobile_bottombar.dart';
-import 'package:responsivedashboard/view/tablet/bottomebar_tablet/tablet_bottombar.dart';
-import '../../../responsiveLayout/responsive_layout.dart';
-import '../web/dashboard/dashboard.dart';
+import 'dashboard.dart';
 
 class SignUpScreenForm extends StatefulWidget {
   const SignUpScreenForm({Key? key}) : super(key: key);
@@ -157,7 +153,7 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
                 ],
               ),
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: 50.h),
             InkWell(
               onTap: _handleLogin,
               child: isLoading
@@ -177,12 +173,12 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
               ),
             ),
             SizedBox(height: 20.h),
-            CustomText(
-              "Terms of use   Privacy policy",
-              color: ColorUtils.grey9A,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            // CustomText(
+            //   "Terms of use   Privacy policy",
+            //   color: ColorUtils.grey9A,
+            //   fontSize: 12,
+            //   fontWeight: FontWeight.w500,
+            // ),
           ],
         ),
       ),
@@ -204,11 +200,7 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
         PreferenceManagerUtils.setIsLogin(true);
         PreferenceManagerUtils.setLoginAdmin(familyCodeController.text.trim());
 
-        Get.offAll(const ResponsiveLayout(
-          desktopBody: DesktopScaffold(),
-          mobileBody: MobileBottombar(),
-          tabletBody: TabletBottombar(),
-        ));
+        Get.offAll(()=>DesktopScaffold());
 
         ToastUtils.showCustomToast(context: context, title: "Login Successfully");
       } else {
@@ -221,13 +213,13 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
 // Optional: Use your original validatePassword function here
 String? validatePassword(String? value) {
   if (value == null || value.isEmpty) return 'Password is required';
-  if (value.length < 8) return 'Password must be at least 8 characters';
-  if (!value.contains(RegExp(r'[A-Z]')) || !value.contains(RegExp(r'[a-z]'))) {
-    return 'Use both upper and lowercase letters';
-  }
-  if (!value.contains(RegExp(r'[0-9]'))) return 'Include at least one digit';
-  if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-    return 'Include at least one special character';
-  }
+  // if (value.length < 8) return 'Password must be at least 8 characters';
+  // if (!value.contains(RegExp(r'[A-Z]')) || !value.contains(RegExp(r'[a-z]'))) {
+  //   return 'Use both upper and lowercase letters';
+  // }
+  // if (!value.contains(RegExp(r'[0-9]'))) return 'Include at least one digit';
+  // if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  //   return 'Include at least one special character';
+  // }
   return null;
 }

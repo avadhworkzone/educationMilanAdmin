@@ -17,11 +17,8 @@ import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
-import 'package:responsivedashboard/view/mobile/bottombar_mobile/mobile_bottombar.dart';
-import 'package:responsivedashboard/view/tablet/bottomebar_tablet/tablet_bottombar.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
-import 'package:responsivedashboard/view/web/dashboard/dashboard.dart';
+import 'package:responsivedashboard/view/screens/dashboard.dart';
 import 'package:responsivedashboard/view/web/dashboard/student_details.dart';
 
 class OnTapStudentDataScreen extends StatefulWidget {
@@ -68,11 +65,7 @@ class _OnTapStudentDataScreenState extends State<OnTapStudentDataScreen> {
           backgroundColor: ColorUtils.primaryColor,
           leading: IconButton(
               onPressed: () {
-                Get.offAll(() => const ResponsiveLayout(
-                      desktopBody: DesktopScaffold(),
-                      mobileBody: MobileBottombar(),
-                      tabletBody: TabletBottombar(),
-                    ));
+                Get.offAll(() => const  DesktopScaffold());
               },
               icon: const Icon(
                 Icons.arrow_back_ios,

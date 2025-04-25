@@ -5,6 +5,28 @@ import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/collection_utils.dart';
 
 class StandardService {
+
+
+  static Future<List<String>> getStandardsByFamily(String familyCode) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('standerd')
+          .doc('standerd')
+          .get();
+
+      if (doc.exists) {
+        List<dynamic> data = doc['standerd'] ?? [];
+        return data.map((e) => e.toString()).toList();
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching standards: $e');
+      return [];
+    }
+  }
   static Future<List<StudentModel>> getStandards() async {
     QuerySnapshot querySnapshot = await CollectionUtils.standardDetails.get();
     List<StudentModel> standardsList = querySnapshot.docs.map((doc) {

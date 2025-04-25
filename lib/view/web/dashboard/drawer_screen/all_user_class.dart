@@ -7,19 +7,14 @@ import 'package:responsivedashboard/common_widget/column_text.dart';
 import 'package:responsivedashboard/common_widget/common_btn.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/firbaseService/user_service/user_service.dart';
-import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/model/user_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
-import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/tablet/auth/login_tablet.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
-import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/web/dashboard/user_details.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
 import '../../../../common_widget/no_data_found.dart';
-import '../../../mobile/auth/login_mobile.dart';
 
 class AllUser extends StatefulWidget {
   const AllUser({Key? key}) : super(key: key);
@@ -75,11 +70,7 @@ class _AllUserState extends State<AllUser> {
                           setState(() {
                             isLoggingOut = false;
                           });
-                          Get.offAll(() => const ResponsiveLayout(
-                                desktopBody: DesktopLoginForm(),
-                                mobileBody: LoginMobile(),
-                                tabletBody: LoginTablet(),
-                              ));
+                          Get.offAll(() => const DesktopLoginForm());
                         },
                         child: isLoggingOut
                             ? const CircularProgressIndicator()

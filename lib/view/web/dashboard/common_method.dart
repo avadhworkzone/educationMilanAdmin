@@ -28,38 +28,45 @@ UserResModel userResModel = UserResModel();
 // List<StudentModel> yourStandardList = [];
 List<UserResModel> userData = [];
 List<UserResModel> userfilterData = [];
+Widget commonTab({
+  required String icon,
+  required String title,
+  required Function onTap,
+  required Color color,
+  double? iconWidth,
+  double? iconHeight,
+}) {
+  bool isMobile = Get.width < 600; // if width < 600, it's mobile
 
-Widget commonTab(
-    {required String icon, required String title, required Function onTap, required Color color,double? iconWidth,double? iconHeight}) {
   return Container(
     color: color,
     child: InkWell(
       onTap: () {
         onTap();
       },
-      child: Row(
-        children: [
-          if (title == "Promotion")
-            const SizedBox(
-              width: 10,
-            ),
-          LocalAssets(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+        child: Row(
+          children: [
+            if (title == "Promotion") const SizedBox(width: 8),
+            LocalAssets(
               imagePath: icon,
-              width: iconWidth ?? (title == "Promotion" ? Get.width * 0.035 : Get.width * 0.05),
-              height: iconHeight ?? (title == "Promotion" ? Get.height * 0.035 : Get.height * 0.05),
-              imgColor: Colors.white),
-          if (title == "Promotion")
-            const SizedBox(
-              width: 10,
+              width: iconWidth ?? (isMobile ? 24.w : 30.w),
+              height: iconHeight ?? (isMobile ? 24.h : 30.h),
+              imgColor: Colors.white,
             ),
-          CustomText(
-            title,
-            fontWeight: FontWeight.w500,
-            color: ColorUtils.white,
-            fontSize: 16.sp,
-            fontFamily: AssetsUtils.poppins,
-          ),
-        ],
+            const SizedBox(width: 12),
+            Flexible(
+              child: CustomText(
+                title,
+                fontWeight: FontWeight.w500,
+                color: ColorUtils.white,
+                fontSize: isMobile ? 13.sp : 15.sp,
+                fontFamily: AssetsUtils.poppins,
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );

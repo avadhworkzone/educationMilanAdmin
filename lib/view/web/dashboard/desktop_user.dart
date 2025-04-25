@@ -16,11 +16,8 @@ import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/auth/login_mobile.dart';
 import 'package:responsivedashboard/view/services/app_notification.dart';
-import 'package:responsivedashboard/view/tablet/auth/login_tablet.dart';
 
-import '../../../responsiveLayout/responsive_layout.dart';
 import '../auth/desktop_login_form.dart';
 import 'student_details.dart';
 
@@ -144,11 +141,7 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                                       isLoggingOut = false;
                                     });
 
-                                    Get.offAll(() => const ResponsiveLayout(
-                                          desktopBody: DesktopLoginForm(),
-                                          mobileBody: LoginMobile(),
-                                          tabletBody: LoginTablet(),
-                                        ));
+                                    Get.offAll(() => const DesktopLoginForm());
                                   },
                                   child: isLoggingOut
                                       ? const CircularProgressIndicator()

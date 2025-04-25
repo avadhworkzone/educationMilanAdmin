@@ -10,12 +10,8 @@ import 'package:responsivedashboard/firbaseService/standard_service/standad_serv
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
-import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/auth/login_mobile.dart';
-import 'package:responsivedashboard/view/tablet/auth/login_tablet.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
-import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/web/dashboard/final_data_ontap.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
@@ -78,11 +74,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                         setState(() => isLoggingOut = true);
                         await signOut();
                         setState(() => isLoggingOut = false);
-                        Get.to(const ResponsiveLayout(
-                          desktopBody: DesktopLoginForm(),
-                          mobileBody: LoginMobile(),
-                          tabletBody: LoginTablet(),
-                        ));
+                        Get.to(const DesktopLoginForm());
                       },
                       child: isLoggingOut
                           ? const CircularProgressIndicator()
@@ -202,11 +194,7 @@ class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
                                 var element = list[index];
                                 return InkWell(
                                   onTap: () {
-                                    Get.offAll(() => ResponsiveLayout(
-                                      desktopBody: OnTapFinalDataScreen(std: element.standard.toString()),
-                                      mobileBody: OnTapFinalDataScreen(std: element.standard.toString()),
-                                      tabletBody: OnTapFinalDataScreen(std: element.standard.toString()),
-                                    ));
+                                    Get.offAll(() => OnTapFinalDataScreen(std: element.standard.toString()));
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

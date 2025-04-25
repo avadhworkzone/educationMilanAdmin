@@ -9,10 +9,7 @@ import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/bottombar_mobile/mobile_bottombar.dart';
-import 'package:responsivedashboard/view/tablet/bottomebar_tablet/tablet_bottombar.dart';
-import '../../../responsiveLayout/responsive_layout.dart';
-import '../dashboard/dashboard.dart';
+import '../../screens/dashboard.dart';
 
 class DesktopLoginForm extends StatefulWidget {
   const DesktopLoginForm({Key? key}) : super(key: key);
@@ -215,11 +212,7 @@ class _DesktopLoginFormState extends State<DesktopLoginForm> {
                                           emailController.text);
 
                                       Get.offAll(
-                                        const ResponsiveLayout(
-                                          desktopBody: DesktopScaffold(),
-                                          mobileBody: MobileBottombar(),
-                                          tabletBody: TabletBottombar(),
-                                        ),
+                                          ()=>  const DesktopScaffold(),
                                       );
                                       ToastUtils.showCustomToast(
                                         context: context,

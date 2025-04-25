@@ -16,15 +16,12 @@ import 'package:responsivedashboard/common_widget/common_btn.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/firbaseService/student_service/student_details_services.dart';
 import 'package:responsivedashboard/model/student_model.dart';
-import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/enum_utils.dart';
 import 'package:responsivedashboard/utils/pdf_service.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
-import 'package:responsivedashboard/view/mobile/bottombar_mobile/mobile_bottombar.dart';
-import 'package:responsivedashboard/view/tablet/bottomebar_tablet/tablet_bottombar.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
-import 'package:responsivedashboard/view/web/dashboard/dashboard.dart';
+import 'package:responsivedashboard/view/screens/dashboard.dart';
 import 'package:responsivedashboard/view/web/dashboard/final_data_row_data.dart';
 
 import '../../../common_widget/no_data_found.dart';
@@ -479,11 +476,7 @@ class _OnTapFinalDataScreenState extends State<OnTapFinalDataScreen> {
           backgroundColor: ColorUtils.primaryColor,
           leading: IconButton(
               onPressed: () {
-                Get.offAll(() => const ResponsiveLayout(
-                  desktopBody: DesktopScaffold(),
-                  mobileBody: MobileBottombar(),
-                  tabletBody: TabletBottombar(),
-                ));
+                Get.offAll(() => const DesktopScaffold());
               },
               icon: const Icon(
                 Icons.arrow_back_ios,

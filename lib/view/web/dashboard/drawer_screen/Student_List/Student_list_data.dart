@@ -12,7 +12,7 @@
 // import 'package:responsivedashboard/web/login_form/desktop_login_form.dart';
 // import 'package:responsivedashboard/web/login_form/responsive_layout.dart';
 // import 'package:responsivedashboard/web/responsive/common_method.dart';
-// import 'package:responsivedashboard/web/responsive/drawer_screen/Student_List/student_data_class.dart';
+// import 'package:responsivedashboard/web/responsive/drawer_screen/Student_List/student_data_list.dart';
 // import 'package:responsivedashboard/web/responsive/final_data_ontap.dart';
 //
 // class StudentListData extends StatefulWidget {

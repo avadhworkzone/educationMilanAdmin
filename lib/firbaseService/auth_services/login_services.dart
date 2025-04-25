@@ -12,17 +12,26 @@ class AuthService {
   //   }
   // }
 
-  static Future<bool> signIn(
-      {required String docId, required String pin}) async {
+  static Future<bool> signIn({
+    required String docId, // this is familyCode
+    required String pin,   // this is password
+  }) async {
     try {
-      var value = await CollectionUtils.adminCollection.doc(docId).get();
-      if (value.data()?['Password'].toString() == pin.toString()) {
-        return true;
-      } else {
-        return false;
+      final doc = await CollectionUtils.families.doc(docId).get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        final storedPassword = data?['password'];
+
+        // ✅ Check if password matches
+        if (storedPassword == pin) {
+          return true;
+        }
       }
+
+      return false;
     } catch (e) {
-      print('CHECK USER EXIST ERROR:=>$e');
+      print('SIGN IN ERROR => $e');
       return false;
     }
   }
