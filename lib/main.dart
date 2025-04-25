@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:responsivedashboard/firebase_options.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
+import 'package:responsivedashboard/view/screens/signInPage.dart';
 import 'package:responsivedashboard/view/services/app_notification.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
 import 'package:responsivedashboard/responsiveLayout/responsive_layout.dart';
@@ -44,12 +45,12 @@ class MyApp extends StatelessWidget {
                   mobileBody: MobileBottombar(),
                   tabletBody: TabletBottombar(),
                   desktopBody: DesktopScaffold(),
-                )
-              : const ResponsiveLayout(
-                  desktopBody: DesktopLoginForm(),
-                  mobileBody: LoginMobile(),
-                  tabletBody: LoginTablet(),
-                ),
+                ):SignUpScreenForm(),
+              // : const ResponsiveLayout(
+              //     desktopBody: DesktopLoginForm(),
+              //     mobileBody: LoginMobile(),
+              //     tabletBody: LoginTablet(),
+              //   ),
           // initialBinding: BindingsBuilder(() {
           //   Get.put(StudentListController());
           // }),
