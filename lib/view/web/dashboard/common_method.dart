@@ -166,114 +166,121 @@ void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
 ///delete dialog
 void deleteUserWithReason(String studentId, bool isApprove, String fcmToken) {
   final TextEditingController reasonController = TextEditingController();
+  bool isDeleting = false;
+
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
       return Dialog(
         backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
-        child: StatefulBuilder(builder: (context, update) {
-          return SizedBox(
-            width: 200.w,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CustomText(
-                    StringUtils.deleteTitle,
-                    color: ColorUtils.black32,
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.02,
-                  ),
-                  CommonTextField(
-                    hintText: "Enter delete reason",
-                    textEditController: reasonController,
-                    keyBoardType: TextInputType.emailAddress,
-                    maxLine: 2,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.02,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: CustomText(
-                          StringUtils.cancel,
-                          color: ColorUtils.greyA7,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return SizedBox(
+              width: 300.w,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      StringUtils.deleteTitle,
+                      color: ColorUtils.black32,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    SizedBox(height: 16.h),
+                    CommonTextField(
+                      hintText: "Enter delete reason",
+                      textEditController: reasonController,
+                      keyBoardType: TextInputType.text,
+                      maxLine: 3,
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Get.back(),
+                          child: CustomText(
+                            StringUtils.cancel,
+                            color: ColorUtils.greyA7,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 6.w,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          if (reasonController.text.isEmpty) {
-                            Get.showSnackbar(const GetSnackBar(
-                              message: "Please enter reason",
-                              duration: Duration(seconds: 2),
-                              backgroundColor: ColorUtils.primaryColor,
-                            ));
-                            return;
-                          }
+                        SizedBox(width: 12.w),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorUtils.redF3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                          ),
+                          onPressed: () async {
+                            final reason = reasonController.text.trim();
 
-                          update(() {
-                            isDelete = true;
-                          });
-                          final status = await StudentService.deleteStudentWithReason(
-                              studentId, reasonController.text, isApprove);
-                          update(() {
-                            isDelete = false;
-                            print("======false========$isDelete");
-                          });
-                          if (status) {
-                            NotificationMethods.sendMessage(
-                                    receiverFcmToken: fcmToken,
-                                    msg: 'your result status is Rejected',
-                                    title: 'Notification')
-                                .then((value) => Get.back());
-                            Get.back();
-                          } else {}
-                        },
-                        child: isDelete
-                            ? const CircularProgressIndicator()
-                            : Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: ColorUtils.redF3),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
-                                  child: CustomText(
-                                    StringUtils.delete,
-                                    color: ColorUtils.white,
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                            if (reason.isEmpty) {
+                              Get.showSnackbar(
+                                const GetSnackBar(
+                                  message: "Please enter reason",
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: ColorUtils.primaryColor,
                                 ),
-                              ),
-                      ),
-                    ],
-                  )
-                ],
+                              );
+                              return;
+                            }
+
+                            setState(() => isDeleting = true);
+
+                            final success = await StudentService.deleteStudentWithReason(
+                              studentId,
+                              reason,
+                              isApprove,
+                            );
+
+                            setState(() => isDeleting = false);
+
+                            if (success) {
+                              await NotificationMethods.sendMessage(
+                                receiverFcmToken: fcmToken,
+                                msg: 'Your result status has been rejected.',
+                                title: 'Notification',
+                              );
+                              Get.back(); // close dialog
+                            } else {
+                              Get.showSnackbar(
+                                const GetSnackBar(
+                                  message: "Failed to delete student",
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: ColorUtils.red,
+                                ),
+                              );
+                            }
+                          },
+                          child: isDeleting
+                              ? const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
+                              : CustomText(
+                            StringUtils.delete,
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       );
     },
   );

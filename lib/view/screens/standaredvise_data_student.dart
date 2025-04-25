@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/common_widget/no_data_found.dart';
+import 'package:responsivedashboard/common_widget/octa_image.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/enum_utils.dart';
@@ -32,112 +33,225 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorUtils.primaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: ColorUtils.white),
-          onPressed: () => Get.offAll(() => const DesktopScaffold()),
-        ),
-        title: CustomText(
-          widget.stdId,
-          color: ColorUtils.white,
-          fontSize: 20.sp,
-        ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(16.w),
-        children: [
-          buildSearchBox(),
-          SizedBox(height: 20.h),
-          StreamBuilder<List<StudentModel>>(
-            stream: StudentService.getStudentDataForAdmin(
-              familyCode: PreferenceManagerUtils.getFamilyCode(),
-              standard: widget.stdId,
-              isApproved: false,
-              statusEnum: StatusEnum.pending,
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        final isMobile = constraints.maxWidth < 600;
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: ColorUtils.primaryColor,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: ColorUtils.white),
+              onPressed: () => Get.offAll(() => const DesktopScaffold()),
             ),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
-                  height: Get.height * 0.5,
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              }
+            title: CustomText(
+              widget.stdId,
+              color: ColorUtils.white,
+              fontSize: isMobile ? 40.sp : 20.sp,
+            ),
+          ),
+          body: ListView(
+            padding: EdgeInsets.all( 24.w),
+            children: [
+              buildSearchBox(isMobile),
+              SizedBox(height: 20.h),
+              StreamBuilder<List<StudentModel>>(
+                stream: StudentService.getStudentDataForAdmin(
+                  familyCode: PreferenceManagerUtils.getFamilyCode(),
+                  standard: widget.stdId,
+                  isApproved: false,
+                  statusEnum: StatusEnum.pending,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      height: Get.height * 0.5,
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
 
-              if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                return SizedBox(
-                  height: Get.height * 0.5,
-                  child: Center(child: noDataFound()),
-                );
-              }
+                  if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                    return SizedBox(
+                      height: Get.height * 0.5,
+                      child: Center(child: noDataFound()),
+                    );
+                  }
 
-              studentData = snapshot.data!;
-              stdFilteredData = filterStudentData(searchController.text);
+                  studentData = snapshot.data!;
+                  stdFilteredData = filterStudentData(searchController.text);
 
-              if (stdFilteredData.isEmpty) {
-                return SizedBox(
-                  height: Get.height * 0.5,
-                  child: Center(child: noDataFound()),
-                );
-              }
+                  if (stdFilteredData.isEmpty) {
+                    return SizedBox(
+                      height: Get.height * 0.5,
+                      child: Center(child: noDataFound()),
+                    );
+                  }
 
-              return buildDataTable(); // your method that returns PaginatedDataTable
-            },
-          )
-
-        ],
-      ),
+                  return buildDataTable();
+                },
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget buildSearchBox() {
-    return SizedBox(
-      width: 300.w,
-      child: TextFormField(
-        controller: searchController,
-        cursorColor: ColorUtils.grey66,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
-          hintText: "Search student...",
-          hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: ColorUtils.greyD0),
+  Widget buildSearchBox(bool isMobile) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: SizedBox(
+        width: isMobile ? double.infinity : 400.w,
+        child: TextFormField(
+          controller: searchController,
+          cursorColor: ColorUtils.grey66,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
+            hintText: "Search student...",
+            hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: ColorUtils.greyD0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: ColorUtils.primaryColor),
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: ColorUtils.primaryColor),
+          style: const TextStyle(
+            color: ColorUtils.black,
+            fontFamily: "FiraSans",
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
           ),
+          onChanged: (_) => setState(() {}),
         ),
-        style: const TextStyle(
-          color: ColorUtils.black,
-          fontFamily: "FiraSans",
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-        ),
-        onChanged: (_) => setState(() {}),
       ),
     );
   }
-
   Widget buildDataTable() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: ColorUtils.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
+    if (isMobile) {
+      return ListView.builder(
+        itemCount: stdFilteredData.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final student = stdFilteredData[index];
+
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 8.w),
+            elevation: 3,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: EdgeInsets.all(12.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+               Row(
+                children: [
+                  // ✅ Student Image
+                  if ((student.result?.isNotEmpty ?? false)) ...[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white,
+                          ),
+                          // width: 100.w,
+                          height: 200.h,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: GestureDetector(
+                              onTap: () {
+                                _showImageDialog(context, student.result.toString());
+                              },
+                              child: NetWorkOcToAssets(
+                                imgUrl: student.result.toString(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  SizedBox(width: 12.h),
+
+                  Expanded(
+                    child: Column(
+                      children: [
+                        buildRowItem("Student Name", student.studentFullName ?? "-", isMobile: true),
+                        buildRowItem("Mobile", student.mobileNumber ?? "-", isMobile: true),
+                        buildRowItem("Village", student.villageName ?? "-", isMobile: true),
+                        buildRowItem("Standard", student.standard ?? "-", isMobile: true),
+                        buildRowItem("Percentage", "${student.percentage ?? 0}%", isMobile: true),
+                        buildRowItem("Date", student.createdDate?.split("T").first ?? "-", isMobile: true),
+                      ],
+                    ),
+                  ),
+                ],
+               ),
+
+                  SizedBox(height: 12.h),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () => deleteUserWithReason(
+                          student.studentId ?? '',
+                          student.isApproved ?? false,
+                          student.fcmToken ?? '',
+                        ),
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                      ),
+                      IconButton(
+                        onPressed: () => commonDialogEdit(
+                          student.imageId,
+                          student.percentage,
+                          student.standard,
+                          student.studentFullName,
+                          student.studentId ?? '',
+                          student.userId ?? '',
+                          student.villageName ?? '',
+                          student.createdDate,
+                          mobileNumber: student.mobileNumber ?? '',
+                          isApproved: student.isApproved ?? false,
+                          result: student.result,
+                          fcmToken: student.fcmToken ?? '',
+                          checkUncheck: student.checkUncheck,
+                          imageId: student.imageId,
+                          reason: student.reason,
+                          status: student.status,
+                        ),
+                        icon: const Icon(Icons.edit, color: Colors.orange),
+                      ),
+                      IconButton(
+                        onPressed: () => commonCheckUncheck(
+                          student.studentId ?? '',
+                          student.fcmToken ?? '',
+                        ),
+                        icon: const Icon(Icons.check_circle, color: Colors.green),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+
+    // 🛠 No SingleChildScrollView needed for Web/Desktop
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 1000),
       child: PaginatedDataTable(
-        initialFirstRowIndex: 0,
-        onPageChanged: (int rowIndex) {},
         source: YourDataTableSource(
           stdFilteredData,
           deleteUserWithReason,
@@ -164,13 +278,53 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
+  void _showImageDialog(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.network(imageUrl, fit: BoxFit.contain),
+        ),
+      ),
+    );
+  }
+
+
+  Widget buildRowItem(String label, String value, {bool isMobile = false}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$label: ",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: isMobile ? 40.sp : 12.sp,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: isMobile ? 40.sp : 12.sp,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   List<StudentModel> filterStudentData(String query) {
-    if (query.isEmpty) {
-      return studentData;
-    }
+    if (query.isEmpty) return studentData;
     return studentData.where((student) {
-      return (student.studentFullName ?? '').toLowerCase().contains(query.toLowerCase());
+      return (student.studentFullName ?? '')
+          .toLowerCase()
+          .contains(query.toLowerCase());
     }).toList();
   }
 }
