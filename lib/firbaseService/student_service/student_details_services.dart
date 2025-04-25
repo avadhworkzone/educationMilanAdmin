@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,17 +107,39 @@ class StudentService {
     required bool isApproved,
     required StatusEnum statusEnum,
   }) {
-    return _firestore
-        .collectionGroup('results')
-        .where('familyCode', isEqualTo: _familyCode)
-    // Comment temporarily to avoid filtering
-    // .where('standard', isEqualTo: standard)
-    // .where('isApproved', isEqualTo: isApproved)
-    // .where('status', isEqualTo: statusEnum.name)
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => StudentModel.fromJson(e.data())).toList()
-      ..sort((a, b) => b.percentage!.compareTo(a.percentage!)));
+    final controller = StreamController<List<StudentModel>>();
+
+    final usersRef = _firestore
+        .collection('families')
+        .doc(_familyCode)
+        .collection('users');
+
+    usersRef.snapshots().listen((userSnapshot) async {
+      List<StudentModel> allStudents = [];
+
+      for (final userDoc in userSnapshot.docs) {
+        final resultsRef = usersRef.doc(userDoc.id).collection('results');
+
+        final resultsSnapshot = await resultsRef
+            .where('standard', isEqualTo: standard)
+            .where('isApproved', isEqualTo: isApproved)
+            .where('status', isEqualTo: statusEnum.name)
+            .get();
+
+        final students = resultsSnapshot.docs
+            .map((doc) => StudentModel.fromJson(doc.data()))
+            .toList();
+
+        allStudents.addAll(students);
+      }
+
+      allStudents.sort((a, b) => b.percentage!.compareTo(a.percentage!));
+      controller.add(allStudents);
+    });
+
+    return controller.stream;
   }
+
 
 
   ///=======================GET ALL STANDARD RESULTS===================///

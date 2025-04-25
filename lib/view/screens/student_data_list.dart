@@ -158,9 +158,11 @@ class CountPendingStudentResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
     return Container(
-      height: 30.h,
-      width: 30.w,
+      height:isMobile?20.h: 30.h,
+      width: isMobile?20.h: 30.w,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: ColorUtils.red,
