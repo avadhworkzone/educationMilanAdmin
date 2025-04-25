@@ -273,6 +273,40 @@ class StudentService {
     }
   }
 
+  static Stream<List<StudentModel>> getApprovedStudentData({
+    required String standard,
+  }) {
+    final controller = StreamController<List<StudentModel>>();
+
+    final usersRef = _firestore
+        .collection('families')
+        .doc(_familyCode)
+        .collection('users');
+
+    usersRef.snapshots().listen((userSnapshot) async {
+      List<StudentModel> allStudents = [];
+
+      for (final userDoc in userSnapshot.docs) {
+        final resultsRef = usersRef.doc(userDoc.id).collection('results');
+
+        final resultsSnapshot = await resultsRef
+            .where('standard', isEqualTo: standard)
+            .where('isApproved', isEqualTo: true) // ✅ Approved students only
+            .where('status', isEqualTo: StatusEnum.approve.name) // ✅ Status approve
+            .get();
+
+        final students = resultsSnapshot.docs
+            .map((doc) => StudentModel.fromJson(doc.data()))
+            .toList();
+
+        allStudents.addAll(students);
+      }
+
+      controller.add(allStudents);
+    });
+
+    return controller.stream;
+  }
 
   ///=======================EDIT STUDENT===================///
   static Future<bool> studentDetailsEdit(StudentModel studentDetail) async {

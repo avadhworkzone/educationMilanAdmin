@@ -15,16 +15,18 @@ import 'package:responsivedashboard/firbaseService/standard_service/standad_serv
 
 import '../../common_widget/no_data_found.dart';
 import '../../utils/enum_utils.dart';
+import 'FinalStandardViseDataScreen.dart';
 import '../web/dashboard/common_method.dart';
 
-class StudentList extends StatefulWidget {
-  const StudentList({Key? key}) : super(key: key);
+
+class FinalDataDrawerScreen extends StatefulWidget {
+  const FinalDataDrawerScreen({Key? key}) : super(key: key);
 
   @override
-  State<StudentList> createState() => _StudentListState();
+  State<FinalDataDrawerScreen> createState() => _FinalDataDrawerScreenState();
 }
 
-class _StudentListState extends State<StudentList> {
+class _FinalDataDrawerScreenState extends State<FinalDataDrawerScreen> {
   bool isLoggingOut = false;
   final DashboardViewModel dashboardViewModel = Get.find();
 
@@ -40,8 +42,8 @@ class _StudentListState extends State<StudentList> {
             SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
-                color: ColorUtils.primaryColor,borderRadius: BorderRadius.circular(10)
-
+                color: ColorUtils.primaryColor,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -49,9 +51,9 @@ class _StudentListState extends State<StudentList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomText(
-                      StringUtils.studentList,
+                      "Final Data",
                       color: ColorUtils.white,
-                      fontSize:isMobile?40.sp: 30.sp,
+                      fontSize: isMobile ? 40.sp : 30.sp,
                       fontWeight: FontWeight.w500,
                     ),
                     InkWell(
@@ -73,7 +75,9 @@ class _StudentListState extends State<StudentList> {
 
             /// Standards grid
             FutureBuilder<List<String>>(
-              future: StandardService.getStandardsByFamily(         PreferenceManagerUtils.getLoginAdmin(),),
+              future: StandardService.getStandardsByFamily(
+                PreferenceManagerUtils.getLoginAdmin(),
+              ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -99,7 +103,7 @@ class _StudentListState extends State<StudentList> {
 
                     return InkWell(
                       onTap: () {
-                        Get.offAll(() => StandardViseDataStudentScreen(stdId: standard));
+                        Get.offAll(() => FinalStandardViseDataScreen(stdId: standard, )); // ✅ pass isApproved true
                       },
                       child: Stack(
                         clipBehavior: Clip.none,
@@ -113,9 +117,8 @@ class _StudentListState extends State<StudentList> {
                             child: Center(
                               child: CustomText(
                                 standard,
-                                fontSize: isMobile?40.sp:22.sp,
+                                fontSize: isMobile ? 40.sp : 22.sp,
                                 fontWeight: FontWeight.bold,
-                                // fontFamily: 'Poppins',
                                 color: ColorUtils.black3F,
                               ),
                             ),
@@ -126,8 +129,8 @@ class _StudentListState extends State<StudentList> {
                             child: StreamBuilder<List<StudentModel>>(
                               stream: StudentService.getStudentData(
                                 standard: standard,
-                                isApproved: false,
-                                statusEnum: StatusEnum.pending,
+                                isApproved: true, // ✅ Show approved students count
+                                statusEnum: StatusEnum.approve,
                               ),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -161,8 +164,8 @@ class CountPendingStudentResult extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
     return Container(
-      height:isMobile?20.h: 30.h,
-      width: isMobile?20.h: 30.w,
+      height: isMobile ? 20.h : 30.h,
+      width: isMobile ? 20.h : 30.w,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: ColorUtils.red,

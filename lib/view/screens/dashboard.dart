@@ -11,7 +11,7 @@ import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/screens/student_data_list.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/all_user_class.dart';
-import 'package:responsivedashboard/view/web/dashboard/drawer_screen/final_data_screen.dart';
+import 'package:responsivedashboard/view/screens/final_data_screen.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/setting_data_screen.dart';
 import 'package:responsivedashboard/view/web/dashboard/year_wise_data.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
@@ -27,7 +27,9 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
   final DashboardViewModel dashboardViewModel = Get.find();
   RxInt onTitleTap = PreferenceManagerUtils.getIndex().obs;
   String familyName='Education ';
-@override
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   void initState() {
   getData();
     // TODO: implement initState
@@ -180,7 +182,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                     onTap: () {
                       onTitleTap.value = index;
                       PreferenceManagerUtils.setIndex(index);
-                      if (Scaffold.of(context).isDrawerOpen) {
+                      if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
                         Navigator.pop(context);
                       }
                     },
