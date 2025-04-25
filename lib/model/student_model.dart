@@ -8,7 +8,6 @@ class StudentModel {
   String? studentId;
   String? fcmToken;
   String? createdDate;
-  String? checkUncheck;
   String? mobileNumber;
   bool? isApproved;
   String? imageId;
@@ -17,8 +16,6 @@ class StudentModel {
 
   // ✅ New fields based on your Firestore data
   String? familyCode;
-  String? documentStatus;
-  String? documentReason;
 
   StudentModel({
     this.userId,
@@ -30,15 +27,12 @@ class StudentModel {
     this.studentId,
     this.fcmToken,
     this.createdDate,
-    this.checkUncheck,
     this.mobileNumber,
     this.isApproved,
     this.imageId,
     this.reason,
     this.status,
     this.familyCode,
-    this.documentStatus,
-    this.documentReason,
   });
 
   StudentModel.fromJson(Map<String, dynamic> json) {
@@ -51,15 +45,12 @@ class StudentModel {
     studentId = json['studentId'];
     fcmToken = json['fcmToken'];
     createdDate = json['createdDate'];
-    checkUncheck = json['checkUncheck'];
     isApproved = json['isApproved'];
     mobileNumber = json['mobileNumber'] ?? "";
     imageId = json['imageId'];
     reason = json['reason'];
     status = json['status'];
     familyCode = json['familyCode'];
-    documentStatus = json['documentStatus'];
-    documentReason = json['documentReason'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -72,15 +63,12 @@ class StudentModel {
     "studentId": studentId,
     "fcmToken": fcmToken,
     "createdDate": createdDate,
-    "checkUncheck": checkUncheck,
     "isApproved": isApproved,
     "mobileNumber": mobileNumber,
     "imageId": imageId,
     "reason": reason,
     "status": status,
     "familyCode": familyCode,
-    "documentStatus": documentStatus,
-    "documentReason": documentReason,
   };
 
   Map<String, dynamic> updateToJson() => {"studentFullName": studentFullName};

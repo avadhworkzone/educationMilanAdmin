@@ -199,13 +199,12 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
     switch (index) {
       case 0:
         return const StudentList();
+
       case 1:
-        return const AllUser();
-      case 2:
         return const FinalDataDrawerScreen();
-      case 3:
+      case 2:
         return const YearWiseExportScreen();
-      case 4:
+      case 3:
         return const SettingDataScreen();
       default:
         return const Center(child: Text("No screen selected"));

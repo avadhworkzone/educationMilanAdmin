@@ -682,14 +682,12 @@ class _DesktopAllUserState extends State<DesktopAllUser> {
                               reqModel.mobileNumber = mobileNumber;
                               reqModel.result = result;
                               reqModel.fcmToken = fcmToken;
-                              reqModel.checkUncheck = checkUncheck;
                               reqModel.standard = selectedValue.toString();
                               reqModel.studentFullName = fullNameController.text;
                               reqModel.percentage = double.parse(percentageController.text);
                               reqModel.studentId = studentId.toString();
                               reqModel.villageName = villageController.text;
                               reqModel.userId = userId.toString();
-                              reqModel.checkUncheck = userId.toString();
                               reqModel.createdDate = DateTime.now().toLocal().toString();
                               reqModel.imageId = imageId;
                               reqModel.reason = reason;

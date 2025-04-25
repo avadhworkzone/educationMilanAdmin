@@ -277,7 +277,7 @@ class StudentService {
   ///=======================EDIT STUDENT===================///
   static Future<bool> studentDetailsEdit(StudentModel studentDetail) async {
     try {
-      final familyCode = PreferenceManagerUtils.getFamilyCode(); // ✅
+      final familyCode = PreferenceManagerUtils.getFamilyCode();
 
       final docRef = FirebaseFirestore.instance
           .collection('families')
@@ -285,13 +285,31 @@ class StudentService {
           .collection('users')
           .doc(studentDetail.userId)
           .collection('results')
-          .doc(studentDetail.studentId); // same collection as in createStudent
+          .doc(studentDetail.studentId);
 
-      await docRef.update(studentDetail.toJson());
+      // ✅ Step 1: Get current document first
+      final docSnapshot = await docRef.get();
+
+      if (!docSnapshot.exists) {
+        print('❌ Student document not found');
+        return false;
+      }
+
+      final currentData = docSnapshot.data() ?? {};
+
+      // ✅ Step 2: Merge currentData with newData
+      final updatedData = {
+        ...currentData, // keep old fields
+        ...studentDetail.toJson(), // overwrite only provided fields
+      };
+
+      // ✅ Step 3: Update merged data safely
+      await docRef.set(updatedData, SetOptions(merge: true));
+
+      print('✅ Student data updated successfully');
       return true;
-
     } catch (e, stackTrace) {
-      print('EDIT STUDENT ERROR: $e');
+      print('❌ EDIT STUDENT ERROR: $e');
       print('STACK TRACE: $stackTrace');
       return false;
     }
@@ -301,13 +319,39 @@ class StudentService {
   ///=======================APPROVE RESULT===================///
   static Future<bool> acceptStudentResult(String studentId) async {
     try {
-      return _updateFieldByStudentId(studentId, {
+      print('acceptStudentResult CALLED');
+      print('_familyCode = $_familyCode');
+      print('studentId = $studentId');
+
+      // 🔥 Search inside 'results' where familyCode and studentId match
+      final resultSnap = await _firestore
+          .collectionGroup('results')
+          .where('familyCode', isEqualTo: _familyCode)
+          .where('studentId', isEqualTo: studentId)
+          .limit(1)
+          .get();
+
+      print('Fetched docs: ${resultSnap.docs.length}');
+
+      if (resultSnap.docs.isEmpty) {
+        print('❌ No matching result found.');
+        return false;
+      }
+
+      final docRef = resultSnap.docs.first.reference;
+
+      // 🔥 Only update necessary fields (not full overwrite!)
+      await docRef.update({
         "isApproved": true,
         "status": StatusEnum.approve.name,
         "statusBy": PreferenceManagerUtils.getLoginAdmin(),
       });
-    } catch (e) {
-      print("APPROVE ERROR: $e");
+
+      print('✅ Student result approved successfully.');
+      return true;
+    } catch (e, stackTrace) {
+      print("❌ APPROVE ERROR: $e");
+      print("STACK TRACE: $stackTrace");
       return false;
     }
   }
@@ -326,18 +370,32 @@ class StudentService {
 
   // 🔁 INTERNAL: update field using collectionGroup match
   static Future<bool> _updateFieldByStudentId(String studentId, Map<String, dynamic> data) async {
-    final resultSnap = await _firestore
-        .collectionGroup('results')
-        .where('familyCode', isEqualTo: _familyCode)
-        .where('studentId', isEqualTo: studentId)
-        .limit(1)
-        .get();
+    try {
+      final resultSnap = await _firestore
+          .collectionGroup('results')
+          .where('familyCode', isEqualTo: _familyCode)
+          .where('studentId', isEqualTo: studentId)
+          .limit(1)
+          .get();
 
-    if (resultSnap.docs.isEmpty) return false;
+      if (resultSnap.docs.isEmpty) return false;
 
-    await resultSnap.docs.first.reference.update(data);
-    return true;
+      final docRef = resultSnap.docs.first.reference;
+      final currentData = resultSnap.docs.first.data();
+
+      // 🛡️ Merge old data + your new data safely
+      await docRef.set({
+        ...currentData,  // keep all existing fields
+        ...data,         // override with your update fields
+      }, SetOptions(merge: true)); // 🛡️ merge true to protect old data
+
+      return true;
+    } catch (e) {
+      print("UPDATE FIELD ERROR: $e");
+      return false;
+    }
   }
+
 
   // 🔁 INTERNAL: delete using collectionGroup match
   static Future<bool> _deleteByStudentId(String studentId) async {

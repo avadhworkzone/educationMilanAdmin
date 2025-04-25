@@ -35,7 +35,7 @@ class YourDataTableSource extends DataTableSource {
       String? status,
       required VoidCallback onSuccess,
       }) commonDialogEditCallback;
-  final Function(String studentId, String fcmToken) commonCheckUncheckCallBack;
+  final Function(String studentId, String fcmToken,  VoidCallback onSuccess,) commonCheckUncheckCallBack;
 
   YourDataTableSource(
       this.yourDataList,
@@ -118,7 +118,6 @@ class YourDataTableSource extends DataTableSource {
                   mobileNumber: rowData.mobileNumber,
                   result: rowData.result,
                   fcmToken: rowData.fcmToken!,
-                  checkUncheck: rowData.checkUncheck,
                   isApproved: rowData.isApproved,
                   imageId: rowData.imageId,
                   reason: rowData.reason,
@@ -139,7 +138,11 @@ class YourDataTableSource extends DataTableSource {
               onTap: () {
                 commonCheckUncheckCallBack(
                   rowData.studentId!,
-                  rowData.fcmToken!,
+                  rowData.fcmToken!,() {
+                  if (context.mounted) {
+                    (context as Element).markNeedsBuild(); // Refresh after delete ✅
+                  }
+                  },
                 );
               },
               child: const Icon(Icons.check),

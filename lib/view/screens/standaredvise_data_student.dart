@@ -208,7 +208,6 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                           isApproved: student.isApproved ?? false,
                           result: student.result,
                           fcmToken: student.fcmToken ?? '',
-                          checkUncheck: student.checkUncheck,
                           imageId: student.imageId,
                           reason: student.reason,
                           status: student.status,
@@ -221,7 +220,11 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       IconButton(
                         onPressed: () => commonCheckUncheck(
                           student.studentId ?? '',
-                          student.fcmToken ?? '',
+                          student.fcmToken ?? '',() {
+                            setState(() {
+
+                            });
+                          },
                         ),
                         icon: const Icon(Icons.check_circle, color: Colors.green),
                       ),

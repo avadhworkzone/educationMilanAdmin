@@ -134,7 +134,6 @@ class FinalDataTableSource extends DataTableSource {
               dataApprove.villageName.toString(),
               dataApprove.createdDate,
               mobileNumber: dataApprove.mobileNumber,
-              checkUncheck: dataApprove.checkUncheck,
               fcmToken: dataApprove.fcmToken!,
               result: dataApprove.result,
               isApproved: dataApprove.isApproved,

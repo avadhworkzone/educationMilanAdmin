@@ -72,96 +72,7 @@ Widget commonTab({
   );
 }
 
-///delete dialog
-void commonDeleteDialog(String studentId, bool isApprove, String fcmToken) {
-  showDialog(
-    context: Get.context!,
-    builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
-        child: StatefulBuilder(builder: (context, update) {
-          return SizedBox(
-            width: 200.w,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CustomText(
-                    StringUtils.deleteTitle,
-                    color: ColorUtils.black32,
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.02,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: CustomText(
-                          StringUtils.cancel,
-                          color: ColorUtils.greyA7,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 6.w,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          update(() {
-                            isDelete = true;
-                          });
-                          final status = await StudentService.deleteStudent(studentId);
-                          update(() {
-                            isDelete = false;
-                            print("======false========$isDelete");
-                          });
-                          if (status) {
-                            Get.back();
-                          } else {}
-                        },
-                        child: isDelete
-                            ? const CircularProgressIndicator()
-                            : Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: ColorUtils.redF3),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
-                                  child: CustomText(
-                                    StringUtils.delete,
-                                    color: ColorUtils.white,
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        }),
-      );
-    },
-  );
-}
+
 
 ///delete dialog
 void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, VoidCallback onSuccess) {
@@ -171,6 +82,8 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, Voi
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
+      final isMobile = MediaQuery.of(context).size.width < 600;
+
       return Dialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -187,7 +100,7 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, Voi
                     CustomText(
                       StringUtils.deleteTitle,
                       color: ColorUtils.black32,
-                      fontSize: 14.sp,
+                      fontSize:isMobile?40.sp: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),
                     SizedBox(height: 16.h),
@@ -206,7 +119,7 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, Voi
                           child: CustomText(
                             StringUtils.cancel,
                             color: ColorUtils.greyA7,
-                            fontSize: 12.sp,
+                            fontSize:isMobile?25.sp: 12.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -269,7 +182,7 @@ void deleteUserWithReason(String studentId, bool isApprove, String fcmToken, Voi
                               : CustomText(
                             StringUtils.delete,
                             color: Colors.white,
-                            fontSize: 12.sp,
+                            fontSize:isMobile?25.sp: 12.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -291,6 +204,7 @@ void commonUserDeleteDialog(String userId, bool isApprove, String fcmToken) {
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
+
       return Dialog(
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
@@ -299,6 +213,8 @@ void commonUserDeleteDialog(String userId, bool isApprove, String fcmToken) {
           ),
         ),
         child: StatefulBuilder(builder: (context, update) {
+          final isMobile = MediaQuery.of(context).size.width < 600;
+
           return SizedBox(
             width: 200.w,
             child: Padding(
@@ -565,35 +481,36 @@ void commonDialogEdit(
                             if (_formKey.currentState!.validate()) {
                               update(() => isEdit = true);
 
-                              reqModel.mobileNumber = mobileNumber;
-                              reqModel.result = result;
-                              reqModel.fcmToken = fcmToken;
-                              reqModel.checkUncheck = checkUncheck;
-                              reqModel.standard = selectedValue.toString();
-                              reqModel.studentFullName = fullNameController.text;
-                              reqModel.percentage = double.parse(percentageController.text);
-                              reqModel.studentId = studentId;
-                              reqModel.villageName = selectedVillage ?? '';
-                              reqModel.userId = userId;
-                              reqModel.isApproved = isApproved ?? false;
-                              reqModel.createdDate = DateTime.now().toLocal().toString();
-                              reqModel.imageId = imageId;
-                              reqModel.reason = reason;
-                              reqModel.status = status;
+                              reqModel = StudentModel(
+                                mobileNumber: mobileNumber,
+                                result: result,
+                                fcmToken: fcmToken,
+                                standard: selectedValue,
+                                studentFullName: fullNameController.text,
+                                percentage: double.tryParse(percentageController.text) ?? 0,
+                                studentId: studentId,
+                                villageName: selectedVillage ?? '',
+                                userId: userId,
+                                isApproved: isApproved ?? false,
+                                createdDate: DateTime.now().toIso8601String(), // 👈 important: ISO String
+                                imageId: imageId,
+                                reason: reason,
+                                status: status,
+                                familyCode: PreferenceManagerUtils.getFamilyCode(), // 👈✅ important fix
+                              );
 
                               final isStatus = await StudentService.studentDetailsEdit(reqModel);
 
                               update(() => isEdit = false);
 
                               if (isStatus) {
-                                NotificationMethods.sendMessage(
+                                await NotificationMethods.sendMessage(
                                   receiverFcmToken: fcmToken,
                                   msg: 'Your result data has been edited.',
                                   title: 'Notification',
                                 );
                                 Get.back();
-                                onSuccess(); // ✅ call refresh
-
+                                onSuccess(); // ✅ refresh after editing
                               }
                             }
                           },
@@ -602,7 +519,7 @@ void commonDialogEdit(
                               : Container(
                             padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
                             decoration: BoxDecoration(
-                              color: const Color(0XFF251E90),
+                              color: const Color(0xFF251E90),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: CustomText(
@@ -614,6 +531,7 @@ void commonDialogEdit(
                           ),
                         ),
                       ),
+
                     ],
                   )
                   ,
@@ -795,7 +713,7 @@ void commonUserEditDialogEdit(
 }
 
 ///CHECK ACCEPT UNBOX DIALOG
-void commonCheckUncheck(String studentId, String fcmToken) {
+void commonCheckUncheck(String studentId, String fcmToken,  VoidCallback onSuccess,) {
   showDialog(
     builder: (BuildContext context) {
       return Dialog(
@@ -806,6 +724,8 @@ void commonCheckUncheck(String studentId, String fcmToken) {
           ),
         ),
         child: StatefulBuilder(builder: (context, update) {
+          final isMobile = MediaQuery.of(context).size.width < 600;
+
           return SizedBox(
             width: 200.w,
             child: Padding(
@@ -817,14 +737,14 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                   CustomText(
                     "ARE YOU SURE TO ACCEPT",
                     color: ColorUtils.black32,
-                    fontSize: 13.sp,
+                    fontSize:isMobile?30.sp: 13.sp,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
                   ),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
@@ -834,7 +754,7 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                         child: CustomText(
                           "NO",
                           color: ColorUtils.greyA7,
-                          fontSize: 12.sp,
+                          fontSize:isMobile?25.sp: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -850,6 +770,7 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                                 msg: 'your result status is Approved',
                                 title: 'Notification');
                             Get.back();
+                            onSuccess();
                             // fetchData();
                             // UserService.getUserData();
                             // Get.offAll(() => ResponsiveLoginLayout(
@@ -869,7 +790,7 @@ void commonCheckUncheck(String studentId, String fcmToken) {
                             child: CustomText(
                               "YES",
                               color: ColorUtils.white,
-                              fontSize: 10.sp,
+                              fontSize: isMobile?25.sp: 12.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -888,88 +809,7 @@ void commonCheckUncheck(String studentId, String fcmToken) {
   );
 }
 
-///CHECK REJECT DIALOG
-void commonRejectDialog(String studentId) {
-  showDialog(
-    builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
-        child: StatefulBuilder(builder: (context, update) {
-          return SizedBox(
-            width: 200.w,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CustomText(
-                    "ARE YOU SURE TO ACCEPT",
-                    color: ColorUtils.black32,
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.02,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: CustomText(
-                          "NO",
-                          color: ColorUtils.greyA7,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 6.w,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          bool success = await StudentService.acceptStudentResult(studentId);
-                          if (success) {
-                            Get.back();
-                          } else {
-                            print("Failed to update isApproved in Firebase");
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20), color: ColorUtils.redF3),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20.w),
-                            child: CustomText(
-                              "YES",
-                              color: ColorUtils.white,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        }),
-      );
-    },
-    context: Get.context!,
-  );
-}
+
 
 ///=======================SignOut===============///
 Future<void> signOut() async {
