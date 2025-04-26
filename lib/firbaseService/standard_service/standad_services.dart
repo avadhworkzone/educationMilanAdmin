@@ -96,33 +96,40 @@ class StandardService {
             }).toList());
   }
 
-  static Future<bool> addStandard(Map<String, dynamic> std) async {
+  static Future<bool> addStandard(String newStandard) async {
     try {
-      String nextId = '01';
-      QuerySnapshot querySnapshot = await CollectionUtils.standardDetails.get();
+      final familyCode = _familyCode; // or wherever you store logged-in familyCode
 
-      if (querySnapshot.docs.isNotEmpty) {
-        List<String> documentIds =
-            querySnapshot.docs.map((doc) => doc.id).toList();
-        documentIds.sort((a, b) => b.compareTo(a));
-        int nextIntId = int.parse(documentIds.first) + 1;
-        nextId = nextIntId.toString().padLeft(2, '0'); // Ensure two digits
-        log("DATA == ${nextId}");
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('standerd')
+          .doc('standerd');
+
+      final snapshot = await docRef.get();
+
+      if (snapshot.exists) {
+        List<dynamic> existingStandards = snapshot.data()?['standerd'] ?? [];
+
+        if (!existingStandards.contains(newStandard)) {
+          existingStandards.add(newStandard);
+
+          await docRef.update({
+            'standerd': existingStandards,
+          });
+        }
+      } else {
+        // If no standerd document, create one
+        await docRef.set({
+          'standerd': [newStandard],
+        });
       }
-      return CollectionUtils.standardDetails
-          .doc(nextId)
-          .set(std)
-          .then((value) => true)
-          .catchError((e) {
-        print('ADD STD ERROR:=>$e');
-        return false;
-      });
+      return true;
     } catch (e) {
-      log('ADD STD ERROR :=>$e');
+      print('Error adding standard: $e');
       return false;
     }
   }
-
   static Future<bool> editStandard(
       String standardId, Map<String, dynamic> updateStandard) async {
     try {

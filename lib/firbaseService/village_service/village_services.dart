@@ -73,30 +73,37 @@ class VillageService {
             }).toList());
   }
 
-  static Future<bool> addVillage(Map<String, dynamic> village) async {
+  static Future<bool> addVillage(String newVillage) async {
     try {
-      String nextId = '01';
-      QuerySnapshot querySnapshot = await CollectionUtils.villageDetails.get();
+      final familyCode = _familyCode; // Use your login family code
 
-      if (querySnapshot.docs.isNotEmpty) {
-        List<String> documentIds =
-            querySnapshot.docs.map((doc) => doc.id).toList();
-        documentIds.sort((a, b) => b.compareTo(a));
-        // Get the highest document ID and increment by 1
-        int nextIntId = int.parse(documentIds.first) + 1;
-        nextId = nextIntId.toString().padLeft(2, '0'); // Ensure two digits
-        log("DATA == ${nextId}");
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(familyCode)
+          .collection('village')
+          .doc('villages');
+
+      final snapshot = await docRef.get();
+
+      if (snapshot.exists) {
+        List<dynamic> existingVillages = snapshot.data()?['villages'] ?? [];
+
+        if (!existingVillages.contains(newVillage)) {
+          existingVillages.add(newVillage);
+
+          await docRef.update({
+            'villages': existingVillages,
+          });
+        }
+      } else {
+        // If no document exists, create new
+        await docRef.set({
+          'villages': [newVillage],
+        });
       }
-      return CollectionUtils.villageDetails
-          .doc(nextId)
-          .set(village)
-          .then((value) => true)
-          .catchError((e) {
-        print('ADD VILLAGE ERROR:=>$e');
-        return false;
-      });
+      return true;
     } catch (e) {
-      log('ADD VILLAGE ERROR :=>$e');
+      print('Error adding village: $e');
       return false;
     }
   }

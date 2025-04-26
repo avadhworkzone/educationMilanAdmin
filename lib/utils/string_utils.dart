@@ -1,5 +1,5 @@
 class StringUtils {
-  static String appName = "Borda Parivar";
+  static String appName = "Education Milan";
   static String allResult = "All Results";
   static String matchOut = "Match out";
   static String addNew = "Add new";

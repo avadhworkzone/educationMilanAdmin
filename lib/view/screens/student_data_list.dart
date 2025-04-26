@@ -7,6 +7,7 @@ import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/share_preference.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
+import 'package:responsivedashboard/view/screens/signInPage.dart';
 import 'package:responsivedashboard/view/screens/standared_vise_data_student.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
@@ -59,7 +60,7 @@ class _StudentListState extends State<StudentList> {
                         setState(() => isLoggingOut = true);
                         await signOut();
                         setState(() => isLoggingOut = false);
-                        Get.offAll(() => DesktopLoginForm());
+                        Get.offAll(() => SignUpScreenForm());
                       },
                       child: isLoggingOut
                           ? const CircularProgressIndicator()

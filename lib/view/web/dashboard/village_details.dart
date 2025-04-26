@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsivedashboard/common_widget/custom_assets.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
-import 'package:responsivedashboard/view/web/dashboard/drawer_screen/add_village.dart';
+import 'package:responsivedashboard/view/screens/add_village.dart';
 
 class VillageDataTableSource extends DataTableSource {
   final BuildContext context;

@@ -8,7 +8,9 @@ import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/web/auth/desktop_login_form.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
-import 'package:responsivedashboard/view/web/dashboard/drawer_screen/add_standard.dart';
+import 'package:responsivedashboard/view/screens/add_standard.dart';
+
+import '../../../screens/signInPage.dart';
 
 class PromotionScreen extends StatefulWidget {
   const PromotionScreen({Key? key}) : super(key: key);
@@ -63,7 +65,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                               setState(() {
                                 isLoggingOut = false;
                               });
-                              Get.offAll(() => const DesktopLoginForm());
+                              Get.offAll(() => const SignUpScreenForm());
                             },
                             child: isLoggingOut
                                 ? const CircularProgressIndicator()
