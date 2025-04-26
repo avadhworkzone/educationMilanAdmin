@@ -3,7 +3,60 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/collection_utils.dart';
 
+import '../../utils/share_preference.dart';
+
 class VillageService {
+  static String get _familyCode => PreferenceManagerUtils.getFamilyCode();
+  Future<List<String>> getVillagesByFamily() async {
+    List<String> villageList = []; // ✅ Add this here
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('families')
+          .doc(_familyCode) // ✅ use globally saved _familyCode
+          .collection('village')
+          .doc('villages')
+          .get();
+
+      if (doc.exists) {
+        List<dynamic> data = doc.data()?['villages'] ?? [];
+        villageList = data.map((e) => e.toString()).toList();
+      } else {
+        villageList = [];
+      }
+      return villageList;
+    } catch (e) {
+      print('Error fetching villages: $e');
+      return [];
+    }
+  }
+
+  Future<bool> deleteVillageByName(String villageName) async {
+    try {
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(_familyCode)
+          .collection('village')
+          .doc('villages');
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        List<dynamic> villages = docSnapshot.data()?['villages'] ?? [];
+
+        villages.removeWhere((item) => item.toString().trim() == villageName.trim());
+
+        await docRef.update({'villages': villages});
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error deleting village: $e');
+      return false;
+    }
+  }
+
   Future<List<StudentModel>> getVillages() async {
     QuerySnapshot querySnapshot = await CollectionUtils.villageDetails.get();
     List<StudentModel> villageList = querySnapshot.docs.map((doc) {

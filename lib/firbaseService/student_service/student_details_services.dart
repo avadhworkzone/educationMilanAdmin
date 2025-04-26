@@ -221,26 +221,6 @@ class StudentService {
 
 
 
-  ///=======================GET ALL STANDARD RESULTS===================///
-  static Stream<List<StudentModel>> getStandardData() {
-    return _firestore
-        .collectionGroup('results')
-        .where('familyCode', isEqualTo: _familyCode)
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => StudentModel.fromJson(e.data())).toList());
-  }
-
-  ///=======================UPDATE STATUS===================///
-  static Future<bool> updateStudentStatus(String studentId, StatusEnum status) async {
-    try {
-      return _updateFieldByStudentId(studentId, {
-        "status": status.name,
-      });
-    } catch (e) {
-      print('STATUS UPDATE ERROR: $e');
-      return false;
-    }
-  }
 
   ///=======================DELETE STUDENT===================///
   static Future<bool> deleteStudent(String studentId) async {
@@ -248,21 +228,6 @@ class StudentService {
       return _deleteByStudentId(studentId);
     } catch (e) {
       print('DELETE ERROR: $e');
-      return false;
-    }
-  }
-
-  ///=======================DELETE WITH REASON===================///
-  static Future<bool> deleteStudentWithReason(
-      String studentId, String reason, bool isApprove) async {
-    try {
-      return _updateFieldByStudentId(studentId, {
-        "status": StatusEnum.delete.name,
-        "reason": reason,
-        "isApproved": isApprove,
-      });
-    } catch (e) {
-      print('DELETE WITH REASON ERROR: $e');
       return false;
     }
   }
@@ -508,35 +473,6 @@ class StudentService {
     } catch (e) {
       print('UPDATE STUDENT ERROR: $e');
       return false;
-    }
-  }
-  static Future<void> migrateMissingFields() async {
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collectionGroup('results')
-          .get();
-
-      for (final doc in querySnapshot.docs) {
-        final data = doc.data();
-
-        final needsUpdate = data['standard'] == null ||
-            data['isApproved'] == null ||
-            data['status'] == null;
-
-        if (needsUpdate) {
-          await doc.reference.set({
-            if (data['standard'] == null) 'standard': '',
-            if (data['isApproved'] == null) 'isApproved': false,
-            if (data['status'] == null) 'status': StatusEnum.pending.name,
-          }, SetOptions(merge: true));
-
-          log('Updated missing fields for doc: ${doc.id}');
-        }
-      }
-
-      log('✅ Migration completed!');
-    } catch (e, st) {
-      log('❌ Migration failed: $e\n$st');
     }
   }
 

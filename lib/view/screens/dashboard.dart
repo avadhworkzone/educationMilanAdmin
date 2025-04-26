@@ -12,8 +12,8 @@ import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/view/screens/student_data_list.dart';
 import 'package:responsivedashboard/view/web/dashboard/drawer_screen/all_user_class.dart';
 import 'package:responsivedashboard/view/screens/final_data_screen.dart';
-import 'package:responsivedashboard/view/web/dashboard/drawer_screen/setting_data_screen.dart';
-import 'package:responsivedashboard/view/web/dashboard/year_wise_data.dart';
+import 'package:responsivedashboard/view/screens/setting_data_screen.dart';
+import 'package:responsivedashboard/view/screens/year_wise_data.dart';
 import 'package:responsivedashboard/viewmodel/dashboard_viewmodel.dart';
 
 class DesktopScaffold extends StatefulWidget {

@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/collection_utils.dart';
+import 'package:responsivedashboard/utils/share_preference.dart';
 
 class StandardService {
 
-
+  static String get _familyCode => PreferenceManagerUtils.getFamilyCode();
   static Future<List<String>> getStandardsByFamily(String familyCode) async {
     try {
       final doc = await FirebaseFirestore.instance
@@ -27,6 +28,58 @@ class StandardService {
       return [];
     }
   }
+  Future<bool> deleteVillageByName(String villageName) async {
+    try {
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(_familyCode)
+          .collection('village')
+          .doc('villages');
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        List<dynamic> villages = docSnapshot.data()?['villages'] ?? [];
+
+        villages.removeWhere((item) => item.toString().trim() == villageName.trim());
+
+        await docRef.update({'villages': villages});
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error deleting village: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> deleteStandardByName(String standardName) async {
+    try {
+      final docRef = FirebaseFirestore.instance
+          .collection('families')
+          .doc(_familyCode)
+          .collection('standerd')
+          .doc('standerd');
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        List<dynamic> standards = docSnapshot.data()?['standerd'] ?? [];
+
+        standards.removeWhere((item) => item.toString().trim() == standardName.trim());
+
+        await docRef.update({'standerd': standards});
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error deleting standard: $e');
+      return false;
+    }
+  }
+
   static Future<List<StudentModel>> getStandards() async {
     QuerySnapshot querySnapshot = await CollectionUtils.standardDetails.get();
     List<StudentModel> standardsList = querySnapshot.docs.map((doc) {
