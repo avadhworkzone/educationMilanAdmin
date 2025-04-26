@@ -132,16 +132,42 @@ class StudentService {
   }
 
   ///=======================GET FINAL DATA ALL===================///
-  static Future<List<StudentModel>> getFinalStudentDataAllFuture() {
-    return _firestore
-        .collectionGroup('results')
-        .where('familyCode', isEqualTo: _familyCode)
-        .where('isApproved', isEqualTo: true)
-        .where('status', isEqualTo: StatusEnum.approve.name)
-        .get()
-        .then((snap) => snap.docs.map((e) => StudentModel.fromJson(e.data())).toList()
-      ..sort((a, b) => b.percentage!.compareTo(a.percentage!)));
+  static Stream<List<StudentModel>> getFinalStudentDataAllFuture({
+  required bool isApproved,
+  }) {
+  final controller = StreamController<List<StudentModel>>();
+
+  final usersRef = _firestore
+      .collection('families')
+      .doc(_familyCode)
+      .collection('users');
+
+  usersRef.snapshots().listen((userSnapshot) async {
+  List<StudentModel> allStudents = [];
+
+  for (final userDoc in userSnapshot.docs) {
+  final resultsRef = usersRef.doc(userDoc.id).collection('results');
+
+  final resultsSnapshot = await resultsRef
+      .where('isApproved', isEqualTo: true)
+      .where('status', isEqualTo: StatusEnum.approve.name)
+      .get();
+
+  final students = resultsSnapshot.docs
+      .map((doc) => StudentModel.fromJson(doc.data()))
+      .toList();
+
+  allStudents.addAll(students);
   }
+
+  allStudents.sort((a, b) => b.percentage!.compareTo(a.percentage!));
+  controller.add(allStudents);
+  });
+
+  return controller.stream;
+  }
+
+
 
   ///=======================GET BY STANDARD + STATUS===================///
   static Stream<List<StudentModel>> getStudentData({
@@ -176,7 +202,18 @@ class StudentService {
       }
 
       allStudents.sort((a, b) => b.percentage!.compareTo(a.percentage!));
-      controller.add(allStudents);
+      final currentYear = DateTime.now().year;
+      final List<StudentModel> currentYearStudents = allStudents.where((student) {
+        final dateStr = student.createdDate;
+        if (dateStr == null || dateStr.isEmpty) return false;
+        try {
+          final date = DateTime.parse(dateStr);
+          return date.year == currentYear;
+        } catch (_) {
+          return false;
+        }
+      }).toList();
+      controller.add(currentYearStudents);
     });
 
     return controller.stream;
@@ -301,8 +338,18 @@ class StudentService {
 
         allStudents.addAll(students);
       }
-
-      controller.add(allStudents);
+      final currentYear = DateTime.now().year;
+      final List<StudentModel> currentYearStudents = allStudents.where((student) {
+        final dateStr = student.createdDate;
+        if (dateStr == null || dateStr.isEmpty) return false;
+        try {
+          final date = DateTime.parse(dateStr);
+          return date.year == currentYear;
+        } catch (_) {
+          return false;
+        }
+      }).toList();
+      controller.add(currentYearStudents);
     });
 
     return controller.stream;

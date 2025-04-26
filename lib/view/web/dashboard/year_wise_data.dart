@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/pdf_service.dart';
@@ -18,6 +17,7 @@ class YearWiseExportScreen extends StatefulWidget {
 class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
   late int selectedYear;
   bool isDownloading = false;
+  bool isLoading = true;
   List<int> availableYears = [];
   List<StudentModel> allStudents = [];
 
@@ -29,7 +29,9 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
 
   Future<void> _fetchStudentYears() async {
     try {
-      allStudents = await StudentService.getFinalStudentDataAllFuture();
+      final List<StudentModel> studentList = await StudentService.getFinalStudentDataAllFuture(isApproved: true).first;
+
+      allStudents = studentList;
 
       final years = allStudents
           .where((s) => s.createdDate != null && s.createdDate!.isNotEmpty)
@@ -45,11 +47,18 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
           .toList()
         ..sort((a, b) => b.compareTo(a)); // Sort descending
 
-      setState(() {
-        availableYears = years;
-        selectedYear = years.isNotEmpty ? years.first : DateTime.now().year;
-      });
+      if (mounted) {
+        setState(() {
+          availableYears = years;
+          selectedYear = years.isNotEmpty ? years.first : DateTime.now().year;
+          isLoading = false;
+        });
+      }
     } catch (e) {
+      print('Error fetching years: $e');
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
       Get.snackbar('Error', 'Failed to load year options: $e');
     }
   }
@@ -61,11 +70,10 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
         year: selectedYear,
         allStudents: allStudents,
       );
-
-      Get.snackbar('Success', 'PDF downloaded for year $selectedYear');
-    } catch (e ,s) {
-      Get.snackbar('Error', 'Failed to download PDF: $e');
-      print("--=-=-=-=-= $e \n   $s" );
+      Get.snackbar('Success', 'Report downloaded for year $selectedYear');
+    } catch (e, s) {
+      Get.snackbar('Error', 'Failed to download: $e');
+      print("--Download Error--\n$e\n$s");
     } finally {
       setState(() => isDownloading = false);
     }
@@ -77,14 +85,21 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Container(width: Get.width/3, height: Get.height/2,
+          child: isLoading
+              ? const CircularProgressIndicator() // 🔥 Show loader while fetching
+              : Container(
+            width: Get.width / 3,
+            height: Get.height / 2,
             decoration: BoxDecoration(
               color: ColorUtils.white,
               borderRadius: BorderRadius.circular(50),
-              border: Border.all(color: Colors.grey,width: 3),
+              border: Border.all(color: Colors.grey, width: 3),
               boxShadow: [
-                BoxShadow(color: Colors.blue.withOpacity(0.3),blurRadius: 10)
-              ]
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.3),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             child: Padding(
               padding: const EdgeInsets.all(50),
@@ -98,9 +113,7 @@ class _YearWiseExportScreenState extends State<YearWiseExportScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                   const SizedBox(height: 10),
-                  availableYears.isEmpty
-                      ? const CircularProgressIndicator()
-                      : DropdownButton<int>(
+                  DropdownButton<int>(
                     value: selectedYear,
                     items: availableYears.map((year) {
                       return DropdownMenuItem<int>(

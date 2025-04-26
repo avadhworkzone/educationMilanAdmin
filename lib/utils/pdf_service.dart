@@ -40,19 +40,21 @@ class PdfService {
     sheet.setColWidth(3, 17);  // Village
     sheet.setColWidth(4, 15);  // Percentage
 
-    // 🔄 Get dynamic standard list from StudentService
-    final List<StudentModel> allStdData = await StudentService.getStandardData().first;
-    final List<String> standardOrder = allStdData
+    // 🆕 Dynamic standard list (from allStudents itself)
+    final List<String> standardOrder = allStudents
         .map((s) => s.standard?.trim() ?? '')
         .where((s) => s.isNotEmpty)
         .toSet()
-        .toList();
-    // Top spacing before standard section
+        .toList()
+      ..sort(); // Alphabetical sort for better structure
+
+    // 📄 Initial Header
     sheet.appendRow(['']);
     sheet.appendRow(['']);
-    sheet.appendRow(['------------------------------------------------------------------------------ BORDA PARIVAR SNEHMILAN ------------------------------------------------------------------------------']);
-    // Top spacing before standard section
+    sheet.appendRow(['------------------------------------------------------------------------------ EDUCATION SNEHMILAN ------------------------------------------------------------------------------']);
     sheet.appendRow(['']);
+    sheet.appendRow(['']);
+
     for (final std in standardOrder) {
       final students = allStudents.where((s) {
         final matchStd = s.standard?.trim() == std.trim();
@@ -63,24 +65,21 @@ class PdfService {
         } catch (_) {
           return false;
         }
-      }).toList();
+      }).toList()
+        ..sort((a, b) => b.percentage!.compareTo(a.percentage!)); // 🔥 sort by % descending
 
       if (students.isEmpty) continue;
 
-      // Top spacing before standard section
+      // 🔥 Section Title for Standard
       sheet.appendRow(['']);
-      sheet.appendRow(['']);
-
-      // Title row
       sheet.appendRow(['================================================== $std ===================================================']);
-
-      // Spacer after title
       sheet.appendRow(['']);
       sheet.appendRow(['']);
 
-      // Header
-      sheet.appendRow(['Rank', 'Name', 'Mobile', 'Village', 'Percentage']);
+      // Headers
+      sheet.appendRow(['Rank', 'Student Name', 'Mobile Number', 'Village Name', 'Percentage']);
 
+      // Student rows
       for (int i = 0; i < students.length; i++) {
         final s = students[i];
         sheet.appendRow([
@@ -92,12 +91,12 @@ class PdfService {
         ]);
       }
 
-      // Bottom spacing after section
+      // 🔥 Spacer after section
       sheet.appendRow(['']);
       sheet.appendRow(['']);
     }
 
-    // Save and download
+    // Save and trigger download
     final excelBytes = excel.encode();
     if (excelBytes == null) return;
 
@@ -110,7 +109,6 @@ class PdfService {
       ..setAttribute('download', 'Yearly_Student_Report_$timestamp.xlsx')
       ..click();
   }
-
 
 
 
