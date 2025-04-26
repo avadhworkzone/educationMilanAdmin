@@ -10,6 +10,8 @@ import 'package:responsivedashboard/view/screens/dashboard.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
 import 'package:responsivedashboard/firbaseService/student_service/student_details_services.dart';
 
+import '../../utils/pdf_service.dart';
+
 class FinalStandardViseDataScreen extends StatefulWidget {
   final String stdId;
 
@@ -23,7 +25,7 @@ class _FinalStandardViseDataScreenState extends State<FinalStandardViseDataScree
   TextEditingController searchController = TextEditingController();
   int _rowsPerPage = 10;
   List<StudentModel> studentData = [];
-
+  List<StudentModel> filteredData=[];
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -43,66 +45,78 @@ class _FinalStandardViseDataScreenState extends State<FinalStandardViseDataScree
               fontSize: isMobile ? 40.sp : 20.sp,
             ),
           ),
-          body: ListView(
-            padding: EdgeInsets.all(24.w),
-            children: [
-              buildSearchBox(isMobile),
-              SizedBox(height: 20.h),
-              StreamBuilder<List<StudentModel>>(
-                stream: StudentService.getApprovedStudentData(standard: widget.stdId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: noDataFound());
-                  }
+          body: StreamBuilder<List<StudentModel>>(
+            stream: StudentService.getApprovedStudentData(standard: widget.stdId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: noDataFound());
+              }
 
-                  studentData = snapshot.data!;
-                  final filteredData = filterStudentData(searchController.text);
+              studentData = snapshot.data!;
+               filteredData = filterStudentData(searchController.text);
 
-                  if (filteredData.isEmpty) {
-                    return Center(child: noDataFound());
-                  }
+              if (filteredData.isEmpty) {
+                return Center(child: noDataFound());
+              }
 
-                  return isMobile
-                      ? buildMobileList(filteredData)
-                      : buildWebTable(filteredData);
-                },
-              ),
-            ],
+              return Column(
+                children: [
+                  buildSearchBox(isMobile,filteredData),
+                  SizedBox(height: 20.h),
+                 Expanded(
+                   child: ListView(children: [
+                     isMobile
+                         ? buildMobileList(filteredData)
+                         : buildWebTable(filteredData),
+                   ],),
+                 )
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
 
-  Widget buildSearchBox(bool isMobile) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: SizedBox(
-        width: isMobile ? double.infinity : 400.w,
-        child: TextFormField(
-          controller: searchController,
-          cursorColor: ColorUtils.grey66,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
-            hintText: "Search student...",
-            hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: ColorUtils.primaryColor),
+  Widget buildSearchBox(bool isMobile,List<StudentModel> dataList) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: searchController,
+              cursorColor: ColorUtils.grey66,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
+                hintText: "Search student...",
+                hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: ColorUtils.primaryColor),
+                ),
+              ),
+              style: const TextStyle(
+                color: ColorUtils.black,
+                fontFamily: "FiraSans",
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+              onChanged: (_) => setState(() {}),
             ),
           ),
-          style: const TextStyle(
-            color: ColorUtils.black,
-            fontFamily: "FiraSans",
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          onChanged: (_) => setState(() {}),
-        ),
+          IconButton(
+              onPressed: ()async {
+                await PdfService.generateReportExcel(reportList: dataList, std:widget.stdId);
+
+              },
+              icon:  Icon(Icons.download_for_offline,color: ColorUtils.primaryColor,size: isMobile?40.h:50.w,))
+        ],
       ),
     );
   }
@@ -111,6 +125,7 @@ class _FinalStandardViseDataScreenState extends State<FinalStandardViseDataScree
     return ListView.builder(
       itemCount: dataList.length,
       shrinkWrap: true,
+      padding: EdgeInsets.all(10),
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final student = dataList[index];
@@ -184,20 +199,23 @@ class _FinalStandardViseDataScreenState extends State<FinalStandardViseDataScree
   }
 
   Widget buildWebTable(List<StudentModel> dataList) {
-    return PaginatedDataTable(
-      source: WebDataTableSource(dataList, context, refreshCallback: () => setState(() {})),
-      rowsPerPage: _rowsPerPage,
-      columnSpacing: 15.w,
-      columns: [
-        DataColumn(label: Text("No")),
-        DataColumn(label: Text("Mobile")),
-        DataColumn(label: Text("Student Name")),
-        DataColumn(label: Text("Village")),
-        DataColumn(label: Text("Percentage")),
-        DataColumn(label: Text("Date")),
-        DataColumn(label: Text("Image")),
-        DataColumn(label: Text("Delete")),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: PaginatedDataTable(
+        source: WebDataTableSource(dataList, context, refreshCallback: () => setState(() {})),
+        rowsPerPage: _rowsPerPage,
+        columnSpacing: 15.w,
+        columns: [
+          DataColumn(label: Text("No")),
+          DataColumn(label: Text("Mobile")),
+          DataColumn(label: Text("Student Name")),
+          DataColumn(label: Text("Village")),
+          DataColumn(label: Text("Percentage")),
+          DataColumn(label: Text("Date")),
+          DataColumn(label: Text("Image")),
+          DataColumn(label: Text("Delete")),
+        ],
+      ),
     );
   }
 

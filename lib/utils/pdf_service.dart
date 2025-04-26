@@ -321,22 +321,24 @@ class PdfService {
     final excel = Excel.createExcel();
     final sheet = excel['Sheet1'];
 
-    // Set column widths
+    // Set custom column widths
     sheet.setColWidth(0, 8);   // Rank
     sheet.setColWidth(1, 65);  // Name
     sheet.setColWidth(2, 25);  // Mobile
     sheet.setColWidth(3, 17);  // Village
     sheet.setColWidth(4, 15);  // Percentage
-    // Spacer
+
+    // Spacer rows
     sheet.appendRow(['']);
     sheet.appendRow(['']);
 
     // App title row
-    sheet.appendRow(['------------------------------------------------------------------------------ BORDA PARIVAR SNEHMILAN ------------------------------------------------------------------------------']);
+    sheet.appendRow([
+      '------------------------------------------------------------------------------ Snehmilan list ------------------------------------------------------------------------------'
+    ]);
 
-
-
-    // Spacer
+    // Spacer rows
+    sheet.appendRow(['']);
     sheet.appendRow(['']);
 
     // Section title
@@ -344,7 +346,7 @@ class PdfService {
       '================================================== $std ==================================================='
     ]);
 
-    // Spacer
+    // Spacer rows
     sheet.appendRow(['']);
     sheet.appendRow(['']);
 
@@ -353,7 +355,7 @@ class PdfService {
 
     // Filter reportList by current year
     final currentYear = DateTime.now().year;
-    reportList = reportList.where((element) {
+    final List<StudentModel> currentYearData = reportList.where((element) {
       final dateStr = element.createdDate;
       if (dateStr == null || dateStr.isEmpty) return false;
       try {
@@ -364,29 +366,32 @@ class PdfService {
       }
     }).toList();
 
+    // Sort by percentage (high to low)
+    currentYearData.sort((a, b) => (b.percentage ?? 0).compareTo(a.percentage ?? 0));
+
     // Add student rows
-    for (int i = 0; i < reportList.length; i++) {
-      final s = reportList[i];
+    for (int i = 0; i < currentYearData.length; i++) {
+      final student = currentYearData[i];
       sheet.appendRow([
         '${i + 1}',
-        s.studentFullName ?? '',
-        s.mobileNumber ?? '',
-        s.villageName ?? '',
-        '${s.percentage ?? '-'}%',
+        student.studentFullName ?? '',
+        student.mobileNumber ?? '',
+        student.villageName ?? '',
+        '${student.percentage ?? '-'}%',
       ]);
     }
 
-    // Save and download
-    final fileBytes = excel.encode();
-    if (fileBytes == null) return;
+    // Encode and download
+    final excelBytes = excel.encode();
+    if (excelBytes == null) return;
 
-    final content = base64Encode(fileBytes);
+    final content = base64Encode(excelBytes);
     final anchor = html.AnchorElement(
       href: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-16le;base64,$content',
-    )..setAttribute("download", "Report_${std}_${DateTime.now().millisecondsSinceEpoch}.xlsx")
+    )
+      ..setAttribute('download', 'Report_${std}_${DateTime.now().millisecondsSinceEpoch}.xlsx')
       ..click();
   }
-
 
   static pw.Container transactionRow(
     StudentModel result,
