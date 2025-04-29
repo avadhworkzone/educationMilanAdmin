@@ -12,9 +12,9 @@ class AuthService {
   //   }
   // }
 
-  static Future<bool> signIn({
-    required String docId, // this is familyCode
-    required String pin,   // this is password
+  static Future<String> signIn({
+    required String docId, // familyCode
+    required String pin,   // password
   }) async {
     try {
       final doc = await CollectionUtils.families.doc(docId).get();
@@ -22,19 +22,26 @@ class AuthService {
       if (doc.exists) {
         final data = doc.data();
         final storedPassword = data?['password'];
+        final isActive = data?['isActive'] ?? true; // if missing, assume active
 
-        // ✅ Check if password matches
+        if (isActive == false) {
+          return 'expired';
+        }
+
         if (storedPassword == pin) {
-          return true;
+          return 'success';
+        } else {
+          return 'invalid';
         }
       }
 
-      return false;
+      return 'invalid';
     } catch (e) {
       print('SIGN IN ERROR => $e');
-      return false;
+      return 'error';
     }
   }
+
 }
 
 enum LoginStatus {

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "862823786092",
-    "project_id": "bordaparivar-85e13",
-    "storage_bucket": "bordaparivar-85e13.appspot.com"
+    "project_number": "685157106296",
+    "project_id": "edupulsemilan",
+    "storage_bucket": "edupulsemilan.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862823786092:android:ea4dc278d06a159ec1da49",
+        "mobilesdk_app_id": "1:685157106296:android:88f553f7e4faf7a0dd238d",
         "android_client_info": {
-          "package_name": "com.madvise.borda"
+          "package_name": "com.madvise.snehmilanworld"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDDZRUrnFSkp8zy0DCleyacQg8GuW_7PJQ"
+          "current_key": "AIzaSyCsV_8SGeCyNDTHtKy1g9gSZh8IUicVeSE"
         }
       ],
       "services": {

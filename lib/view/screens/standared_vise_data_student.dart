@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/common_widget/no_data_found.dart';
 import 'package:responsivedashboard/common_widget/octa_image.dart';
@@ -267,17 +269,24 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
-
-  void _showImageDialog(BuildContext context, String imageUrl) {
-    showDialog(
+  Future<void> _showImageDialog(BuildContext context, String imageUrl) async {
+    return showDialog<void>(
       context: context,
-      builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.network(imageUrl, fit: BoxFit.contain),
-        ),
-      ),
+      builder: (BuildContext context) {
+        return Dialog(
+          child: PhotoViewGallery(
+            pageController: PageController(),
+            backgroundDecoration: const BoxDecoration(color: Colors.black),
+            pageOptions: [
+              PhotoViewGalleryPageOptions(
+                imageProvider: NetworkImage(imageUrl),
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 2,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

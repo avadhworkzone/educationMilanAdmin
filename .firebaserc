@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "bordaparivar-85e13"
-  }
+    "default": "edupulsemilan"
+  },
+  "targets": {},
+  "etags": {}
 }

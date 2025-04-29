@@ -196,16 +196,20 @@ class _SignUpScreenFormState extends State<SignUpScreenForm> {
 
       setState(() => isLoading = false);
 
-      if (status == true) {
+      if (status == 'success') {
         PreferenceManagerUtils.setIsLogin(true);
         PreferenceManagerUtils.setLoginAdmin(familyCodeController.text.trim());
         PreferenceManagerUtils.setFamilyCode(familyCodeController.text.trim());
 
-        Get.offAll(()=>DesktopScaffold());
+        Get.offAll(() => DesktopScaffold());
 
         ToastUtils.showCustomToast(context: context, title: "Login Successfully");
-      } else {
+      } else if (status == 'expired') {
+        ToastUtils.showCustomToast(context: context, title: "Your plan has expired. Please renew.");
+      } else if (status == 'invalid') {
         ToastUtils.showCustomToast(context: context, title: "Invalid Family Code or Password");
+      } else {
+        ToastUtils.showCustomToast(context: context, title: "Something went wrong, please try again.");
       }
     }
   }
