@@ -269,26 +269,63 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
-  Future<void> _showImageDialog(BuildContext context, String imageUrl) async {
+  Future<void> _showImageDialog(BuildContext context, String imageResult) async {
+    final List<String> imageUrls = imageResult.split(',');
+    final PageController controller = PageController();
+    int currentIndex = 0;
+
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: PhotoViewGallery(
-            pageController: PageController(),
-            backgroundDecoration: const BoxDecoration(color: Colors.black),
-            pageOptions: [
-              PhotoViewGalleryPageOptions(
-                imageProvider: NetworkImage(imageUrl),
-                minScale: PhotoViewComputedScale.contained,
-                maxScale: PhotoViewComputedScale.covered * 2,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.black,
+              insetPadding: EdgeInsets.zero,
+              child: Stack(
+                children: [
+                  PhotoViewGallery.builder(
+                    itemCount: imageUrls.length,
+                    pageController: controller,
+                    onPageChanged: (index) => setState(() => currentIndex = index),
+                    backgroundDecoration: const BoxDecoration(color: Colors.black),
+                    builder: (BuildContext context, int index) {
+                      return PhotoViewGalleryPageOptions(
+                        imageProvider: NetworkImage(imageUrls[index]),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2,
+                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        '${currentIndex + 1} / ${imageUrls.length}',
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
+
 
   Widget buildRowItem(String label, String value, {bool isMobile = false}) {
     return Padding(

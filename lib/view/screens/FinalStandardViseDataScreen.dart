@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:responsivedashboard/common_widget/custom_text.dart';
 import 'package:responsivedashboard/common_widget/no_data_found.dart';
 import 'package:responsivedashboard/common_widget/octa_image.dart';
@@ -219,16 +221,60 @@ class _FinalStandardViseDataScreenState extends State<FinalStandardViseDataScree
     );
   }
 
-  void _showImageDialog(BuildContext context, String imageUrl) {
-    showDialog(
+  Future<void> _showImageDialog(BuildContext context, String imageResult) async {
+    final List<String> imageUrls = imageResult.split(',');
+    final PageController controller = PageController();
+    int currentIndex = 0;
+
+    return showDialog<void>(
       context: context,
-      builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.network(imageUrl, fit: BoxFit.contain),
-        ),
-      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.black,
+              insetPadding: EdgeInsets.zero,
+              child: Stack(
+                children: [
+                  PhotoViewGallery.builder(
+                    itemCount: imageUrls.length,
+                    pageController: controller,
+                    onPageChanged: (index) => setState(() => currentIndex = index),
+                    backgroundDecoration: const BoxDecoration(color: Colors.black),
+                    builder: (BuildContext context, int index) {
+                      return PhotoViewGalleryPageOptions(
+                        imageProvider: NetworkImage(imageUrls[index]),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2,
+                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        '${currentIndex + 1} / ${imageUrls.length}',
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -301,13 +347,7 @@ class WebDataTableSource extends DataTableSource {
             borderRadius: BorderRadius.circular(6),
             child: GestureDetector(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => Dialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Image.network(student.result.toString(), fit: BoxFit.contain),
-                  ),
-                );
+                _showImageDialog(context, student.result.toString());
               },
               child: Image.network(
                 student.result.toString(),
@@ -318,6 +358,8 @@ class WebDataTableSource extends DataTableSource {
         )
             : const Text("-"),
       ),
+
+
 
       // Delete button
       DataCell(
@@ -334,6 +376,62 @@ class WebDataTableSource extends DataTableSource {
         ),
       ),
     ]);
+  }
+  Future<void> _showImageDialog(BuildContext context, String imageResult) async {
+    final List<String> imageUrls = imageResult.split(',');
+    final PageController controller = PageController();
+    int currentIndex = 0;
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.black,
+              insetPadding: EdgeInsets.zero,
+              child: Stack(
+                children: [
+                  PhotoViewGallery.builder(
+                    itemCount: imageUrls.length,
+                    pageController: controller,
+                    onPageChanged: (index) => setState(() => currentIndex = index),
+                    backgroundDecoration: const BoxDecoration(color: Colors.black),
+                    builder: (BuildContext context, int index) {
+                      return PhotoViewGalleryPageOptions(
+                        imageProvider: NetworkImage(imageUrls[index]),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2,
+                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        '${currentIndex + 1} / ${imageUrls.length}',
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
