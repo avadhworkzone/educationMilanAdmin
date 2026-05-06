@@ -1,0 +1,296 @@
+[debug] [2026-05-06T17:33:59.683Z] ----------------------------------------------------------------------
+[debug] [2026-05-06T17:33:59.692Z] Command:       /usr/local/Cellar/node/25.3.0/bin/node /usr/local/bin/firebase deploy
+[debug] [2026-05-06T17:33:59.692Z] CLI Version:   15.3.1
+[debug] [2026-05-06T17:33:59.693Z] Platform:      darwin
+[debug] [2026-05-06T17:33:59.693Z] Node Version:  v25.3.0
+[debug] [2026-05-06T17:33:59.693Z] Time:          Wed May 06 2026 10:33:59 GMT-0700 (Pacific Daylight Time)
+[debug] [2026-05-06T17:33:59.693Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-06T17:34:01.037Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-06T17:34:01.038Z] > authorizing via signed-in user (avadhworkzone@gmail.com)
+[debug] [2026-05-06T17:34:01.039Z] [iam] checking project edupulsemilan for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-06T17:34:01.040Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:01.040Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:01.041Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions [none]
+[debug] [2026-05-06T17:34:01.041Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions x-goog-quota-user=projects/edupulsemilan
+[debug] [2026-05-06T17:34:01.041Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-06T17:34:02.583Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions 200
+[debug] [2026-05-06T17:34:02.583Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-06T17:34:02.584Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:02.584Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:02.584Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan [none]
+[debug] [2026-05-06T17:34:03.216Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan 200
+[debug] [2026-05-06T17:34:03.216Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan {"projectId":"edupulsemilan","projectNumber":"685157106296","displayName":"EducationMilan","name":"projects/edupulsemilan","resources":{"hostingSite":"edupulsemilan"},"state":"ACTIVE","etag":"1_cfd8ab1a-96eb-4713-84e6-6c5b56a36eee"}
+[info] 
+[info] === Deploying to 'edupulsemilan'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-05-06T17:34:03.257Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:03.257Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:03.258Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions [none]
+[debug] [2026-05-06T17:34:03.258Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-06T17:34:05.196Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions 200
+[debug] [2026-05-06T17:34:05.196Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions {"name":"projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[edupulsemilan]: beginning deploy... 
+[info] i  hosting[edupulsemilan]: found 43 files in build/web 
+[debug] [2026-05-06T17:34:05.249Z] [hosting] uploading with 200 concurrency
+[debug] [2026-05-06T17:34:05.935Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:05.935Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:05.973Z] [hosting] hash cache [YnVpbGQvd2Vi] stored for 43 files
+[debug] [2026-05-06T17:34:05.973Z] [hosting][hash queue][FINAL] {"max":682,"min":17,"avg":83.11627906976744,"active":0,"complete":43,"success":43,"errored":0,"retried":0,"total":43,"elapsed":723}
+[debug] [2026-05-06T17:34:05.973Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0:populateFiles [none]
+[debug] [2026-05-06T17:34:05.973Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0:populateFiles {"files":{"/version.json":"6bc398c043cd917b3208ec84866c06fd0ba609b548472447bc16d90a8d96d613","/index.html":"4550e0080dcd87f5f80c95eb4f7f9c83c64de4de9559bde84f4b71a4d6d1c81b","/flutter_bootstrap.js":"b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725","/flutter_service_worker.js":"e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb","/flutter.js":"053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26","/canvaskit/skwasm.js":"28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b","/assets/FontManifest.json":"507ae73116c9724a3b70a51724a1d7979d9662673b4e2f8015276e5fe983d855","/assets/AssetManifest.json":"cf268e5b64a5656b2eaf8a5951e76e211506df06283bf66479b06f11cb092846","/assets/AssetManifest.bin.json":"fa9f94ad6176084b197fcd5172c02b6e7e0b5f27e5b6fc7b15f460870bca4aec","/assets/AssetManifest.bin":"b6013719662294b7ac3d80e966b2c4c79d2206148fbd5c3d092e31d6e6d4a7f7","/assets/packages/fluttertoast/assets/toastify.js":"4e20650ab4e93b654194e343a3e4b3b858974f1c008d58ab8c468227b452e6d4","/assets/shaders/ink_sparkle.frag":"80c6e65c75f1de434b1b22dba61e96ad82dba0f2fc5e8b3b59c2def46d794354","/assets/packages/fluttertoast/assets/toastify.css":"be0033951236b059573b3b7716c5ca1edf00a1508565e3c38f811cc18f264a0f","/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf":"12bc6bf55aad4657f62747b6c1c9b5c120a594ed3540db21729b6db3c847340d","/assets/fonts/MaterialIcons-Regular.otf":"3242258b6af381def38632b976bce2781bf9f92c071b2fb90c360fd8904254cc","/assets/assets/images/signupLogo.png":"9ab77c4d11847b33d2377e2bcb43e36b147ad060f826e6bfa3d2ac67bce7de55","/assets/assets/images/logo.jpg":"fa7bb4699e744940ed5cb38cf5373d280d9b1eff8c05aa05d5118ba03ed199ef","/assets/assets/images/photo.png":"2c41f6640b734be60117582a84f22ebcab350fb2a30a5edeace98a8a0427c17a","/assets/assets/images/logo.png":"fa7bb4699e744940ed5cb38cf5373d280d9b1eff8c05aa05d5118ba03ed199ef","/assets/assets/icon/pencil.png":"e1f38bea62e5774945c4b8b8ed6842970d76c2b0e7038c05ed0b69115b6ee8d1","/assets/assets/icon/edit.svg":"4540fda315ec20b922e120a77e043a1ee8b8995739ae5ac200d90f7a3136d37e","/assets/assets/icon/graph.png":"1e48dc34987b2283008cf80dfbcab84bedf7c109014983780f0a41d6935d7cb0","/assets/assets/icon/Vector.png":"fc5afa044771a264d264d5b9eb9f4f460bcc29876613589959555584883ade35","/assets/assets/icon/delete.svg":"3efadc1d7ed1275dd1d6c10841c852ba5dc9f007f84ceff0c57a17971865dbab","/assets/assets/icon/Icon.svg":"1e035b184cf3d0b5f8f957cdf2deb2fd9501ffe87f31ccb5afc57fa1bf20a50d","/assets/assets/icon/Person.png":"455f2236d449435846b9da8cac4321e88044974216ca58f59786ce850eb278aa","/assets/assets/icon/adsIcon.png":"6cc2d3516d314a1111bdc97ad937b060435079244eb13d8d10d2d02e550226f2","/assets/assets/icon/download.png":"fd4b57c9f4a771a9d3393896487557ddb2ac6924840c15868562870e5740811b","/canvaskit/canvaskit.js":"9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c","/canvaskit/chromium/canvaskit.js":"98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb","/assets/assets/fonts/DMSerifDisplay-Regular.ttf":"27cf21b853eea1c80800335612bc02d9c6e04c238ab73b41fbc2c71da4e6db24","/assets/assets/fonts/Poppins-Regular.ttf":"f615176f3a3b7edf54daa48faef435de8b016238911dc6824d31e93442799dd5","/assets/assets/fonts/NotoSansGujarati-Regular.ttf":"7f5ae4b2567075c94a7fa91d7455c730b51b790c6d81e9a571f0062dd16368a7","/assets/assets/images/desktopLogin.png":"8cd03d93b30947965b69ca2721024539aac9bb8088bf6879093cba3b2ab76397","/assets/assets/images/no_data_found.gif":"a6d8c41f1259afaffd75deff5e2eaa329c5a7e97a6a72db6418db490abf3aa7b","/assets/NOTICES":"96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6","/canvaskit/chromium/canvaskit.js.symbols":"6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65","/canvaskit/skwasm.js.symbols":"3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11","/canvaskit/canvaskit.js.symbols":"c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a","/main.dart.js":"dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469","/canvaskit/skwasm.wasm":"bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d","/canvaskit/chromium/canvaskit.wasm":"3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513","/canvaskit/canvaskit.wasm":"c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934"}}
+[debug] [2026-05-06T17:34:06.912Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0:populateFiles 200
+[debug] [2026-05-06T17:34:06.912Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0:populateFiles {"uploadRequiredHashes":["053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26","e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb","dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469","9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c","c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a","96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6","c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934","3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11","28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b","98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb","3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513","b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725","6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65","bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files"}
+[debug] [2026-05-06T17:34:06.913Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.913Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.913Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.913Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.914Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.914Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.914Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.914Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.915Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.916Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:06.917Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26 [none]
+[debug] [2026-05-06T17:34:06.917Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26 [stream]
+[debug] [2026-05-06T17:34:06.919Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb [none]
+[debug] [2026-05-06T17:34:06.919Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb [stream]
+[debug] [2026-05-06T17:34:06.920Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469 [none]
+[debug] [2026-05-06T17:34:06.920Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469 [stream]
+[debug] [2026-05-06T17:34:06.921Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c [none]
+[debug] [2026-05-06T17:34:06.921Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c [stream]
+[debug] [2026-05-06T17:34:06.923Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a [none]
+[debug] [2026-05-06T17:34:06.923Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a [stream]
+[debug] [2026-05-06T17:34:06.924Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6 [none]
+[debug] [2026-05-06T17:34:06.924Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6 [stream]
+[debug] [2026-05-06T17:34:06.926Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934 [none]
+[debug] [2026-05-06T17:34:06.926Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934 [stream]
+[debug] [2026-05-06T17:34:06.926Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11 [none]
+[debug] [2026-05-06T17:34:06.926Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11 [stream]
+[debug] [2026-05-06T17:34:06.927Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b [none]
+[debug] [2026-05-06T17:34:06.927Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b [stream]
+[debug] [2026-05-06T17:34:06.928Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb [none]
+[debug] [2026-05-06T17:34:06.928Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb [stream]
+[debug] [2026-05-06T17:34:06.929Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513 [none]
+[debug] [2026-05-06T17:34:06.929Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513 [stream]
+[debug] [2026-05-06T17:34:06.931Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725 [none]
+[debug] [2026-05-06T17:34:06.931Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725 [stream]
+[debug] [2026-05-06T17:34:06.931Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65 [none]
+[debug] [2026-05-06T17:34:06.932Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65 [stream]
+[debug] [2026-05-06T17:34:06.932Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d [none]
+[debug] [2026-05-06T17:34:06.932Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d [stream]
+[debug] [2026-05-06T17:34:06.934Z] [hosting][populate queue][FINAL] {"max":982,"min":982,"avg":982,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":999}
+[debug] [2026-05-06T17:34:06.934Z] [hosting] uploads queued: 14
+[info] i  hosting: uploading new files [0/14] (0%) 
+[debug] [2026-05-06T17:34:08.236Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26 200
+[debug] [2026-05-06T17:34:08.236Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/053adb95c9fd7e93f05fde87a56d68d3269388c2678826834ffd3ed7d292bf26 [stream]
+[debug] [2026-05-06T17:34:08.342Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c 200
+[debug] [2026-05-06T17:34:08.342Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/9b87a0d6c67ac68cbce3c8018ecc18f7d77811460b772cd0c51bba45d120136c [stream]
+[debug] [2026-05-06T17:34:08.378Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b 200
+[debug] [2026-05-06T17:34:08.378Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/28b1c6f000b61bd2f141dbc2d6dd2d4e8d78295593baea48ad52a9f8b0eca76b [stream]
+[debug] [2026-05-06T17:34:08.388Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb 200
+[debug] [2026-05-06T17:34:08.388Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/98eed9e4311de4bc5e460d73ab0e034be11a0c0aded58733e94bf9971c8d1ecb [stream]
+[debug] [2026-05-06T17:34:08.412Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a 200
+[debug] [2026-05-06T17:34:08.412Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c58c818ceea58799cc5cfd951fa78f7607db6756342bd7a1aaeb1e431063894a [stream]
+[debug] [2026-05-06T17:34:08.493Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65 200
+[debug] [2026-05-06T17:34:08.493Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/6e864727463607c5ed93d9197e943eee281b93d814115f14e114defd31359f65 [stream]
+[debug] [2026-05-06T17:34:08.542Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11 200
+[debug] [2026-05-06T17:34:08.542Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3bef5f28baf386a699e4b98893c94c0dd42ad82f1f93c1cdea532a75210aca11 [stream]
+[debug] [2026-05-06T17:34:08.663Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb 200
+[debug] [2026-05-06T17:34:08.663Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/e83343e42e3dd0650ccbe33fccb7d8e6dbfeda7913c173cabf0cf624d533e6eb [stream]
+[debug] [2026-05-06T17:34:08.680Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6 200
+[debug] [2026-05-06T17:34:08.680Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/96d1fc42a888f1d9a9554466ddb4fbec71aeccf46627ce348b8f2c384f04a9d6 [stream]
+[debug] [2026-05-06T17:34:08.773Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469 200
+[debug] [2026-05-06T17:34:08.773Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/dc95c9e705f0f63e685f252d0e36be66c7a3863296764c0b981d7b8d58313469 [stream]
+[debug] [2026-05-06T17:34:08.869Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725 200
+[debug] [2026-05-06T17:34:08.869Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/b971e393710033c0199b3e724e3798b66e1457d4d2ec54b0a9bdcadf09267725 [stream]
+[debug] [2026-05-06T17:34:08.938Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d 200
+[debug] [2026-05-06T17:34:08.938Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/bfcbd4b6e44b3118380e714f97dbab1b685b95bcd4a9c007bfa79c43b60c4b4d [stream]
+[info] i  hosting: uploading new files [12/14] (85%) 
+[debug] [2026-05-06T17:34:09.316Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934 200
+[debug] [2026-05-06T17:34:09.316Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/c6fe626af107c4e97739d6c3062cfcb1f8e2eb75d8f1f657fdf77ac78b4dd934 [stream]
+[debug] [2026-05-06T17:34:09.375Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513 200
+[debug] [2026-05-06T17:34:09.375Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/6b856a977866edf0/files/3b6125ac9e23794cf7f39985a7f21d8270fbdf5af7b30d1fa67a2b70061a1513 [stream]
+[debug] [2026-05-06T17:34:09.375Z] [hosting][upload queue][FINAL] {"max":2459,"min":1324,"avg":1756.9285714285713,"active":0,"complete":14,"success":14,"errored":0,"retried":0,"total":14,"elapsed":2463}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[edupulsemilan]: file upload complete 
+[debug] [2026-05-06T17:34:09.375Z] [hosting] deploy completed after 4176ms
+[debug] [2026-05-06T17:34:09.376Z] [
+  {
+    "config": {
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "edupulsemilan"
+    },
+    "version": "projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0"
+  }
+]
+[info] i  hosting[edupulsemilan]: finalizing version... 
+[debug] [2026-05-06T17:34:09.377Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:09.377Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:09.378Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/6b856a977866edf0 updateMask=status%2Cconfig
+[debug] [2026-05-06T17:34:09.379Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/6b856a977866edf0 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-05-06T17:34:10.114Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/6b856a977866edf0 200
+[debug] [2026-05-06T17:34:10.115Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/6b856a977866edf0 {"name":"projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T05:02:52.945254Z","createUser":{"email":"avadhworkzone@gmail.com"},"finalizeTime":"2026-05-06T05:02:58.447923Z","finalizeUser":{"email":"avadhworkzone@gmail.com"}}
+[debug] [2026-05-06T17:34:10.115Z] [hosting] finalized version for edupulsemilan:[object Object]
+[info] ✔  hosting[edupulsemilan]: version finalized 
+[info] i  hosting[edupulsemilan]: releasing new version... 
+[debug] [2026-05-06T17:34:10.115Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:10.115Z] Checked if tokens are valid: true, expires at: 1778090241407
+[debug] [2026-05-06T17:34:10.115Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases versionName=projects%2F685157106296%2Fsites%2Fedupulsemilan%2Fversions%2F6b856a977866edf0
+[debug] [2026-05-06T17:34:10.115Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases {}
+[debug] [2026-05-06T17:34:11.038Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases 200
+[debug] [2026-05-06T17:34:11.039Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases {"name":"projects/685157106296/sites/edupulsemilan/channels/live/releases/1778043778699000","version":{"name":"projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T05:02:52.945254Z","createUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"},"finalizeTime":"2026-05-06T05:02:58.447923Z","finalizeUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}},"type":"DEPLOY","releaseTime":"2026-05-06T05:02:58.699Z","releaseUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}}
+[debug] [2026-05-06T17:34:11.039Z] [hosting] release: {"name":"projects/685157106296/sites/edupulsemilan/channels/live/releases/1778043778699000","version":{"name":"projects/685157106296/sites/edupulsemilan/versions/6b856a977866edf0","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T05:02:52.945254Z","createUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"},"finalizeTime":"2026-05-06T05:02:58.447923Z","finalizeUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}},"type":"DEPLOY","releaseTime":"2026-05-06T05:02:58.699Z","releaseUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}}
+[info] ✔  hosting[edupulsemilan]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/edupulsemilan/overview
+[info] Hosting URL: https://edupulsemilan.web.app
+[debug] [2026-05-06T18:34:27.355Z] ----------------------------------------------------------------------
+[debug] [2026-05-06T18:34:27.363Z] Command:       /usr/local/Cellar/node/25.3.0/bin/node /usr/local/bin/firebase deploy --only hosting
+[debug] [2026-05-06T18:34:27.363Z] CLI Version:   15.3.1
+[debug] [2026-05-06T18:34:27.363Z] Platform:      darwin
+[debug] [2026-05-06T18:34:27.364Z] Node Version:  v25.3.0
+[debug] [2026-05-06T18:34:27.364Z] Time:          Wed May 06 2026 11:34:27 GMT-0700 (Pacific Daylight Time)
+[debug] [2026-05-06T18:34:27.364Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-06T18:34:28.731Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-06T18:34:28.732Z] > authorizing via signed-in user (avadhworkzone@gmail.com)
+[debug] [2026-05-06T18:34:28.733Z] [iam] checking project edupulsemilan for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-06T18:34:28.734Z] Checked if tokens are valid: false, expires at: 1778090241407
+[debug] [2026-05-06T18:34:28.734Z] Checked if tokens are valid: false, expires at: 1778090241407
+[debug] [2026-05-06T18:34:28.734Z] > refreshing access token with scopes: []
+[debug] [2026-05-06T18:34:28.737Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-06T18:34:28.737Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-06T18:34:28.991Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-06T18:34:28.991Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-06T18:34:29.003Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions [none]
+[debug] [2026-05-06T18:34:29.003Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions x-goog-quota-user=projects/edupulsemilan
+[debug] [2026-05-06T18:34:29.004Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-06T18:34:30.426Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions 200
+[debug] [2026-05-06T18:34:30.426Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/edupulsemilan:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-06T18:34:30.427Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:30.427Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:30.428Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan [none]
+[debug] [2026-05-06T18:34:30.848Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan 200
+[debug] [2026-05-06T18:34:30.848Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/edupulsemilan {"projectId":"edupulsemilan","projectNumber":"685157106296","displayName":"EducationMilan","name":"projects/edupulsemilan","resources":{"hostingSite":"edupulsemilan"},"state":"ACTIVE","etag":"1_cfd8ab1a-96eb-4713-84e6-6c5b56a36eee"}
+[info] 
+[info] === Deploying to 'edupulsemilan'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-05-06T18:34:30.853Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:30.854Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:30.854Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions [none]
+[debug] [2026-05-06T18:34:30.854Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-06T18:34:32.483Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions 200
+[debug] [2026-05-06T18:34:32.484Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions {"name":"projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[edupulsemilan]: beginning deploy... 
+[info] i  hosting[edupulsemilan]: found 46 files in build/web 
+[debug] [2026-05-06T18:34:32.501Z] [hosting] uploading with 200 concurrency
+[debug] [2026-05-06T18:34:33.225Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.225Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.232Z] [hosting] hash cache [YnVpbGQvd2Vi] stored for 46 files
+[debug] [2026-05-06T18:34:33.232Z] [hosting][hash queue][FINAL] {"max":719,"min":1,"avg":90.58695652173913,"active":0,"complete":46,"success":46,"errored":0,"retried":0,"total":46,"elapsed":729}
+[debug] [2026-05-06T18:34:33.232Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294:populateFiles [none]
+[debug] [2026-05-06T18:34:33.233Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294:populateFiles {"files":{"/assets/packages/fluttertoast/assets/toastify.js":"4e20650ab4e93b654194e343a3e4b3b858974f1c008d58ab8c468227b452e6d4","/assets/packages/fluttertoast/assets/toastify.css":"be0033951236b059573b3b7716c5ca1edf00a1508565e3c38f811cc18f264a0f","/assets/assets/images/signupLogo.png":"9ab77c4d11847b33d2377e2bcb43e36b147ad060f826e6bfa3d2ac67bce7de55","/assets/assets/images/photo.png":"2c41f6640b734be60117582a84f22ebcab350fb2a30a5edeace98a8a0427c17a","/assets/assets/images/no_data_found.gif":"a6d8c41f1259afaffd75deff5e2eaa329c5a7e97a6a72db6418db490abf3aa7b","/assets/assets/images/logo.png":"fa7bb4699e744940ed5cb38cf5373d280d9b1eff8c05aa05d5118ba03ed199ef","/assets/assets/images/logo.jpg":"fa7bb4699e744940ed5cb38cf5373d280d9b1eff8c05aa05d5118ba03ed199ef","/assets/assets/images/desktopLogin.png":"8cd03d93b30947965b69ca2721024539aac9bb8088bf6879093cba3b2ab76397","/assets/assets/icon/pencil.png":"e1f38bea62e5774945c4b8b8ed6842970d76c2b0e7038c05ed0b69115b6ee8d1","/assets/assets/icon/graph.png":"1e48dc34987b2283008cf80dfbcab84bedf7c109014983780f0a41d6935d7cb0","/assets/assets/icon/edit.svg":"4540fda315ec20b922e120a77e043a1ee8b8995739ae5ac200d90f7a3136d37e","/assets/assets/icon/download.png":"fd4b57c9f4a771a9d3393896487557ddb2ac6924840c15868562870e5740811b","/assets/assets/icon/delete.svg":"3efadc1d7ed1275dd1d6c10841c852ba5dc9f007f84ceff0c57a17971865dbab","/assets/assets/icon/adsIcon.png":"6cc2d3516d314a1111bdc97ad937b060435079244eb13d8d10d2d02e550226f2","/assets/assets/icon/Vector.png":"fc5afa044771a264d264d5b9eb9f4f460bcc29876613589959555584883ade35","/assets/assets/icon/Person.png":"455f2236d449435846b9da8cac4321e88044974216ca58f59786ce850eb278aa","/assets/assets/icon/Icon.svg":"1e035b184cf3d0b5f8f957cdf2deb2fd9501ffe87f31ccb5afc57fa1bf20a50d","/assets/assets/fonts/Poppins-Regular.ttf":"f615176f3a3b7edf54daa48faef435de8b016238911dc6824d31e93442799dd5","/assets/assets/fonts/NotoSansGujarati-Regular.ttf":"7f5ae4b2567075c94a7fa91d7455c730b51b790c6d81e9a571f0062dd16368a7","/assets/assets/fonts/DMSerifDisplay-Regular.ttf":"27cf21b853eea1c80800335612bc02d9c6e04c238ab73b41fbc2c71da4e6db24","/version.json":"6bc398c043cd917b3208ec84866c06fd0ba609b548472447bc16d90a8d96d613","/index.html":"4550e0080dcd87f5f80c95eb4f7f9c83c64de4de9559bde84f4b71a4d6d1c81b","/flutter.js":"e71aec1e6b9f6de5e59a1eb5ba97a9d27078d22d629347436053c8e9512df189","/flutter_bootstrap.js":"fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b","/flutter_service_worker.js":"e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5","/canvaskit/skwasm_heavy.js":"d42973a60d2e9fe42000f20bb52945cbd58fd5a383f4bf9f53b308577c5bf78f","/canvaskit/skwasm.js":"3b86fc4d69eb8ea21020a32e53bc6f88d9b1750d88b96a9130fb74e16ba5d668","/assets/FontManifest.json":"507ae73116c9724a3b70a51724a1d7979d9662673b4e2f8015276e5fe983d855","/assets/AssetManifest.bin.json":"fa9f94ad6176084b197fcd5172c02b6e7e0b5f27e5b6fc7b15f460870bca4aec","/assets/AssetManifest.json":"cf268e5b64a5656b2eaf8a5951e76e211506df06283bf66479b06f11cb092846","/assets/AssetManifest.bin":"b6013719662294b7ac3d80e966b2c4c79d2206148fbd5c3d092e31d6e6d4a7f7","/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf":"12bc6bf55aad4657f62747b6c1c9b5c120a594ed3540db21729b6db3c847340d","/assets/shaders/ink_sparkle.frag":"80c6e65c75f1de434b1b22dba61e96ad82dba0f2fc5e8b3b59c2def46d794354","/assets/fonts/MaterialIcons-Regular.otf":"3242258b6af381def38632b976bce2781bf9f92c071b2fb90c360fd8904254cc","/canvaskit/canvaskit.js":"d4e14203796f8b071e02b3ff55f2a3b9c60fda7b95af3cfb9dad0f4954db5786","/canvaskit/chromium/canvaskit.js":"db8039200dfc2f9089cd4f4a8b5dc73d2d5d4615db9f291395f93f4616ad82a3","/assets/NOTICES":"8cd1877b56787e66ec25ce10557b8356939cb9cf5df7d0424c8371546426b5b2","/canvaskit/chromium/canvaskit.js.symbols":"3ca323fc4ed4ffce70febaf9c4e5bbca0628143c9eadd0de73a245e6c4714164","/canvaskit/canvaskit.js.symbols":"bd30e17b937bc541d78582e25695a6100d98044315ab52b22e584da1bc1fa012","/canvaskit/skwasm.js.symbols":"1a70a84b7220cabfbeda9f990f529de5582a78a2710a75dda8248a34cb5fed59","/canvaskit/skwasm_heavy.js.symbols":"485c1fdb9cd268526233f8ea52469060853d756d787948814ec80f325914afb4","/main.dart.js":"abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb","/canvaskit/skwasm.wasm":"8a934406b97da507124e77dba8296939119f44e31a01bad393a42ed1bb8900e8","/canvaskit/skwasm_heavy.wasm":"0a1a848adce75e37bcd652578cbb75ebd088b4e7abea8c007e0cc5611034254b","/canvaskit/chromium/canvaskit.wasm":"782a22a9f299410be90e67efa4d521ff3baba4b35cefc0b045f4ab090465c262","/canvaskit/canvaskit.wasm":"43cdc219bfd89800100843c4dcbd35a00ee6c3ee55fc6dee80d5515617873ec7"}}
+[debug] [2026-05-06T18:34:33.940Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294:populateFiles 200
+[debug] [2026-05-06T18:34:33.941Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294:populateFiles {"uploadRequiredHashes":["fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b","abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb","e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files"}
+[debug] [2026-05-06T18:34:33.941Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.941Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.941Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.941Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.942Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.942Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:33.942Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b [none]
+[debug] [2026-05-06T18:34:33.942Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b [stream]
+[debug] [2026-05-06T18:34:33.943Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb [none]
+[debug] [2026-05-06T18:34:33.944Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb [stream]
+[debug] [2026-05-06T18:34:33.945Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5 [none]
+[debug] [2026-05-06T18:34:33.945Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5 [stream]
+[debug] [2026-05-06T18:34:33.946Z] [hosting][populate queue][FINAL] {"max":718,"min":718,"avg":718,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":722}
+[debug] [2026-05-06T18:34:33.946Z] [hosting] uploads queued: 3
+[info] i  hosting: uploading new files [0/3] (0%) 
+[debug] [2026-05-06T18:34:35.484Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5 200
+[debug] [2026-05-06T18:34:35.484Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/e4185afb093080a7d2a6ee55cfa2a85af1bf120dd8bfb26b7e3369c3f01a40b5 [stream]
+[debug] [2026-05-06T18:34:35.647Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b 200
+[debug] [2026-05-06T18:34:35.647Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/fa94fb95c76912795f375ea7525ceeea49051287ffc5859041e3351791e53d3b [stream]
+[debug] [2026-05-06T18:34:35.784Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb 200
+[debug] [2026-05-06T18:34:35.784Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edupulsemilan/versions/9ead2e16733ac294/files/abe00af9b768ad1fa75f6633581df5a758a2ecce5f3cf65a7f99a2d09771d7fb [stream]
+[debug] [2026-05-06T18:34:35.784Z] [hosting][upload queue][FINAL] {"max":1843,"min":1543,"avg":1697.3333333333333,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":1843}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[edupulsemilan]: file upload complete 
+[debug] [2026-05-06T18:34:35.785Z] [hosting] deploy completed after 3299ms
+[debug] [2026-05-06T18:34:35.785Z] [
+  {
+    "config": {
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "edupulsemilan"
+    },
+    "version": "projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294"
+  }
+]
+[info] i  hosting[edupulsemilan]: finalizing version... 
+[debug] [2026-05-06T18:34:35.786Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:35.786Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:35.787Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/9ead2e16733ac294 updateMask=status%2Cconfig
+[debug] [2026-05-06T18:34:35.787Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/9ead2e16733ac294 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-05-06T18:34:36.566Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/9ead2e16733ac294 200
+[debug] [2026-05-06T18:34:36.566Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/versions/9ead2e16733ac294 {"name":"projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T06:03:20.249180Z","createUser":{"email":"avadhworkzone@gmail.com"},"finalizeTime":"2026-05-06T06:03:24.858547Z","finalizeUser":{"email":"avadhworkzone@gmail.com"}}
+[debug] [2026-05-06T18:34:36.566Z] [hosting] finalized version for edupulsemilan:[object Object]
+[info] ✔  hosting[edupulsemilan]: version finalized 
+[info] i  hosting[edupulsemilan]: releasing new version... 
+[debug] [2026-05-06T18:34:36.566Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:36.566Z] Checked if tokens are valid: true, expires at: 1778096067991
+[debug] [2026-05-06T18:34:36.567Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases versionName=projects%2F685157106296%2Fsites%2Fedupulsemilan%2Fversions%2F9ead2e16733ac294
+[debug] [2026-05-06T18:34:36.567Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases {}
+[debug] [2026-05-06T18:34:37.350Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases 200
+[debug] [2026-05-06T18:34:37.350Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/edupulsemilan/channels/live/releases {"name":"projects/685157106296/sites/edupulsemilan/channels/live/releases/1778047404975000","version":{"name":"projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T06:03:20.249180Z","createUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"},"finalizeTime":"2026-05-06T06:03:24.858547Z","finalizeUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}},"type":"DEPLOY","releaseTime":"2026-05-06T06:03:24.975Z","releaseUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}}
+[debug] [2026-05-06T18:34:37.350Z] [hosting] release: {"name":"projects/685157106296/sites/edupulsemilan/channels/live/releases/1778047404975000","version":{"name":"projects/685157106296/sites/edupulsemilan/versions/9ead2e16733ac294","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-06T06:03:20.249180Z","createUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"},"finalizeTime":"2026-05-06T06:03:24.858547Z","finalizeUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}},"type":"DEPLOY","releaseTime":"2026-05-06T06:03:24.975Z","releaseUser":{"email":"avadhworkzone@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLCMJNs5jGTNOopcTgSowyak2SKMx5pPiLKqaHdTTeJ0teDJg=mo"}}
+[info] ✔  hosting[edupulsemilan]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/edupulsemilan/overview
+[info] Hosting URL: https://edupulsemilan.web.app

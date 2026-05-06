@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:responsivedashboard/common_widget/octa_image.dart';
 import 'package:responsivedashboard/common_widget/custom_assets.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
+import 'package:responsivedashboard/utils/network_image_helper.dart';
 
 const int columnCount = 10;
 
@@ -15,36 +17,41 @@ class YourDataTableSource extends DataTableSource {
   final BuildContext context;
   final bool isApprove;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove, String fcmToken, VoidCallback onSuccess) commonDialogCallback;
+  final Function(String studentId, bool isApprove, String fcmToken,
+      VoidCallback onSuccess) commonDialogCallback;
   final Function(
-      String? image,
-      num? personTage,
-      String? standard,
-      String? fullName,
-      String studentId,
-      String userId,
-      String villageName,
-      String? createdDate, {
-      required String? mobileNumber,
-      required bool? isApproved,
-      String? result,
-      required String fcmToken,
-      String? checkUncheck,
-      required String? imageId,
-      String? reason,
-      String? status,
-      required VoidCallback onSuccess,
-      }) commonDialogEditCallback;
-  final Function(String studentId, String fcmToken,  VoidCallback onSuccess,) commonCheckUncheckCallBack;
+    String? image,
+    num? personTage,
+    String? standard,
+    String? fullName,
+    String studentId,
+    String userId,
+    String villageName,
+    String? createdDate, {
+    required String? mobileNumber,
+    required bool? isApproved,
+    String? result,
+    required String fcmToken,
+    String? checkUncheck,
+    required String? imageId,
+    String? reason,
+    String? status,
+    required VoidCallback onSuccess,
+  }) commonDialogEditCallback;
+  final Function(
+    String studentId,
+    String fcmToken,
+    VoidCallback onSuccess,
+  ) commonCheckUncheckCallBack;
 
   YourDataTableSource(
-      this.yourDataList,
-      this.commonDialogCallback,
-      this.commonDialogEditCallback,
-      this.commonCheckUncheckCallBack,
-      this.context, {
-        this.isApprove = false,
-      });
+    this.yourDataList,
+    this.commonDialogCallback,
+    this.commonDialogEditCallback,
+    this.commonCheckUncheckCallBack,
+    this.context, {
+    this.isApprove = false,
+  });
 
   @override
   DataRow? getRow(int index) {
@@ -54,11 +61,15 @@ class YourDataTableSource extends DataTableSource {
 
     if (rowData.isApproved == false) {
       final dynamic rawDate = rowData.createdDate;
-      final DateTime dateTime = rawDate is DateTime ? rawDate : DateTime.parse(rawDate.toString());
+      final DateTime dateTime =
+          rawDate is DateTime ? rawDate : DateTime.parse(rawDate.toString());
       final formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
 
       return DataRow(
-        color: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.blue : Colors.white),
+        color: MaterialStateColor.resolveWith((states) =>
+            states.contains(MaterialState.selected)
+                ? Colors.blue
+                : Colors.white),
         cells: [
           DataCell(Text('${index + 1}')),
           DataCell(Text(rowData.mobileNumber ?? '')),
@@ -78,7 +89,8 @@ class YourDataTableSource extends DataTableSource {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: GestureDetector(
-                    onTap: () => _showImageDialog(context, rowData.result ?? ''),
+                    onTap: () =>
+                        _showImageDialog(context, rowData.result ?? ''),
                     child: NetWorkOcToAssets(imgUrl: rowData.result ?? ''),
                   ),
                 ),
@@ -92,10 +104,11 @@ class YourDataTableSource extends DataTableSource {
                   rowData.studentId!,
                   isApprove,
                   rowData.fcmToken!,
-                      () {
+                  () {
                     Get.back(); // Close Delete Dialog
                     if (context.mounted) {
-                      (context as Element).markNeedsBuild(); // Refresh after delete ✅
+                      (context as Element)
+                          .markNeedsBuild(); // Refresh after delete ✅
                     }
                   },
                 );
@@ -125,7 +138,8 @@ class YourDataTableSource extends DataTableSource {
                   onSuccess: () {
                     Get.back(); // Close Edit Dialog
                     if (context.mounted) {
-                      (context as Element).markNeedsBuild(); // Refresh after edit ✅
+                      (context as Element)
+                          .markNeedsBuild(); // Refresh after edit ✅
                     }
                   },
                 );
@@ -138,10 +152,12 @@ class YourDataTableSource extends DataTableSource {
               onTap: () {
                 commonCheckUncheckCallBack(
                   rowData.studentId!,
-                  rowData.fcmToken!,() {
-                  if (context.mounted) {
-                    (context as Element).markNeedsBuild(); // Refresh after delete ✅
-                  }
+                  rowData.fcmToken!,
+                  () {
+                    if (context.mounted) {
+                      (context as Element)
+                          .markNeedsBuild(); // Refresh after delete ✅
+                    }
                   },
                 );
               },
@@ -155,7 +171,7 @@ class YourDataTableSource extends DataTableSource {
         index: index,
         cells: List.generate(
           columnCount,
-              (index) => DataCell(Container()),
+          (index) => DataCell(Container()),
         ),
       );
     }
@@ -170,8 +186,12 @@ class YourDataTableSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  Future<void> _showImageDialog(BuildContext context, String imageResult) async {
-    final List<String> imageUrls = imageResult.split(',');
+  Future<void> _showImageDialog(
+      BuildContext context, String imageResult) async {
+    final List<String> imageUrls = extractImageUrls(imageResult);
+    if (imageUrls.isEmpty) {
+      return;
+    }
     final PageController controller = PageController();
     int currentIndex = 0;
 
@@ -185,28 +205,96 @@ class YourDataTableSource extends DataTableSource {
               insetPadding: EdgeInsets.zero,
               child: Stack(
                 children: [
-                  PhotoViewGallery.builder(
-                    itemCount: imageUrls.length,
-                    pageController: controller,
-                    onPageChanged: (index) => setState(() => currentIndex = index),
-                    backgroundDecoration: const BoxDecoration(color: Colors.black),
-                    builder: (BuildContext context, int index) {
-                      return PhotoViewGalleryPageOptions(
-                        imageProvider: NetworkImage(imageUrls[index]),
-                        minScale: PhotoViewComputedScale.contained,
-                        maxScale: PhotoViewComputedScale.covered * 2,
-                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
-                      );
-                    },
-                  ),
+                  if (kIsWeb)
+                    PageView.builder(
+                      controller: controller,
+                      itemCount: imageUrls.length,
+                      onPageChanged: (index) =>
+                          setState(() => currentIndex = index),
+                      itemBuilder: (context, index) => InteractiveViewer(
+                        child: Center(
+                          child: Image.network(
+                            imageUrls[index],
+                            fit: BoxFit.contain,
+                            webHtmlElementStrategy:
+                                WebHtmlElementStrategy.prefer,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    PhotoViewGallery.builder(
+                      itemCount: imageUrls.length,
+                      pageController: controller,
+                      onPageChanged: (index) =>
+                          setState(() => currentIndex = index),
+                      backgroundDecoration:
+                          const BoxDecoration(color: Colors.black),
+                      builder: (BuildContext context, int index) {
+                        return PhotoViewGalleryPageOptions(
+                          imageProvider: NetworkImage(imageUrls[index]),
+                          minScale: PhotoViewComputedScale.contained,
+                          maxScale: PhotoViewComputedScale.covered * 2,
+                          heroAttributes:
+                              PhotoViewHeroAttributes(tag: imageUrls[index]),
+                        );
+                      },
+                    ),
                   Positioned(
                     top: 20,
                     right: 20,
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 28),
                     ),
                   ),
+                  if (imageUrls.length > 1)
+                    Positioned(
+                      left: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: currentIndex > 0
+                              ? () => controller.previousPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  )
+                              : null,
+                          icon: Icon(
+                            Icons.chevron_left,
+                            color: currentIndex > 0
+                                ? Colors.white
+                                : Colors.white38,
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (imageUrls.length > 1)
+                    Positioned(
+                      right: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: currentIndex < imageUrls.length - 1
+                              ? () => controller.nextPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  )
+                              : null,
+                          icon: Icon(
+                            Icons.chevron_right,
+                            color: currentIndex < imageUrls.length - 1
+                                ? Colors.white
+                                : Colors.white38,
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
                   Positioned(
                     bottom: 20,
                     left: 0,
@@ -214,7 +302,8 @@ class YourDataTableSource extends DataTableSource {
                     child: Center(
                       child: Text(
                         '${currentIndex + 1} / ${imageUrls.length}',
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),

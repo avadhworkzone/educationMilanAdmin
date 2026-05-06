@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,6 +10,7 @@ import 'package:responsivedashboard/common_widget/octa_image.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
 import 'package:responsivedashboard/utils/enum_utils.dart';
+import 'package:responsivedashboard/utils/network_image_helper.dart';
 import 'package:responsivedashboard/utils/string_utils.dart';
 import 'package:responsivedashboard/view/screens/dashboard.dart';
 import 'package:responsivedashboard/view/web/dashboard/common_method.dart';
@@ -21,13 +22,16 @@ import 'student_details_row.dart';
 class StandardViseDataStudentScreen extends StatefulWidget {
   final String stdId;
 
-  const StandardViseDataStudentScreen({Key? key, required this.stdId}) : super(key: key);
+  const StandardViseDataStudentScreen({Key? key, required this.stdId})
+      : super(key: key);
 
   @override
-  State<StandardViseDataStudentScreen> createState() => _StandardViseDataStudentScreenState();
+  State<StandardViseDataStudentScreen> createState() =>
+      _StandardViseDataStudentScreenState();
 }
 
-class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentScreen> {
+class _StandardViseDataStudentScreenState
+    extends State<StandardViseDataStudentScreen> {
   TextEditingController searchController = TextEditingController();
   int _rowsPerPage = 10;
   List<StudentModel> studentData = [];
@@ -70,7 +74,9 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }
-                  if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                  if (snapshot.hasError ||
+                      !snapshot.hasData ||
+                      snapshot.data!.isEmpty) {
                     return SizedBox(
                       height: Get.height * 0.5,
                       child: Center(child: noDataFound()),
@@ -106,11 +112,14 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
           controller: searchController,
           cursorColor: ColorUtils.grey66,
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search_rounded, color: ColorUtils.grey66),
+            prefixIcon:
+                const Icon(Icons.search_rounded, color: ColorUtils.grey66),
             hintText: "Search student...",
             hintStyle: const TextStyle(color: ColorUtils.grey66, fontSize: 14),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: ColorUtils.primaryColor)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: ColorUtils.primaryColor)),
           ),
           style: const TextStyle(
             color: ColorUtils.black,
@@ -138,7 +147,8 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
           return Card(
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 8.w),
             elevation: 3,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
               padding: EdgeInsets.all(12.w),
               child: Column(
@@ -158,9 +168,11 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                               borderRadius: BorderRadius.circular(5),
                               child: GestureDetector(
                                 onTap: () {
-                                  _showImageDialog(context, student.result.toString());
+                                  _showImageDialog(
+                                      context, student.result.toString());
                                 },
-                                child: NetWorkOcToAssets(imgUrl: student.result.toString()),
+                                child: NetWorkOcToAssets(
+                                    imgUrl: student.result.toString()),
                               ),
                             ),
                           ),
@@ -169,12 +181,21 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       Expanded(
                         child: Column(
                           children: [
-                            buildRowItem("Student Name", student.studentFullName ?? "-", isMobile: true),
-                            buildRowItem("Mobile", student.mobileNumber ?? "-", isMobile: true),
-                            buildRowItem("Village", student.villageName ?? "-", isMobile: true),
-                            buildRowItem("Standard", student.standard ?? "-", isMobile: true),
-                            buildRowItem("Percentage", "${student.percentage ?? 0}%", isMobile: true),
-                            buildRowItem("Date", student.createdDate?.split("T").first ?? "-", isMobile: true),
+                            buildRowItem(
+                                "Student Name", student.studentFullName ?? "-",
+                                isMobile: true),
+                            buildRowItem("Mobile", student.mobileNumber ?? "-",
+                                isMobile: true),
+                            buildRowItem("Village", student.villageName ?? "-",
+                                isMobile: true),
+                            buildRowItem("Standard", student.standard ?? "-",
+                                isMobile: true),
+                            buildRowItem(
+                                "Percentage", "${student.percentage ?? 0}%",
+                                isMobile: true),
+                            buildRowItem("Date",
+                                student.createdDate?.split("T").first ?? "-",
+                                isMobile: true),
                           ],
                         ),
                       ),
@@ -188,10 +209,9 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                         onPressed: () => deleteUserWithReason(
                           student.studentId ?? '',
                           student.isApproved ?? false,
-                          student.fcmToken ?? '',() {
-                            setState(() {
-
-                            });
+                          student.fcmToken ?? '',
+                          () {
+                            setState(() {});
                           },
                         ),
                         icon: const Icon(Icons.delete, color: Colors.red),
@@ -222,13 +242,13 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                       IconButton(
                         onPressed: () => commonCheckUncheck(
                           student.studentId ?? '',
-                          student.fcmToken ?? '',() {
-                            setState(() {
-
-                            });
+                          student.fcmToken ?? '',
+                          () {
+                            setState(() {});
                           },
                         ),
-                        icon: const Icon(Icons.check_circle, color: Colors.green),
+                        icon:
+                            const Icon(Icons.check_circle, color: Colors.green),
                       ),
                     ],
                   )
@@ -269,8 +289,13 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       ),
     );
   }
-  Future<void> _showImageDialog(BuildContext context, String imageResult) async {
-    final List<String> imageUrls = imageResult.split(',');
+
+  Future<void> _showImageDialog(
+      BuildContext context, String imageResult) async {
+    final List<String> imageUrls = extractImageUrls(imageResult);
+    if (imageUrls.isEmpty) {
+      return;
+    }
     final PageController controller = PageController();
     int currentIndex = 0;
 
@@ -284,28 +309,96 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
               insetPadding: EdgeInsets.zero,
               child: Stack(
                 children: [
-                  PhotoViewGallery.builder(
-                    itemCount: imageUrls.length,
-                    pageController: controller,
-                    onPageChanged: (index) => setState(() => currentIndex = index),
-                    backgroundDecoration: const BoxDecoration(color: Colors.black),
-                    builder: (BuildContext context, int index) {
-                      return PhotoViewGalleryPageOptions(
-                        imageProvider: NetworkImage(imageUrls[index]),
-                        minScale: PhotoViewComputedScale.contained,
-                        maxScale: PhotoViewComputedScale.covered * 2,
-                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
-                      );
-                    },
-                  ),
+                  if (kIsWeb)
+                    PageView.builder(
+                      controller: controller,
+                      itemCount: imageUrls.length,
+                      onPageChanged: (index) =>
+                          setState(() => currentIndex = index),
+                      itemBuilder: (context, index) => InteractiveViewer(
+                        child: Center(
+                          child: Image.network(
+                            imageUrls[index],
+                            fit: BoxFit.contain,
+                            webHtmlElementStrategy:
+                                WebHtmlElementStrategy.prefer,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    PhotoViewGallery.builder(
+                      itemCount: imageUrls.length,
+                      pageController: controller,
+                      onPageChanged: (index) =>
+                          setState(() => currentIndex = index),
+                      backgroundDecoration:
+                          const BoxDecoration(color: Colors.black),
+                      builder: (BuildContext context, int index) {
+                        return PhotoViewGalleryPageOptions(
+                          imageProvider: NetworkImage(imageUrls[index]),
+                          minScale: PhotoViewComputedScale.contained,
+                          maxScale: PhotoViewComputedScale.covered * 2,
+                          heroAttributes:
+                              PhotoViewHeroAttributes(tag: imageUrls[index]),
+                        );
+                      },
+                    ),
                   Positioned(
                     top: 20,
                     right: 20,
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 28),
                     ),
                   ),
+                  if (imageUrls.length > 1)
+                    Positioned(
+                      left: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: currentIndex > 0
+                              ? () => controller.previousPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  )
+                              : null,
+                          icon: Icon(
+                            Icons.chevron_left,
+                            color: currentIndex > 0
+                                ? Colors.white
+                                : Colors.white38,
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (imageUrls.length > 1)
+                    Positioned(
+                      right: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: currentIndex < imageUrls.length - 1
+                              ? () => controller.nextPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  )
+                              : null,
+                          icon: Icon(
+                            Icons.chevron_right,
+                            color: currentIndex < imageUrls.length - 1
+                                ? Colors.white
+                                : Colors.white38,
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
                   Positioned(
                     bottom: 20,
                     left: 0,
@@ -313,7 +406,8 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
                     child: Center(
                       child: Text(
                         '${currentIndex + 1} / ${imageUrls.length}',
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),
@@ -325,7 +419,6 @@ class _StandardViseDataStudentScreenState extends State<StandardViseDataStudentS
       },
     );
   }
-
 
   Widget buildRowItem(String label, String value, {bool isMobile = false}) {
     return Padding(

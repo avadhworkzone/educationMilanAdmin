@@ -1,12 +1,10 @@
-import 'dart:html';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:responsivedashboard/utils/color_utils.dart';
+import 'package:responsivedashboard/utils/network_image_helper.dart';
 import 'package:shimmer/shimmer.dart';
-import 'dart:ui' as ui;
 
 Widget showShimmer({double? height}) {
   return Shimmer.fromColors(
@@ -26,29 +24,57 @@ class NetWorkOcToAssets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (kIsWeb) {
-    //   ui.Pl.registerViewFactory(
-    //     boxFit == null ? imgUrl : "contained${imgUrl}",
-    //     (int _) => ImageElement()
-    //       ..src = imgUrl
-    //       ..style.objectFit = boxFit ?? "cover",
-    //   );
-    // }
-    // print("image url==========>$imgUrl");
-    // return HtmlElementView(
-    //   viewType: imgUrl!,
-    // );
-    return OctoImage(
-        image: NetworkImage("$imgUrl"),
-        progressIndicatorBuilder: (context, progress) {
-          return showShimmer();
-        },
-        errorBuilder: (context, error, stacktrace) {
-          print("ERROR == $error");
-          return Icon(
-            Icons.error,
-            color: Colors.red,
+    final normalizedUrl = firstImageUrl(imgUrl);
+
+    if (normalizedUrl == null) {
+      return Container(
+        color: Colors.grey[200],
+        child: const Icon(Icons.broken_image, color: Colors.grey),
+      );
+    }
+
+    if (kIsWeb) {
+      // For web - simple Image.network (works when CORS is properly configured)
+      return Image.network(
+        normalizedUrl,
+        fit: BoxFit.cover,
+        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
           );
-        });
+        },
+        errorBuilder: (context, error, stackTrace) {
+          debugPrint('Image Load Error: $error');
+          debugPrint('URL: $normalizedUrl');
+          return Container(
+            color: Colors.grey[200],
+            child: const Icon(Icons.broken_image, color: Colors.grey),
+          );
+        },
+      );
+    }
+
+    // For mobile/Android/iOS - OctoImage for better performance
+    return OctoImage(
+      image: NetworkImage(normalizedUrl),
+      progressIndicatorBuilder: (context, progress) {
+        return showShimmer();
+      },
+      errorBuilder: (context, error, stacktrace) {
+        debugPrint('OctoImage Error: $error');
+        return Container(
+          color: Colors.grey[200],
+          child: const Icon(Icons.broken_image, color: Colors.grey),
+        );
+      },
+    );
   }
 }

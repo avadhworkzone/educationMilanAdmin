@@ -7,13 +7,15 @@ import 'package:responsivedashboard/common_widget/custom_assets.dart';
 import 'package:responsivedashboard/common_widget/octa_image.dart';
 import 'package:responsivedashboard/model/student_model.dart';
 import 'package:responsivedashboard/utils/image_utils.dart';
+import 'package:responsivedashboard/utils/network_image_helper.dart';
 
 const int columnCount = 10;
 
 class FinalDataTableSource extends DataTableSource {
   final BuildContext context;
   final List<StudentModel> yourDataList;
-  final Function(String studentId, bool isApprove, String fcmToken) commonDialogCallback;
+  final Function(String studentId, bool isApprove, String fcmToken)
+      commonDialogCallback;
   final Function(
     String? image,
     num? personTage,
@@ -75,8 +77,8 @@ class FinalDataTableSource extends DataTableSource {
       cells: [
         DataCell(Text('${index + 1}')),
         DataCell(Text(dataApprove.mobileNumber ?? '')),
-        DataCell(Text(DateFormat("dd MMM yyyy")
-            .format(DateTime.parse(dataApprove.createdDate ?? DateTime.now().toString())))),
+        DataCell(Text(DateFormat("dd MMM yyyy").format(DateTime.parse(
+            dataApprove.createdDate ?? DateTime.now().toString())))),
 
         DataCell(
           Text(dataApprove.studentFullName ?? ''),
@@ -169,24 +171,30 @@ class FinalDataTableSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  Future<void> _showImageDialog(BuildContext context, String imageUrl) async {
+  Future<void> _showImageDialog(
+      BuildContext context, String imageResult) async {
+    final List<String> imageUrls = extractImageUrls(imageResult);
+    if (imageUrls.isEmpty) {
+      return;
+    }
+
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: PhotoViewGallery(
+          backgroundColor: Colors.black,
+          child: PhotoViewGallery.builder(
+            itemCount: imageUrls.length,
             pageController: PageController(),
-            backgroundDecoration: const BoxDecoration(
-              color: Colors.black,
-            ),
+            backgroundDecoration: const BoxDecoration(color: Colors.black),
             onPageChanged: (index) {},
-            pageOptions: [
-              PhotoViewGalleryPageOptions(
-                imageProvider: NetworkImage(imageUrl),
+            builder: (context, index) {
+              return PhotoViewGalleryPageOptions(
+                imageProvider: NetworkImage(imageUrls[index]),
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
-              ),
-            ],
+              );
+            },
           ),
         );
       },
